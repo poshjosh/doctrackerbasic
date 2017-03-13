@@ -1,0 +1,25 @@
+root
+authsvc
+idisc
+tracker
+
+Verify reports being generated
+
+Ability to add 'remark' as well as 'query on'
+
+Settings. Add table settings fontSize, outputPath, combine
+
+Addresponse, closeTask, deletetask buttons on task editor pane may not work on multi-selection
+When adding response, if user adds date without year use current year
+  - search java how to make dateformat use current year when none
+Importing of data, some taskresponse not showing
+Execute update and delete
+
+Print also ask page range
+
+if user press wrong add button in taskpanel
+Should TaskPanel clear docidLabel on reset
+Should TaskResponsePanel clear taskidLabel on reset
+
+http://www.imdb.com/search/title?genres=adventure,animation,comedy,family,mystery,romance,sci_fi,thriller&num_votes=1000,1000000&release_date=2010,2017&title_type=video&user_rating=7.5,10
+http://www.imdb.com/search/title?genres=adventure,animation,comedy,family,mystery,romance,sci_fi,thriller&num_votes=1000,1000000&release_date=2010,2017&user_rating=7.5,10

@@ -1,0 +1,49 @@
+MASTER SLAVE REPLICATION NOTES
+------------------------------
+Had to implement replication logic between a local database as master and a
+remote database as slave. Master database and tables are created on a remote server.
+
+Persistence Unit Names
+----------------------
+Both master and slave persistence units are defined in the same persistence.xml file
+The app currently decides with persistence units are masters by checking for the
+word 'master' in the persistence unit name and for slaves, the word 'slave'
+
+Entity Class Names
+------------------
+Slave entity class simple names must be equal to corresponding master entity 
+class simple names as such:
+
+Master: com.project.jpa.entities.Person   Slave: com.remote.project.jpa.entities.Person
+
+Auto-Generated Fields
+---------------------
+If a master table has auto generated fields and the corresponding slave table
+follows suit. Then each generated slave entity instance will not be equal to 
+the corresponding master entity instance. 
+To work around this slave tables do not use auto generated fields even where
+master tables do so. 
+
+Self reference issues
+---------------------
+NOTE: Manually insert records with self-references. Reason explained below.
+
+Consider the Entity
+create table appointment
+(
+    appointmentid INTEGER(8) AUTO_INCREMENT not null primary key,
+    appointment VARCHAR(100) not null UNIQUE,
+    parentappointment INTEGER(8) not null,
+
+    FOREIGN KEY (parentappointment) REFERENCES appointment(appointmentid) ON DELETE CASCADE ON UPDATE CASCADE
+
+)ENGINE=INNODB CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+If the parentappointment of an appointment is itself then perisisting that 
+appointment for the first time using jpa will lead to an Exception. This is 
+because jpa expects the reference to the parent appointment to be pre-existing
+which is not possible in the case of a self-reference. I don't know any 
+solution for now so the workaround is to pre-insert the records with such
+self references.
+
+

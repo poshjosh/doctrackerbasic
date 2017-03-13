@@ -1,0 +1,85 @@
+/*
+ * Copyright 2017 NUROX Ltd.
+ *
+ * Licensed under the NUROX Ltd Software License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.looseboxes.com/legal/licenses/software.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.doctracker.basic.ui.actions;
+
+import com.bc.util.Util;
+import com.bc.util.concurrent.NamedThreadFactory;
+import com.doctracker.basic.ConfigNames;
+import com.doctracker.basic.pu.entities.Taskresponse_;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import com.doctracker.basic.App;
+
+/**
+ * @author Chinomso Bassey Ikwuagwu on Feb 19, 2017 8:45:06 PM
+ */
+public class ScheduleDeadlineTasksReminder implements Action<Boolean> {
+
+    @Override
+    public Boolean execute(App app, Map<String, Object> params) throws TaskExecutionException {
+        
+        final Logger logger = Logger.getLogger(this.getClass().getName());
+        
+        final Integer deadlineHours = (Integer)params.get(ConfigNames.DEADLINE_HOURS);
+        
+        final Integer deadlineReminderIntervalHours = (Integer)params.get(ConfigNames.DEADLINE_REMINDER_INTERVAL_HOURS);
+        final ScheduledExecutorService svc = Executors.newSingleThreadScheduledExecutor(
+                new NamedThreadFactory(this.getClass().getName()+"_ThreadFactory"));
+        
+        svc.scheduleAtFixedRate(new Runnable(){
+            @Override
+            public void run() {
+                try{
+                    
+                    final Date date = new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(deadlineHours));
+                    
+                    if(logger.isLoggable(Level.FINE)) {
+                        logger.log(Level.FINE, "Deadline hours: {0}, deadline: {1}", new Object[]{deadlineHours, date});
+                    }
+
+                    final Map<String, Object> params = Collections.singletonMap(
+                            Taskresponse_.deadline.getName(), date);
+                    
+                    app.getAction(ActionCommands.SEARCH_DEADLINE_TASKS).execute(app, params);
+                    
+                }catch(TaskExecutionException | RuntimeException e) {
+                    Logger.getLogger(this.getClass().getName()).log(
+                            Level.WARNING, "Unexpected error", e);
+                }
+            }
+        }, deadlineReminderIntervalHours, deadlineReminderIntervalHours, TimeUnit.HOURS);
+
+        final String THREAD_NAME = this.getClass().getName() + '_' + ScheduledExecutorService.class.getSimpleName() + "_ShutdownHookThread";
+        Runtime.getRuntime().addShutdownHook(new Thread(THREAD_NAME){
+            @Override
+            public void run() {
+                
+                logger.log(Level.INFO, "Shutting down @{0}", THREAD_NAME);
+                
+                Util.shutdownAndAwaitTermination(svc, 1, TimeUnit.SECONDS);
+            }
+        });
+        
+        return Boolean.TRUE;
+    }
+}
