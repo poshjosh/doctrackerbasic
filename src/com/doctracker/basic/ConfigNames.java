@@ -31,8 +31,6 @@ public interface ConfigNames {
     
     String LOOK_AND_FEEL = "lookAndFeel";
     
-    String DEFAULT_DEADLINE_HOURS = "defaultDeadlineHours";
-    
     String DEFAULT_DEADLINE_EXTENSION_HOURS = "defaultDeadlineExtensionHours";
     
     String SEARCHRESULTS_PAGESIZE = "searchresultsPagesize";

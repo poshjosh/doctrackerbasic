@@ -16,32 +16,37 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.jpa.search.SearchResults;
 import com.doctracker.basic.pu.entities.Task;
-import com.doctracker.basic.ui.SearchResultsFrame;
+import com.bc.appbase.ui.SearchResultsFrame;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.bc.appbase.App;
+import com.bc.appcore.jpa.SearchContext;
+import com.bc.appcore.parameter.ParameterException;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 10, 2017 3:10:11 PM
  */
-public class SearchAndDisplayResultsUI implements Action<String> {
+public class SearchAndDisplayResultsUI implements Action<App,String> {
     
     @Override
-    public String execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
+    public String execute(final App app, final Map<String, Object> params) 
+            throws ParameterException, TaskExecutionException {
         
         final SearchResults<Task> searchResults = 
-                (SearchResults)app.getAction(ActionCommands.SEARCH).execute(app, params);
+                (SearchResults)app.getAction(DtbActionCommands.SEARCH).execute(app, params);
         
         final String KEY = UUID.randomUUID().toString();
         
         app.getAttributes().put(KEY, searchResults);
         
-        final Object msg = app.getAction(ActionCommands.BUILD_SEARCHUI_MESSAGE).execute(app, params);
+        final Object msg = app.getAction(DtbActionCommands.BUILD_SEARCHUI_MESSAGE).execute(app, params);
                 
         if(SwingUtilities.isEventDispatchThread()) {
             this.createAndShowSearchResultsFrame(app, searchResults, KEY, msg);
@@ -59,8 +64,10 @@ public class SearchAndDisplayResultsUI implements Action<String> {
     }
     
     private void createAndShowSearchResultsFrame(App app, SearchResults<Task> searchResults, String KEY, Object msg) {
-        final SearchResultsFrame frame = app.getUI().createSearchResultsFrame(searchResults, KEY, 0, 1, Task.class, msg.toString(), true);
-        app.getUI().positionHalfScreenRight(frame);
+        final SearchContext<Task> searchContext = app.getSearchContext(Task.class);
+        final SearchResultsFrame frame = app.getUIContext().createSearchResultsFrame(
+                searchContext, searchResults, KEY, 0, 1, msg.toString(), true);
+        app.getUIContext().positionHalfScreenRight(frame);
         frame.pack();
         frame.setVisible(true);
     }

@@ -16,6 +16,7 @@
 
 package com.doctracker.basic.html;
 
+import com.bc.appcore.html.HtmlBuilder;
 import com.bc.html.HtmlGen;
 import com.doctracker.basic.pu.entities.Appointment;
 import com.doctracker.basic.pu.entities.Task;
@@ -23,20 +24,20 @@ import com.doctracker.basic.pu.entities.Taskresponse;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.doctracker.basic.App;
+import com.doctracker.basic.DtbApp;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 2:20:04 AM
  */
 public class TaskHtmlBuilder implements HtmlBuilder<Task> {
 
-    private final App app;
+    private final DtbApp app;
     
     private boolean buildAttempted;
     
     private Task task;
 
-    public TaskHtmlBuilder(App app) {
+    public TaskHtmlBuilder(DtbApp app) {
         this.app = app;
     }
 

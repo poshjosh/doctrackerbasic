@@ -16,9 +16,9 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.doctracker.basic.ConfigNames;
-import com.doctracker.basic.io.FileNames;
-import com.doctracker.basic.util.Util;
+import com.doctracker.basic.FileNames;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,12 +30,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.bc.appbase.App;
+import com.bc.appcore.util.Util;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 3, 2017 1:33:32 PM
  */
-public class RefreshOutputFromBackup implements Action<List<File>> {
+public class RefreshOutputFromBackup implements Action<App,List<File>> {
     
     private transient static final Logger logger = Logger.getLogger(RefreshOutputFromBackup.class.getName());
 
@@ -83,7 +85,7 @@ public class RefreshOutputFromBackup implements Action<List<File>> {
                         if(e instanceof java.nio.file.FileSystemException && 
                                 e.getMessage().toLowerCase().contains("cannot access")) {
                             
-                            app.getUI().showErrorMessage(e, 
+                            app.getUIContext().showErrorMessage(e, 
                                     "Please close this file and retry: " + targetPath);
                         }
                         

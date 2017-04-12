@@ -18,16 +18,16 @@ package com.doctracker.basic.util;
 
 import com.doctracker.basic.ConfigNames;
 import java.text.SimpleDateFormat;
-import com.doctracker.basic.App;
+import com.doctracker.basic.DtbApp;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 4, 2017 11:35:33 PM
  */
 public class DateFormat extends SimpleDateFormat {
 
-    private final App app;
+    private final DtbApp app;
 
-    public DateFormat(App app) {
+    public DateFormat(DtbApp app) {
         this.app = app;
         DateFormat.this.setTimeZone(app.getTimeZone());
         DateFormat.this.applyLocalizedPattern(

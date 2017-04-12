@@ -16,14 +16,16 @@
 
 package com.doctracker.basic.parameter;
 
+import com.bc.appcore.parameter.ParameterException;
+import com.bc.appcore.parameter.ParametersBuilder;
 import com.doctracker.basic.pu.entities.Task_;
-import com.doctracker.basic.ui.DateFromUIBuilder;
+import com.bc.appbase.ui.DateFromUIBuilder;
 import com.doctracker.basic.ui.SearchPanel;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import com.doctracker.basic.App;
+import com.bc.appcore.AppCore;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 10, 2017 2:48:38 PM
@@ -35,12 +37,12 @@ public class SearchParametersBuilder implements ParametersBuilder<SearchPanel> {
     public static final String DEADLINE_TO = "deadlineTo";
     
 
-    private App app;
+    private AppCore app;
     
     private SearchPanel searchPanel;
     
     @Override
-    public ParametersBuilder<SearchPanel> app(App app) {
+    public ParametersBuilder<SearchPanel> context(AppCore app) {
         this.app = app;
         return this;
     }
@@ -71,7 +73,7 @@ public class SearchParametersBuilder implements ParametersBuilder<SearchPanel> {
             params.put("query", text);
         }
         
-        final DateFromUIBuilder builder = app.getUI().getDateFromUIBuilder();
+        final DateFromUIBuilder builder = app.get(DateFromUIBuilder.class);
         
         final Calendar cal = app.getCalendar();
         

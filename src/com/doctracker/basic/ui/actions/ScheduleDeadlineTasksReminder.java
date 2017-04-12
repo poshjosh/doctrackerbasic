@@ -16,7 +16,7 @@
 
 package com.doctracker.basic.ui.actions;
 
-import com.bc.util.Util;
+import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.util.concurrent.NamedThreadFactory;
 import com.doctracker.basic.ConfigNames;
 import com.doctracker.basic.pu.entities.Taskresponse_;
@@ -28,15 +28,19 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.doctracker.basic.App;
+import java.util.concurrent.ExecutorService;
+import com.bc.appcore.actions.Action;
+import com.bc.appbase.App;
+import com.bc.appcore.parameter.ParameterException;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 19, 2017 8:45:06 PM
  */
-public class ScheduleDeadlineTasksReminder implements Action<Boolean> {
+public class ScheduleDeadlineTasksReminder implements Action<App,ExecutorService> {
 
     @Override
-    public Boolean execute(App app, Map<String, Object> params) throws TaskExecutionException {
+    public ExecutorService execute(App app, Map<String, Object> params) 
+            throws ParameterException, TaskExecutionException {
         
         final Logger logger = Logger.getLogger(this.getClass().getName());
         
@@ -60,26 +64,15 @@ public class ScheduleDeadlineTasksReminder implements Action<Boolean> {
                     final Map<String, Object> params = Collections.singletonMap(
                             Taskresponse_.deadline.getName(), date);
                     
-                    app.getAction(ActionCommands.SEARCH_DEADLINE_TASKS).execute(app, params);
+                    app.getAction(DtbActionCommands.SEARCH_DEADLINE_TASKS).execute(app, params);
                     
-                }catch(TaskExecutionException | RuntimeException e) {
+                }catch(ParameterException | TaskExecutionException | RuntimeException e) {
                     Logger.getLogger(this.getClass().getName()).log(
                             Level.WARNING, "Unexpected error", e);
                 }
             }
         }, deadlineReminderIntervalHours, deadlineReminderIntervalHours, TimeUnit.HOURS);
 
-        final String THREAD_NAME = this.getClass().getName() + '_' + ScheduledExecutorService.class.getSimpleName() + "_ShutdownHookThread";
-        Runtime.getRuntime().addShutdownHook(new Thread(THREAD_NAME){
-            @Override
-            public void run() {
-                
-                logger.log(Level.INFO, "Shutting down @{0}", THREAD_NAME);
-                
-                Util.shutdownAndAwaitTermination(svc, 1, TimeUnit.SECONDS);
-            }
-        });
-        
-        return Boolean.TRUE;
+        return svc;
     }
 }

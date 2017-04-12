@@ -16,16 +16,16 @@
 
 package com.doctracker.basic.jpa;
 
-import com.doctracker.basic.App;
 import com.doctracker.basic.pu.entities.Appointment;
 import java.util.Date;
+import com.doctracker.basic.DtbApp;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 10, 2017 3:43:25 PM
  */
 public interface SelectionBuilder<T> {
 
-    SelectionBuilder<T> app(App app);
+    SelectionBuilder<T> app(DtbApp app);
     
     SelectionBuilder<T> query(String query);
     

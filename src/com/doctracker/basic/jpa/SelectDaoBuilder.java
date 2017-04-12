@@ -23,5 +23,5 @@ import com.bc.jpa.dao.SelectDao;
  */
 public interface SelectDaoBuilder<T> extends SelectionBuilder<SelectDao<T>> {
 
-    SelectDaoBuilder<SelectDao<T>> resultType(Class<T> resultType);
+    SelectDaoBuilder<T> resultType(Class<T> resultType);
 }

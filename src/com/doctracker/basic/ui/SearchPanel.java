@@ -16,24 +16,96 @@
 
 package com.doctracker.basic.ui;
 
+import com.bc.appbase.ui.DateTimePanel;
+import com.bc.appbase.ui.DateUIUpdater;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import com.doctracker.basic.DtbApp;
+import com.doctracker.basic.ui.actions.DtbActionCommands;
 
 /**
- *
  * @author Josh
  */
 public class SearchPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form SearchPanel
-     */
     public SearchPanel() {
+        this(null);
+    }
+    
+    public SearchPanel(DtbApp app) {
         initComponents();
+        if(app != null) {
+            this.init(app);
+        }
+    }
+
+    public void init(DtbApp app) {
+        
+        final String [] values = app.getAppointmentValuesForComboBox();
+        
+        this.getResponsiblityCombobox().setModel(new DefaultComboBoxModel<>(values));
+        
+        final ActionListener actionListener = app.getUIContext().getActionListener(this, DtbActionCommands.SEARCH_AND_DISPLAY_RESULTS_UI);
+        this.getSearchTextfield().setActionCommand(DtbActionCommands.SEARCH_AND_DISPLAY_RESULTS_UI);
+        this.getSearchTextfield().addActionListener(actionListener);
+        this.getSearchButton().setActionCommand(DtbActionCommands.SEARCH_AND_DISPLAY_RESULTS_UI);
+        this.getSearchButton().addActionListener(actionListener);
+        
+        this.setToDefaults(app);
+    }
+    
+    public void reset(DtbApp app) {
+        
+        this.getResponsiblityCombobox().setSelectedIndex(0);
+        
+        this.getSearchTextfield().setText(null);
+        
+        this.getClosedTasksCheckBox().setSelected(false);
+        
+        DateTimePanel dateTimePanel = this.getFromDateTimePanel();
+        dateTimePanel.getHoursTextfield().setText(null);
+        dateTimePanel.getMinutesTextfield().setText(null);
+        dateTimePanel.getDayTextfield().setText(null);
+        
+        this.setToDefaults(app);
+    }
+    
+    public void setToDefaults(DtbApp app) {
+        
+        final DateUIUpdater updater = app.get(DateUIUpdater.class);
+        
+        final Calendar cal = app.getCalendar();
+        
+        final DateTimePanel fromDatePanel = this.getFromDateTimePanel();
+        
+        updater.updateMonth(fromDatePanel.getMonthCombobox(), cal);
+        updater.updateYear(fromDatePanel.getYearCombobox(), cal);
+        
+        updater.updateField(this.getToDateTimePanel().getHoursTextfield(), cal, Calendar.HOUR_OF_DAY);
+        updater.updateField(this.getToDateTimePanel().getMinutesTextfield(), cal, Calendar.MINUTE);
+        
+//        updater.updateField(container.getToDateTimePanel().getDayTextfield(), cal, Calendar.DAY_OF_MONTH);
+        updater.updateMonth(this.getToDateTimePanel().getMonthCombobox(), cal);
+        updater.updateYear(this.getToDateTimePanel().getYearCombobox(), cal);
+
+/////////////////
+
+        updater.updateMonth(this.getFromDeadlineDateTimePanel().getMonthCombobox(), cal);
+        updater.updateYear(this.getFromDeadlineDateTimePanel().getYearCombobox(), cal);
+        
+        updater.updateField(this.getToDeadlineDateTimePanel().getHoursTextfield(), cal, Calendar.HOUR_OF_DAY);
+        updater.updateField(this.getToDeadlineDateTimePanel().getMinutesTextfield(), cal, Calendar.MINUTE);
+        
+//        updater.updateField(container.getToDeadlineDateTimePanel().getDayTextfield(), cal, Calendar.DAY_OF_MONTH);
+        updater.updateMonth(this.getToDeadlineDateTimePanel().getMonthCombobox(), cal);
+        updater.updateYear(this.getToDeadlineDateTimePanel().getYearCombobox(), cal);
     }
 
     /**
@@ -55,10 +127,10 @@ public class SearchPanel extends javax.swing.JPanel {
         periodLabel = new javax.swing.JLabel();
         separator = new javax.swing.JSeparator();
         deadlineLabel = new javax.swing.JLabel();
-        fromDateTimePanel = new com.doctracker.basic.ui.DateTimePanelLarge();
-        fromDeadlineDateTimePanel = new com.doctracker.basic.ui.DateTimePanelLarge();
-        toDateTimePanel = new com.doctracker.basic.ui.DateTimePanelLarge();
-        toDeadlineDateTimePanel = new com.doctracker.basic.ui.DateTimePanelLarge();
+        fromDateTimePanel = new com.bc.appbase.ui.DateTimePanel();
+        toDateTimePanel = new com.bc.appbase.ui.DateTimePanel();
+        fromDeadlineDateTimePanel = new com.bc.appbase.ui.DateTimePanel();
+        toDeadlineDateTimePanel = new com.bc.appbase.ui.DateTimePanel();
 
         setPreferredSize(new java.awt.Dimension(805, 235));
 
@@ -99,22 +171,6 @@ public class SearchPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(fromLabel)
-                        .addGap(10, 10, 10)
-                        .addComponent(fromDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fromDeadlineDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(periodLabel)
-                        .addGap(347, 347, 347)
-                        .addComponent(deadlineLabel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(toLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(toDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(8, 8, 8)
-                        .addComponent(toDeadlineDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(searchTextfield, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -124,7 +180,27 @@ public class SearchPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(closedTasksCheckBox)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(periodLabel)
+                        .addGap(347, 347, 347)
+                        .addComponent(deadlineLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fromLabel)
+                            .addComponent(toLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(fromDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fromDeadlineDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(toDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(toDeadlineDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,14 +222,18 @@ public class SearchPanel extends javax.swing.JPanel {
                     .addComponent(deadlineLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fromLabel)
-                    .addComponent(fromDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fromDeadlineDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toLabel)
-                    .addComponent(toDeadlineDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(toDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(fromLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(toLabel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fromDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(fromDeadlineDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(toDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(toDeadlineDateTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -161,8 +241,8 @@ public class SearchPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox closedTasksCheckBox;
     private javax.swing.JLabel deadlineLabel;
-    private com.doctracker.basic.ui.DateTimePanelLarge fromDateTimePanel;
-    private com.doctracker.basic.ui.DateTimePanelLarge fromDeadlineDateTimePanel;
+    private com.bc.appbase.ui.DateTimePanel fromDateTimePanel;
+    private com.bc.appbase.ui.DateTimePanel fromDeadlineDateTimePanel;
     private javax.swing.JLabel fromLabel;
     private javax.swing.JLabel periodLabel;
     private javax.swing.JLabel responsibilityLabel;
@@ -170,8 +250,8 @@ public class SearchPanel extends javax.swing.JPanel {
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField searchTextfield;
     private javax.swing.JSeparator separator;
-    private com.doctracker.basic.ui.DateTimePanelLarge toDateTimePanel;
-    private com.doctracker.basic.ui.DateTimePanelLarge toDeadlineDateTimePanel;
+    private com.bc.appbase.ui.DateTimePanel toDateTimePanel;
+    private com.bc.appbase.ui.DateTimePanel toDeadlineDateTimePanel;
     private javax.swing.JLabel toLabel;
     // End of variables declaration//GEN-END:variables
 
@@ -181,22 +261,6 @@ public class SearchPanel extends javax.swing.JPanel {
 
     public JTextField getSearchTextfield() {
         return searchTextfield;
-    }
-
-    public DateTimePanel getToDateTimePanel() {
-        return toDateTimePanel;
-    }
-
-    public DateTimePanel getFromDateTimePanel() {
-        return fromDateTimePanel;
-    }
-
-    public DateTimePanel getFromDeadlineDateTimePanel() {
-        return fromDeadlineDateTimePanel;
-    }
-
-    public DateTimePanel getToDeadlineDateTimePanel() {
-        return toDeadlineDateTimePanel;
     }
 
     public JLabel getFromLabel() {
@@ -229,5 +293,21 @@ public class SearchPanel extends javax.swing.JPanel {
 
     public JSeparator getSeparator() {
         return separator;
+    }
+
+    public DateTimePanel getFromDateTimePanel() {
+        return fromDateTimePanel;
+    }
+
+    public DateTimePanel getFromDeadlineDateTimePanel() {
+        return fromDeadlineDateTimePanel;
+    }
+
+    public DateTimePanel getToDateTimePanel() {
+        return toDateTimePanel;
+    }
+
+    public DateTimePanel getToDeadlineDateTimePanel() {
+        return toDeadlineDateTimePanel;
     }
 }

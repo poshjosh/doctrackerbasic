@@ -16,27 +16,30 @@
 
 package com.doctracker.basic.parameter;
 
+import com.bc.appcore.parameter.ParameterException;
+import com.bc.appcore.parameter.ParameterNotFoundException;
+import com.bc.appcore.parameter.ParametersBuilder;
 import com.doctracker.basic.pu.entities.Task_;
 import com.doctracker.basic.pu.entities.Taskresponse_;
-import com.doctracker.basic.ui.DateFromUIBuilder;
+import com.bc.appbase.ui.DateFromUIBuilder;
 import com.doctracker.basic.ui.TaskResponsePanel;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import com.doctracker.basic.App;
+import com.bc.appcore.AppCore;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 1:34:17 PM
  */
 public class AddResponseParametersBuilder implements ParametersBuilder<TaskResponsePanel> {
 
-    private App app;
+    private AppCore app;
     
     private TaskResponsePanel taskResponsePanel;
     
     @Override
-    public ParametersBuilder<TaskResponsePanel> app(App app) {
+    public ParametersBuilder<TaskResponsePanel> context(AppCore app) {
         this.app = app;
         return this;
     }
@@ -71,7 +74,7 @@ public class AddResponseParametersBuilder implements ParametersBuilder<TaskRespo
         
         final Calendar cal = app.getCalendar();
         
-        final DateFromUIBuilder builder = app.getUI().getDateFromUIBuilder();
+        final DateFromUIBuilder builder = app.get(DateFromUIBuilder.class);
         final Date deadline = builder.calendar(cal)
                 .ui(taskResponsePanel.getDeadlinePanel())
                 .build(null);

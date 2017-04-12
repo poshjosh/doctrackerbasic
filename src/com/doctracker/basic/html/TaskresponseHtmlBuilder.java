@@ -16,22 +16,23 @@
 
 package com.doctracker.basic.html;
 
+import com.bc.appcore.html.HtmlBuilder;
 import com.bc.html.HtmlGen;
 import com.doctracker.basic.pu.entities.Taskresponse;
-import com.doctracker.basic.App;
+import com.doctracker.basic.DtbApp;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 5:43:58 PM
  */
 public class TaskresponseHtmlBuilder implements HtmlBuilder<Taskresponse> {
 
-    private final App app;
+    private final DtbApp app;
     
     private boolean buildAttempted;
     
     private Taskresponse taskresponse;
 
-    public TaskresponseHtmlBuilder(App app) {
+    public TaskresponseHtmlBuilder(DtbApp app) {
         this.app = app;
     }
 

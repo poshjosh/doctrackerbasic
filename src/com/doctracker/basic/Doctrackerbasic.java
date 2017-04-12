@@ -16,11 +16,8 @@
 
 package com.doctracker.basic;
 
-import com.doctracker.basic.io.FileNames;
-import com.doctracker.basic.io.ResourceContextImpl;
 import com.bc.config.CompositeConfig;
-import com.doctracker.basic.util.UILog;
-import com.doctracker.basic.jpa.SearchManager;
+import com.bc.appbase.ui.UILog;
 import com.bc.config.Config;
 import com.bc.config.ConfigService;
 import com.bc.config.SimpleConfigService;
@@ -28,13 +25,10 @@ import com.bc.jpa.JpaContext;
 import com.bc.jpa.JpaContextImpl;
 import com.bc.jpa.dao.SelectDao;
 import com.bc.jpa.search.SearchResults;
-import com.doctracker.basic.io.LoggingConfigManagerImpl;
+import com.bc.util.Util;
 import com.doctracker.basic.pu.entities.Task;
-import com.doctracker.basic.ui.MainFrame;
-import com.doctracker.basic.ui.SearchResultsPanel;
-import com.doctracker.basic.ui.UI;
-import com.doctracker.basic.ui.actions.ActionCommands;
-import com.doctracker.basic.ui.actions.SetLookAndFeel;
+import com.bc.appbase.ui.SearchResultsPanel;
+import com.bc.appbase.ui.actions.SetLookAndFeel;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -42,8 +36,32 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import com.doctracker.basic.io.ResourceContext;
+import com.bc.appbase.ui.PopupImpl;
+import com.bc.appbase.ui.actions.ParamNames;
+import com.bc.appcore.ResourceContext;
+import com.bc.appcore.ResourceContextImpl;
+import com.bc.appcore.util.BlockingQueueThreadPoolExecutor;
+import com.bc.appcore.util.LoggingConfigManagerImpl;
+import com.bc.appcore.util.Settings;
+import com.bc.appcore.util.SettingsImpl;
+import com.bc.jpa.sync.JpaSync;
+import com.bc.jpa.sync.impl.JpaSyncImpl;
+import com.bc.jpa.sync.impl.RemoteUpdaterImpl;
+import com.bc.jpa.sync.SlaveUpdates;
+import com.bc.jpa.sync.impl.SlaveUpdatesImpl;
+import com.bc.jpa.sync.predicates.PersistenceCommunicationsLinkFailureTest;
+import com.doctracker.basic.jpa.predicates.MasterPersistenceUnitTest;
+import com.doctracker.basic.jpa.predicates.SlavePersistenceUnitTest;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import com.doctracker.basic.pu.entities.Unit;
+import com.doctracker.basic.ui.DtbMainFrame;
+import com.doctracker.basic.jpa.DtbSearchContext;
+import com.doctracker.basic.ui.DtbUIContext;
+import com.doctracker.basic.ui.actions.DtbActionCommands;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Properties;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 7, 2017 11:10:16 PM
@@ -51,6 +69,7 @@ import com.doctracker.basic.io.ResourceContext;
 public class Doctrackerbasic {
     
     public static final Boolean PRODUCTION_MODE = Boolean.TRUE;
+    public static final Boolean ENABLE_SYNC = Boolean.FALSE;
     
     public static void main(String [] args) {
         
@@ -60,9 +79,18 @@ public class Doctrackerbasic {
             
             logger.log(Level.INFO, "Production mode: {0}", PRODUCTION_MODE);
             
+            final UILog uiLog = new UILog("Startup Log");
+            
+            uiLog.show();
+            
+            uiLog.log("");
+            uiLog.log("Doc Tracker Basic");
+            uiLog.log("-----------------");
+            uiLog.log("...Initializing");
+            
             final String workingDir = Paths.get(System.getProperty("user.home"), FileNames.ROOT).toString();
             final String defaultLoggingConfigFile = "META-INF/properties/logging.properties";
-            final String defaultPropsFile = "META-INF/properties/appdefaults.properties";
+            final String defaultPropsFile = "META-INF/properties/app.properties";
             final String loggingConfigFile;
             final String propsFile;
             if(PRODUCTION_MODE) {
@@ -73,6 +101,8 @@ public class Doctrackerbasic {
                 propsFile = "META-INF/properties/app_devmode.properties";
             }
             
+            uiLog.log("Initializing folders");
+            
             final String [] dirsToCreate = new String[]{
                     Paths.get(workingDir, FileNames.LOGS).toString(),
                     Paths.get(workingDir, FileNames.SLAVE_UPDATES_DIR).toString()
@@ -82,72 +112,109 @@ public class Doctrackerbasic {
             
             new LoggingConfigManagerImpl(fileManager).init(defaultLoggingConfigFile, loggingConfigFile);
             
+            uiLog.log("Loading configurations");
+            
             final ConfigService configService = new SimpleConfigService(
                     defaultPropsFile, propsFile);
 
             final Config config = new CompositeConfig(configService);
             
+            uiLog.log("Setting look and feel");
+            
             new SetLookAndFeel().execute(null, 
                     Collections.singletonMap(
-                            ConfigNames.LOOK_AND_FEEL, 
+                            ParamNames.LOOK_AND_FEEL, 
                             config.getString(ConfigNames.LOOK_AND_FEEL)));
             
             final boolean WAS_INSTALLED = config.getBoolean(ConfigNames.INSTALLED);
             
-            final UILog uiLog = new UILog("Startup Log", WAS_INSTALLED ? 300 : 600, WAS_INSTALLED ? 225 : 450);
-        
-            uiLog.log("...Launching app");
+            uiLog.log("Initializing database");
         
             final String persistenceFile = config.getString(ConfigNames.PERSISTENCE_FILE);
             logger.log(Level.INFO, "Peristence file: {0}", persistenceFile);
             final URI peristenceURI = fileManager.getResource(persistenceFile).toURI();
             final JpaContext jpaContext = new JpaContextImpl(peristenceURI, null);
+            jpaContext.getBuilderForSelect(Unit.class).from(Unit.class).getResultsAndClose(0, 10);
 
-            uiLog.log("Creating UI");
+            final ExecutorService updateOutputService = 
+                    new BlockingQueueThreadPoolExecutor("Service_for_writing_excel_data_to_disk_ThreadFactory", 1, 1, 1);
+
+            final SlaveUpdates slaveUpdates = !ENABLE_SYNC ? SlaveUpdates.NO_OP :
+                    new SlaveUpdatesImpl(
+                            Paths.get(workingDir, FileNames.SLAVE_UPDATES_DIR), 
+                            new RemoteUpdaterImpl(jpaContext, new MasterPersistenceUnitTest(), new SlavePersistenceUnitTest()),
+                            new PersistenceCommunicationsLinkFailureTest());
+
+            final JpaSync jpaSync = !ENABLE_SYNC ? JpaSync.NO_OP :
+                    new JpaSyncImpl(jpaContext, 
+                            new RemoteUpdaterImpl(jpaContext, new MasterPersistenceUnitTest(), new SlavePersistenceUnitTest()), 
+                            20, 
+                            new PersistenceCommunicationsLinkFailureTest());
             
-            /* Create and display the UI */
+            uiLog.log("Initializing application context");
+            
+            final Properties settingsMetaData = new Properties();
+            
+            try(Reader reader = new InputStreamReader(fileManager.getResourceAsStream("META-INF/properties/settings.properties"))) {
+                settingsMetaData.load(reader);
+            }
+            
+            final Settings settings = new SettingsImpl(configService, config, settingsMetaData);
+            
+            final DtbApp app = new DtbAppImpl(
+                    Paths.get(workingDir), configService, config, settings, jpaContext,
+                    updateOutputService, slaveUpdates, jpaSync
+            );
+            
+            uiLog.log("Creating user interface");
+            
+            /* Create and display the UIContextBase */
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
                     try{
                         
-                        final App app = new AppImpl(
-                                Paths.get(workingDir), configService, config, jpaContext);
+                        app.init();
                         
-                        uiLog.log("SUCCESS creating UI");
+                        uiLog.log("Configuring user interface");
                         
-                        final UI ui = app.getUI();
+                        final DtbUIContext ui = ((DtbApp)app).getUIContext();
                         
-                        final MainFrame mainFrame = ui.getMainFrame();
+                        final DtbMainFrame mainFrame = ui.getMainFrame();
                         
                         final SearchResultsPanel resultsPanel = mainFrame.getSearchResultsPanel();
+                        
+                        resultsPanel.getAddButton().setActionCommand(DtbActionCommands.DISPLAY_ADD_TASK_UI);
+                        ui.addActionListeners(resultsPanel, resultsPanel.getAddButton());
                         
                         uiLog.log("Loading search results");
                         
                         final Class<Task> entityType = Task.class;
                         
-                        final SearchManager<Task> sm = app.getSearchManager(entityType);
+                        final DtbSearchContext<Task> searchContext = app.getSearchContext(entityType);
                         
-                        final SelectDao<Task> selectDao = sm.getSelectDaoBuilder(entityType).closed(false).build();
+                        final SelectDao<Task> selectDao = searchContext.getSelectDaoBuilder(entityType)
+                                .resultType(entityType).closed(false).build();
                         
-                        final SearchResults<Task> searchResults = sm.getSearchResults(selectDao);
+                        final SearchResults<Task> searchResults = searchContext.getSearchResults(selectDao);
                         
                         ui.positionFullScreen(mainFrame);
                         
-                        ui.loadSearchResultsUI(resultsPanel, searchResults, "AppMainFrame", 0, 1, entityType, true);
-                        
+                        ui.loadSearchResultsUI(resultsPanel, searchContext, 
+                                searchResults, "AppMainFrame", 0, 1, true);
+
                         mainFrame.pack();
                         
-                        mainFrame.setVisible(true);
+                        uiLog.log("Displaying user interface");
                         
-                        uiLog.log("Displayed UI");
+                        mainFrame.setVisible(true);
                         
                         app.getConfig().setBoolean(ConfigNames.INSTALLED, true);
                         
                         app.getConfigService().store();
                         
-                        logger.log(Level.FINE, "{0} = {1}",
-                                new Object[]{ConfigNames.INSTALLED, app.getConfig().getBoolean(ConfigNames.INSTALLED)});
+                        logger.log(Level.INFO, "Was installed: {0}, now installed: {1}",
+                                new Object[]{WAS_INSTALLED, app.getConfig().getBoolean(ConfigNames.INSTALLED)});
                         
                         uiLog.log(WAS_INSTALLED ? "App Launch Successful" : "Installation Successful");
                         
@@ -155,16 +222,28 @@ public class Doctrackerbasic {
                         params.put(ConfigNames.DEADLINE_HOURS, config.getInt(ConfigNames.DEADLINE_HOURS));
                         params.put(ConfigNames.DEADLINE_REMINDER_INTERVAL_HOURS, config.getInt(ConfigNames.DEADLINE_REMINDER_INTERVAL_HOURS));
                         
-                        app.getAction(ActionCommands.SCHEDULE_DEADLINE_TASKS_REMINDER).execute(app, params);
+                        final ExecutorService scheduleDeadlineTasksReminderSvc = 
+                                (ExecutorService)app.getAction(DtbActionCommands.SCHEDULE_DEADLINE_TASKS_REMINDER).execute(app, params);
                         
                         app.updateOutput();
-                        
-//                        app.getAction(ActionCommands.SYNC_DATABASE).execute(app, Collections.EMPTY_MAP);
                         
                         if(!WAS_INSTALLED) {
                             
                             uiLog.querySaveLogThenSave();
                         }
+                        
+                        Runtime.getRuntime().addShutdownHook(new Thread("App_ShutdownHook_Thread") {
+                            @Override
+                            public void run() {
+                                
+                                if(!app.isShutdown()) {
+                                    app.shutdown();
+                                }
+                                
+                                Util.shutdownAndAwaitTermination(
+                                        scheduleDeadlineTasksReminderSvc, 1, TimeUnit.SECONDS);
+                            }
+                        });
                     }catch(Throwable t) {
                         
                         uiLog.log("Error");
@@ -192,17 +271,7 @@ public class Doctrackerbasic {
         
         Logger.getLogger(Doctrackerbasic.class.getName()).log(Level.SEVERE, description, t);
         
-        String title;
-        Object message;
-        if(t != null) {
-            title = description;
-            message = t;
-        }else{
-            title = "Error";
-            message = description;
-        }
-        
-        JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
+        new PopupImpl(null).showErrorMessage(t, description);
 
         System.exit(exitCode);
     }

@@ -1,6 +1,6 @@
-delete from `doctrackerbasic_db1`.unit;
+--delete from `doctrackerbasic_db1`.unit;
 
-delete from `doctrackerbasic_db1`.appointment;
+--delete from `doctrackerbasic_db1`.appointment;
 
 delete from `doctrackerbasic_db1`.doc;
 

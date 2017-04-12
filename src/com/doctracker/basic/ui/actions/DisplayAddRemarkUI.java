@@ -16,9 +16,9 @@
 
 package com.doctracker.basic.ui.actions;
 
-import com.doctracker.basic.App;
 import com.doctracker.basic.ui.TaskResponseFrame;
 import javax.swing.JComboBox;
+import com.doctracker.basic.DtbApp;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 11, 2017 2:31:48 PM
@@ -26,11 +26,11 @@ import javax.swing.JComboBox;
 public class DisplayAddRemarkUI extends DisplayAddResponseUI {
 
     @Override
-    public void beforeDisplay(final App app, final TaskResponseFrame frame) {
+    public void beforeDisplay(DtbApp app, final TaskResponseFrame frame) {
         frame.getTitleLabel().setText("Add Remark");
         final JComboBox cb = frame.getTaskResponsePanel().getAuthorCombobox();
         cb.setSelectedItem(
-                app.getUser().getAppointment().getAppointment());
+               app.getUser().getAppointment().getAppointment());
         cb.setEnabled(false);
     }
 }

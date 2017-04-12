@@ -16,25 +16,28 @@
 
 package com.doctracker.basic.parameter;
 
+import com.bc.appcore.parameter.ParameterException;
+import com.bc.appcore.parameter.ParameterNotFoundException;
+import com.bc.appcore.parameter.ParametersBuilder;
 import com.doctracker.basic.pu.entities.Appointment_;
 import com.doctracker.basic.ui.AppointmentPanel;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
-import com.doctracker.basic.App;
+import com.bc.appcore.AppCore;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 26, 2017 10:52:34 PM
  */
 public class AddAppointmentParametersBuilder implements ParametersBuilder<AppointmentPanel> {
 
-    private App app;
+    private AppCore app;
     
     private AppointmentPanel ui;
     
     @Override
-    public ParametersBuilder<AppointmentPanel> app(App app) {
+    public ParametersBuilder<AppointmentPanel> context(AppCore app) {
         this.app = app;
         return this;
     }

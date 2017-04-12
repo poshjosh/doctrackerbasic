@@ -16,21 +16,24 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.jpa.dao.SelectDao;
 import com.bc.jpa.search.SearchResults;
 import com.doctracker.basic.parameter.SearchParametersBuilder;
 import com.doctracker.basic.pu.entities.Task;
 import com.doctracker.basic.pu.entities.Task_;
-import com.doctracker.basic.jpa.SearchManager;
 import java.util.Date;
 import java.util.Map;
-import com.doctracker.basic.App;
 import com.doctracker.basic.jpa.SelectDaoBuilder;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
+import com.doctracker.basic.jpa.DtbSearchContext;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 6, 2017 10:49:16 PM
  */
-public class Search implements Action<SearchResults> {
+public class Search implements Action<App,SearchResults> {
     
     @Override
     public SearchResults execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
@@ -46,9 +49,9 @@ public class Search implements Action<SearchResults> {
         final Date deadlineFrom = (Date)params.get(SearchParametersBuilder.DEADLINE_FROM);
         final Date deadlineTo = (Date)params.get(SearchParametersBuilder.DEADLINE_TO);
         
-        final SearchManager<Task> sm = app.getSearchManager(Task.class);
+        final DtbSearchContext<Task> searchContext = ((DtbApp)app).getSearchContext(Task.class);
                     
-        final SelectDaoBuilder<Task> selectionBuilder = sm.getSelectDaoBuilder(Task.class);
+        final SelectDaoBuilder<Task> selectionBuilder = searchContext.getSelectDaoBuilder(Task.class);
         
         final SelectDao<Task> selectDao = selectionBuilder
                 .query(query)
@@ -59,7 +62,7 @@ public class Search implements Action<SearchResults> {
                 .deadlineFrom(deadlineFrom)
                 .deadlineTo(deadlineTo).build();
         
-        final SearchResults<Task> searchResults = sm.getSearchResults(selectDao);
+        final SearchResults<Task> searchResults = searchContext.getSearchResults(selectDao);
 
         return searchResults;
     }

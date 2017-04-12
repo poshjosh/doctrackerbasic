@@ -15,13 +15,13 @@
  */
 package com.doctracker.basic.ui;
 
-import com.doctracker.basic.ui.actions.ActionCommands;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import com.doctracker.basic.App;
+import com.doctracker.basic.DtbApp;
+import com.doctracker.basic.ui.actions.DtbActionCommands;
 
 /**
  *
@@ -40,7 +40,7 @@ public class AppointmentPanel extends javax.swing.JPanel {
      * Creates new form UnitPanel and initializes it from
      * @param app
      */
-    public AppointmentPanel(App app) {
+    public AppointmentPanel(DtbApp app) {
         initComponents();
         if(app != null) {
             this.parentAppointmentComboBox.setModel(new DefaultComboBoxModel(
@@ -49,9 +49,9 @@ public class AppointmentPanel extends javax.swing.JPanel {
             this.unitComboBox.setModel(new DefaultComboBoxModel(
                     app.getUnitValuesForComboBox()
             ));
-            this.addAppointmentButton.setActionCommand(ActionCommands.ADD_APPOINTMENT);
-            this.createNewUnitForAppointmentButton.setActionCommand(ActionCommands.DISPLAY_UNIT_UI);
-            app.getUI().addActionListeners(AppointmentPanel.this, 
+            this.addAppointmentButton.setActionCommand(DtbActionCommands.ADD_APPOINTMENT);
+            this.createNewUnitForAppointmentButton.setActionCommand(DtbActionCommands.DISPLAY_UNIT_UI);
+            app.getUIContext().addActionListeners(AppointmentPanel.this, 
                     this.addAppointmentButton, this.createNewUnitForAppointmentButton);
         }
     }

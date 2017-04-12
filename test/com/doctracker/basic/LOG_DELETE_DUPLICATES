@@ -1,0 +1,1191 @@
+run:
+Mar 18, 2017 1:22:52 AM com.bc.jpa.JpaContextImpl 
+INFO: ======================== Creating EntityManagerFactory =========================
+PersistenceUnit: doctrackerbasicPUremoteslave, URI: file:/C:/Users/Josh/Documents/NetBeansProjects/doctrackerbasic/build/classes/META-INF/persistence.xml
+[EL Info]: 2017-03-18 01:22:53.753--ServerSession(11923594)--EclipseLink, version: Eclipse Persistence Services - 2.5.2.v20140319-9ad6abd
+[EL Warning]: metadata: 2017-03-18 01:22:57.247--ServerSession(11923594)--Reverting the lazy setting on the OneToOne or ManyToOne attribute [author] for the entity class [class com.doctracker.basic.pu.remote.entities.Task] since weaving was not enabled or did not occur.
+[EL Warning]: metadata: 2017-03-18 01:22:57.248--ServerSession(11923594)--Reverting the lazy setting on the OneToOne or ManyToOne attribute [doc] for the entity class [class com.doctracker.basic.pu.remote.entities.Task] since weaving was not enabled or did not occur.
+[EL Warning]: metadata: 2017-03-18 01:22:57.249--ServerSession(11923594)--Reverting the lazy setting on the OneToOne or ManyToOne attribute [reponsibility] for the entity class [class com.doctracker.basic.pu.remote.entities.Task] since weaving was not enabled or did not occur.
+[EL Warning]: metadata: 2017-03-18 01:22:57.249--ServerSession(11923594)--Reverting the lazy setting on the OneToOne or ManyToOne attribute [task] for the entity class [class com.doctracker.basic.pu.remote.entities.Taskresponse] since weaving was not enabled or did not occur.
+[EL Warning]: metadata: 2017-03-18 01:22:57.249--ServerSession(11923594)--Reverting the lazy setting on the OneToOne or ManyToOne attribute [author] for the entity class [class com.doctracker.basic.pu.remote.entities.Taskresponse] since weaving was not enabled or did not occur.
+[EL Warning]: metadata: 2017-03-18 01:22:57.25--ServerSession(11923594)--Reverting the lazy setting on the OneToOne or ManyToOne attribute [unit] for the entity class [class com.doctracker.basic.pu.remote.entities.Appointment] since weaving was not enabled or did not occur.
+[EL Warning]: metadata: 2017-03-18 01:22:57.25--ServerSession(11923594)--Reverting the lazy setting on the OneToOne or ManyToOne attribute [parentappointment] for the entity class [class com.doctracker.basic.pu.remote.entities.Appointment] since weaving was not enabled or did not occur.
+[EL Warning]: metadata: 2017-03-18 01:22:57.252--ServerSession(11923594)--Reverting the lazy setting on the OneToOne or ManyToOne attribute [parentunit] for the entity class [class com.doctracker.basic.pu.remote.entities.Unit] since weaving was not enabled or did not occur.
+[EL Info]: connection: 2017-03-18 01:22:57.46--ServerSession(11923594)--file:/C:/Users/Josh/Documents/NetBeansProjects/doctrackerbasic/build/classes/_doctrackerbasicPUremoteslave_url=jdbc:mysql://europa.ignitionserver.net:3306/loosebox_dtb?zeroDateTimeBehavior=convertToNull_user=loosebox_dtbuser login successful
+INFO. Doc with id: 6213 is a duplicate of 794
+INFO. Doc with id: 6214 is a duplicate of 795
+INFO. Doc with id: 6215 is a duplicate of 796
+INFO. Doc with id: 6216 is a duplicate of 797
+INFO. Doc with id: 6225 is a duplicate of 802
+INFO. Doc with id: 6226 is a duplicate of 803
+INFO. Doc with id: 6229 is a duplicate of 805
+INFO. Doc with id: 6230 is a duplicate of 806
+INFO. Doc with id: 6231 is a duplicate of 807
+INFO. Doc with id: 6232 is a duplicate of 808
+INFO. Doc with id: 6234 is a duplicate of 810
+INFO. Doc with id: 6235 is a duplicate of 811
+INFO. Doc with id: 6236 is a duplicate of 812
+INFO. Doc with id: 6239 is a duplicate of 814
+WARN. Between Docs with ids: 815 and 6240, could not detemine which to delete
+INFO. Doc with id: 6241 is a duplicate of 816
+INFO. Doc with id: 6242 is a duplicate of 817
+INFO. Doc with id: 6243 is a duplicate of 818
+INFO. Doc with id: 6244 is a duplicate of 819
+INFO. Doc with id: 6245 is a duplicate of 820
+INFO. Doc with id: 6246 is a duplicate of 821
+INFO. Doc with id: 6247 is a duplicate of 822
+INFO. Doc with id: 6248 is a duplicate of 823
+INFO. Doc with id: 6249 is a duplicate of 824
+INFO. Doc with id: 6254 is a duplicate of 826
+INFO. Doc with id: 6258 is a duplicate of 830
+WARN. Between Docs with ids: 831 and 5996, could not detemine which to delete
+INFO. Doc with id: 6259 is a duplicate of 832
+INFO. Doc with id: 6260 is a duplicate of 833
+INFO. Doc with id: 6261 is a duplicate of 834
+INFO. Doc with id: 6263 is a duplicate of 836
+INFO. Doc with id: 6264 is a duplicate of 837
+INFO. Doc with id: 6265 is a duplicate of 838
+INFO. Doc with id: 6266 is a duplicate of 839
+INFO. Doc with id: 6267 is a duplicate of 840
+INFO. Doc with id: 6269 is a duplicate of 842
+INFO. Doc with id: 6270 is a duplicate of 843
+INFO. Doc with id: 6274 is a duplicate of 847
+INFO. Doc with id: 6275 is a duplicate of 848
+INFO. Doc with id: 6277 is a duplicate of 850
+INFO. Doc with id: 6279 is a duplicate of 852
+INFO. Doc with id: 6280 is a duplicate of 853
+INFO. Doc with id: 6281 is a duplicate of 854
+INFO. Doc with id: 6284 is a duplicate of 857
+INFO. Doc with id: 6285 is a duplicate of 858
+INFO. Doc with id: 6286 is a duplicate of 859
+INFO. Doc with id: 6287 is a duplicate of 860
+INFO. Doc with id: 6288 is a duplicate of 861
+INFO. Doc with id: 6289 is a duplicate of 862
+INFO. Doc with id: 6290 is a duplicate of 863
+INFO. Doc with id: 6291 is a duplicate of 864
+INFO. Doc with id: 6292 is a duplicate of 865
+INFO. Doc with id: 6293 is a duplicate of 866
+INFO. Doc with id: 6294 is a duplicate of 867
+INFO. Doc with id: 6296 is a duplicate of 869
+INFO. Doc with id: 6297 is a duplicate of 870
+INFO. Doc with id: 6298 is a duplicate of 871
+INFO. Doc with id: 6299 is a duplicate of 872
+INFO. Doc with id: 6300 is a duplicate of 873
+INFO. Doc with id: 6301 is a duplicate of 874
+INFO. Doc with id: 6302 is a duplicate of 875
+INFO. Doc with id: 6305 is a duplicate of 877
+INFO. Doc with id: 6306 is a duplicate of 878
+INFO. Doc with id: 879 has no duplicates 
+INFO. Doc with id: 881 has no duplicates 
+INFO. Doc with id: 6310 is a duplicate of 884
+INFO. Doc with id: 6311 is a duplicate of 885
+INFO. Doc with id: 6312 is a duplicate of 886
+INFO. Doc with id: 6313 is a duplicate of 887
+INFO. Doc with id: 6314 is a duplicate of 888
+INFO. Doc with id: 6315 is a duplicate of 889
+INFO. Doc with id: 6316 is a duplicate of 890
+INFO. Doc with id: 6317 is a duplicate of 891
+INFO. Doc with id: 6318 is a duplicate of 892
+INFO. Doc with id: 6319 is a duplicate of 893
+INFO. Doc with id: 6321 is a duplicate of 895
+INFO. Doc with id: 6322 is a duplicate of 896
+INFO. Doc with id: 6323 is a duplicate of 897
+INFO. Doc with id: 6324 is a duplicate of 898
+INFO. Doc with id: 6325 is a duplicate of 899
+WARN. Between Docs with ids: 900 and 6326, could not detemine which to delete
+INFO. Doc with id: 6327 is a duplicate of 901
+INFO. Doc with id: 6328 is a duplicate of 902
+INFO. Doc with id: 6329 is a duplicate of 903
+INFO. Doc with id: 6331 is a duplicate of 905
+INFO. Doc with id: 906 has no duplicates 
+INFO. Doc with id: 6332 is a duplicate of 907
+INFO. Doc with id: 6333 is a duplicate of 908
+INFO. Doc with id: 6334 is a duplicate of 909
+INFO. Doc with id: 6335 is a duplicate of 910
+INFO. Doc with id: 911 has no duplicates 
+INFO. Doc with id: 6336 is a duplicate of 912
+INFO. Doc with id: 6337 is a duplicate of 913
+INFO. Doc with id: 6339 is a duplicate of 915
+INFO. Doc with id: 6340 is a duplicate of 916
+INFO. Doc with id: 6341 is a duplicate of 917
+INFO. Doc with id: 6342 is a duplicate of 918
+INFO. Doc with id: 6343 is a duplicate of 919
+INFO. Doc with id: 6344 is a duplicate of 920
+INFO. Doc with id: 6345 is a duplicate of 921
+INFO. Doc with id: 6346 is a duplicate of 922
+INFO. Doc with id: 6371 is a duplicate of 931
+INFO. Doc with id: 6372 is a duplicate of 932
+INFO. Doc with id: 6373 is a duplicate of 933
+INFO. Doc with id: 6374 is a duplicate of 934
+INFO. Doc with id: 5994 is a duplicate of 935
+INFO. Doc with id: 5995 is a duplicate of 936
+INFO. Doc with id: 5997 is a duplicate of 937
+INFO. Doc with id: 5998 is a duplicate of 938
+INFO. Doc with id: 5999 is a duplicate of 939
+INFO. Doc with id: 6000 is a duplicate of 940
+INFO. Doc with id: 6001 is a duplicate of 941
+INFO. Doc with id: 6002 is a duplicate of 942
+INFO. Doc with id: 6003 is a duplicate of 943
+INFO. Doc with id: 6004 is a duplicate of 944
+INFO. Doc with id: 6005 is a duplicate of 945
+INFO. Doc with id: 6006 is a duplicate of 946
+INFO. Doc with id: 6007 is a duplicate of 947
+INFO. Doc with id: 6008 is a duplicate of 948
+INFO. Doc with id: 6009 is a duplicate of 949
+INFO. Doc with id: 6010 is a duplicate of 950
+INFO. Doc with id: 6011 is a duplicate of 951
+INFO. Doc with id: 6016 is a duplicate of 953
+INFO. Doc with id: 6017 is a duplicate of 954
+INFO. Doc with id: 6018 is a duplicate of 955
+INFO. Doc with id: 6019 is a duplicate of 956
+INFO. Doc with id: 6020 is a duplicate of 957
+INFO. Doc with id: 6021 is a duplicate of 958
+INFO. Doc with id: 6022 is a duplicate of 959
+INFO. Doc with id: 6023 is a duplicate of 960
+INFO. Doc with id: 6024 is a duplicate of 961
+INFO. Doc with id: 6025 is a duplicate of 962
+INFO. Doc with id: 6026 is a duplicate of 963
+INFO. Doc with id: 964 has no duplicates 
+INFO. Doc with id: 6027 is a duplicate of 965
+INFO. Doc with id: 6028 is a duplicate of 966
+INFO. Doc with id: 967 has no duplicates 
+INFO. Doc with id: 6029 is a duplicate of 968
+INFO. Doc with id: 6030 is a duplicate of 969
+INFO. Doc with id: 6031 is a duplicate of 970
+INFO. Doc with id: 6032 is a duplicate of 971
+INFO. Doc with id: 6033 is a duplicate of 972
+INFO. Doc with id: 6034 is a duplicate of 973
+WARN. Between Docs with ids: 974 and 6035, could not detemine which to delete
+WARN. Between Docs with ids: 975 and 6036, could not detemine which to delete
+INFO. Doc with id: 6037 is a duplicate of 976
+INFO. Doc with id: 6038 is a duplicate of 977
+INFO. Doc with id: 6039 is a duplicate of 978
+INFO. Doc with id: 6040 is a duplicate of 979
+INFO. Doc with id: 6041 is a duplicate of 980
+INFO. Doc with id: 6042 is a duplicate of 981
+INFO. Doc with id: 6043 is a duplicate of 982
+INFO. Doc with id: 6044 is a duplicate of 983
+INFO. Doc with id: 6045 is a duplicate of 984
+INFO. Doc with id: 6046 is a duplicate of 985
+INFO. Doc with id: 6047 is a duplicate of 986
+WARN. Between Docs with ids: 987 and 6048, could not detemine which to delete
+INFO. Doc with id: 6049 is a duplicate of 988
+INFO. Doc with id: 6050 is a duplicate of 989
+INFO. Doc with id: 6051 is a duplicate of 990
+INFO. Doc with id: 6052 is a duplicate of 991
+INFO. Doc with id: 6053 is a duplicate of 992
+INFO. Doc with id: 6054 is a duplicate of 993
+INFO. Doc with id: 6055 is a duplicate of 994
+INFO. Doc with id: 6056 is a duplicate of 995
+INFO. Doc with id: 6057 is a duplicate of 996
+INFO. Doc with id: 6059 is a duplicate of 998
+INFO. Doc with id: 999 has no duplicates 
+INFO. Doc with id: 6060 is a duplicate of 1000
+INFO. Doc with id: 6061 is a duplicate of 1001
+INFO. Doc with id: 6062 is a duplicate of 1002
+INFO. Doc with id: 6063 is a duplicate of 1003
+INFO. Doc with id: 6064 is a duplicate of 1004
+INFO. Doc with id: 6065 is a duplicate of 1005
+INFO. Doc with id: 6066 is a duplicate of 1006
+INFO. Doc with id: 6067 is a duplicate of 1007
+INFO. Doc with id: 6068 is a duplicate of 1008
+INFO. Doc with id: 6069 is a duplicate of 1009
+INFO. Doc with id: 6070 is a duplicate of 1010
+INFO. Doc with id: 6071 is a duplicate of 1011
+INFO. Doc with id: 6072 is a duplicate of 1012
+INFO. Doc with id: 6073 is a duplicate of 1013
+INFO. Doc with id: 6074 is a duplicate of 1014
+INFO. Doc with id: 6075 is a duplicate of 1016
+WARN. Between Docs with ids: 1017 and 6076, could not detemine which to delete
+INFO. Doc with id: 1018 has no duplicates 
+INFO. Doc with id: 6077 is a duplicate of 1019
+INFO. Doc with id: 6078 is a duplicate of 1020
+INFO. Doc with id: 6079 is a duplicate of 1021
+INFO. Doc with id: 6080 is a duplicate of 1022
+INFO. Doc with id: 1023 has no duplicates 
+INFO. Doc with id: 6081 is a duplicate of 1024
+INFO. Doc with id: 6082 is a duplicate of 1025
+INFO. Doc with id: 6083 is a duplicate of 1026
+INFO. Doc with id: 6084 is a duplicate of 1027
+INFO. Doc with id: 6085 is a duplicate of 1028
+INFO. Doc with id: 6086 is a duplicate of 1029
+INFO. Doc with id: 1030 has no duplicates 
+WARN. Doc with id: 1031, has 3 (more than 2) duplicates.
+INFO. Doc with id: 1032 has no duplicates 
+INFO. Doc with id: 1033 has no duplicates 
+WARN. Between Docs with ids: 1034 and 6087, could not detemine which to delete
+INFO. Doc with id: 6088 is a duplicate of 1035
+INFO. Doc with id: 6089 is a duplicate of 1036
+INFO. Doc with id: 6090 is a duplicate of 1037
+INFO. Doc with id: 6091 is a duplicate of 1038
+INFO. Doc with id: 6092 is a duplicate of 1039
+INFO. Doc with id: 1040 has no duplicates 
+INFO. Doc with id: 6093 is a duplicate of 1041
+INFO. Doc with id: 6094 is a duplicate of 1042
+INFO. Doc with id: 6095 is a duplicate of 1043
+WARN. Between Docs with ids: 1044 and 6096, could not detemine which to delete
+WARN. Doc with id: 1045, has 3 (more than 2) duplicates.
+INFO. Doc with id: 1046 has no duplicates 
+INFO. Doc with id: 1047 has no duplicates 
+INFO. Doc with id: 6098 is a duplicate of 1048
+INFO. Doc with id: 1049 has no duplicates 
+INFO. Doc with id: 1050 has no duplicates 
+INFO. Doc with id: 6099 is a duplicate of 1051
+INFO. Doc with id: 6100 is a duplicate of 1052
+WARN. Between Docs with ids: 1053 and 6101, could not detemine which to delete
+INFO. Doc with id: 6102 is a duplicate of 1054
+INFO. Doc with id: 1055 has no duplicates 
+INFO. Doc with id: 1056 has no duplicates 
+WARN. Between Docs with ids: 1057 and 6103, could not detemine which to delete
+WARN. Between Docs with ids: 1058 and 6104, could not detemine which to delete
+INFO. Doc with id: 6105 is a duplicate of 1059
+INFO. Doc with id: 6106 is a duplicate of 1060
+INFO. Doc with id: 6107 is a duplicate of 1061
+WARN. Between Docs with ids: 1062 and 6108, could not detemine which to delete
+INFO. Doc with id: 6109 is a duplicate of 1063
+INFO. Doc with id: 1064 has no duplicates 
+INFO. Doc with id: 6110 is a duplicate of 1065
+INFO. Doc with id: 6111 is a duplicate of 1066
+INFO. Doc with id: 6112 is a duplicate of 1067
+INFO. Doc with id: 6113 is a duplicate of 1068
+INFO. Doc with id: 6114 is a duplicate of 1069
+INFO. Doc with id: 6115 is a duplicate of 1070
+INFO. Doc with id: 6116 is a duplicate of 1071
+INFO. Doc with id: 1072 has no duplicates 
+INFO. Doc with id: 6117 is a duplicate of 1073
+INFO. Doc with id: 6118 is a duplicate of 1074
+INFO. Doc with id: 6120 is a duplicate of 1076
+INFO. Doc with id: 6121 is a duplicate of 1077
+INFO. Doc with id: 6122 is a duplicate of 1078
+INFO. Doc with id: 6123 is a duplicate of 1079
+INFO. Doc with id: 1080 has no duplicates 
+INFO. Doc with id: 1081 has no duplicates 
+INFO. Doc with id: 6125 is a duplicate of 1082
+INFO. Doc with id: 6126 is a duplicate of 1083
+INFO. Doc with id: 6127 is a duplicate of 1084
+INFO. Doc with id: 6128 is a duplicate of 1085
+INFO. Doc with id: 6129 is a duplicate of 1086
+INFO. Doc with id: 6130 is a duplicate of 1087
+INFO. Doc with id: 6131 is a duplicate of 1088
+INFO. Doc with id: 6132 is a duplicate of 1089
+INFO. Doc with id: 6133 is a duplicate of 1090
+INFO. Doc with id: 6134 is a duplicate of 1091
+INFO. Doc with id: 1092 has no duplicates 
+INFO. Doc with id: 6135 is a duplicate of 1093
+INFO. Doc with id: 6136 is a duplicate of 1094
+INFO. Doc with id: 6137 is a duplicate of 1095
+INFO. Doc with id: 6138 is a duplicate of 1096
+INFO. Doc with id: 6139 is a duplicate of 1097
+INFO. Doc with id: 6140 is a duplicate of 1098
+INFO. Doc with id: 6141 is a duplicate of 1099
+INFO. Doc with id: 6142 is a duplicate of 1100
+INFO. Doc with id: 1101 has no duplicates 
+WARN. Between Docs with ids: 1102 and 6143, could not detemine which to delete
+INFO. Doc with id: 6144 is a duplicate of 1103
+INFO. Doc with id: 1104 has no duplicates 
+INFO. Doc with id: 6145 is a duplicate of 1105
+INFO. Doc with id: 6146 is a duplicate of 1106
+INFO. Doc with id: 6147 is a duplicate of 1107
+INFO. Doc with id: 6148 is a duplicate of 1108
+INFO. Doc with id: 6149 is a duplicate of 1109
+INFO. Doc with id: 6150 is a duplicate of 1110
+INFO. Doc with id: 6151 is a duplicate of 1111
+INFO. Doc with id: 6152 is a duplicate of 1112
+INFO. Doc with id: 6153 is a duplicate of 1113
+INFO. Doc with id: 6154 is a duplicate of 1114
+INFO. Doc with id: 6155 is a duplicate of 1115
+INFO. Doc with id: 6156 is a duplicate of 1116
+INFO. Doc with id: 6157 is a duplicate of 1117
+INFO. Doc with id: 6158 is a duplicate of 1118
+INFO. Doc with id: 6159 is a duplicate of 1119
+INFO. Doc with id: 6160 is a duplicate of 1120
+INFO. Doc with id: 6161 is a duplicate of 1121
+INFO. Doc with id: 6162 is a duplicate of 1122
+INFO. Doc with id: 6163 is a duplicate of 1123
+INFO. Doc with id: 1124 has no duplicates 
+INFO. Doc with id: 6164 is a duplicate of 1125
+INFO. Doc with id: 6165 is a duplicate of 1126
+WARN. Between Docs with ids: 1127 and 6167, could not detemine which to delete
+INFO. Doc with id: 6166 is a duplicate of 1128
+INFO. Doc with id: 6168 is a duplicate of 1129
+INFO. Doc with id: 6169 is a duplicate of 1130
+INFO. Doc with id: 6170 is a duplicate of 1131
+INFO. Doc with id: 6171 is a duplicate of 1132
+INFO. Doc with id: 6172 is a duplicate of 1133
+INFO. Doc with id: 6173 is a duplicate of 1134
+INFO. Doc with id: 6174 is a duplicate of 1135
+INFO. Doc with id: 6175 is a duplicate of 1136
+INFO. Doc with id: 6176 is a duplicate of 1137
+INFO. Doc with id: 6177 is a duplicate of 1138
+INFO. Doc with id: 6178 is a duplicate of 1139
+INFO. Doc with id: 6179 is a duplicate of 1140
+INFO. Doc with id: 6180 is a duplicate of 1141
+INFO. Doc with id: 6181 is a duplicate of 1142
+INFO. Doc with id: 6182 is a duplicate of 1143
+INFO. Doc with id: 6183 is a duplicate of 1144
+INFO. Doc with id: 6184 is a duplicate of 1145
+INFO. Doc with id: 6185 is a duplicate of 1146
+INFO. Doc with id: 6186 is a duplicate of 1147
+INFO. Doc with id: 6187 is a duplicate of 1148
+INFO. Doc with id: 6188 is a duplicate of 1149
+INFO. Doc with id: 6189 is a duplicate of 1150
+WARN. Between Docs with ids: 1151 and 6190, could not detemine which to delete
+INFO. Doc with id: 6191 is a duplicate of 1152
+INFO. Doc with id: 6192 is a duplicate of 1153
+INFO. Doc with id: 1154 has no duplicates 
+INFO. Doc with id: 1155 has no duplicates 
+INFO. Doc with id: 1156 has no duplicates 
+INFO. Doc with id: 1157 has no duplicates 
+INFO. Doc with id: 1158 has no duplicates 
+INFO. Doc with id: 1159 has no duplicates 
+INFO. Doc with id: 1160 has no duplicates 
+INFO. Doc with id: 1161 has no duplicates 
+INFO. Doc with id: 1162 has no duplicates 
+INFO. Doc with id: 5994 is a duplicate of 935
+INFO. Doc with id: 5995 is a duplicate of 936
+WARN. Between Docs with ids: 831 and 5996, could not detemine which to delete
+INFO. Doc with id: 5997 is a duplicate of 937
+INFO. Doc with id: 5998 is a duplicate of 938
+INFO. Doc with id: 5999 is a duplicate of 939
+INFO. Doc with id: 6000 is a duplicate of 940
+INFO. Doc with id: 6001 is a duplicate of 941
+INFO. Doc with id: 6002 is a duplicate of 942
+INFO. Doc with id: 6003 is a duplicate of 943
+INFO. Doc with id: 6004 is a duplicate of 944
+INFO. Doc with id: 6005 is a duplicate of 945
+INFO. Doc with id: 6006 is a duplicate of 946
+INFO. Doc with id: 6007 is a duplicate of 947
+INFO. Doc with id: 6008 is a duplicate of 948
+INFO. Doc with id: 6009 is a duplicate of 949
+INFO. Doc with id: 6010 is a duplicate of 950
+INFO. Doc with id: 6011 is a duplicate of 951
+INFO. Doc with id: 6016 is a duplicate of 953
+INFO. Doc with id: 6017 is a duplicate of 954
+INFO. Doc with id: 6018 is a duplicate of 955
+INFO. Doc with id: 6019 is a duplicate of 956
+INFO. Doc with id: 6020 is a duplicate of 957
+INFO. Doc with id: 6021 is a duplicate of 958
+INFO. Doc with id: 6022 is a duplicate of 959
+INFO. Doc with id: 6023 is a duplicate of 960
+INFO. Doc with id: 6024 is a duplicate of 961
+INFO. Doc with id: 6025 is a duplicate of 962
+INFO. Doc with id: 6026 is a duplicate of 963
+INFO. Doc with id: 6027 is a duplicate of 965
+INFO. Doc with id: 6028 is a duplicate of 966
+INFO. Doc with id: 6029 is a duplicate of 968
+INFO. Doc with id: 6030 is a duplicate of 969
+INFO. Doc with id: 6031 is a duplicate of 970
+INFO. Doc with id: 6032 is a duplicate of 971
+INFO. Doc with id: 6033 is a duplicate of 972
+INFO. Doc with id: 6034 is a duplicate of 973
+WARN. Between Docs with ids: 974 and 6035, could not detemine which to delete
+WARN. Between Docs with ids: 975 and 6036, could not detemine which to delete
+INFO. Doc with id: 6037 is a duplicate of 976
+INFO. Doc with id: 6038 is a duplicate of 977
+INFO. Doc with id: 6039 is a duplicate of 978
+INFO. Doc with id: 6040 is a duplicate of 979
+INFO. Doc with id: 6041 is a duplicate of 980
+INFO. Doc with id: 6042 is a duplicate of 981
+INFO. Doc with id: 6043 is a duplicate of 982
+INFO. Doc with id: 6044 is a duplicate of 983
+INFO. Doc with id: 6045 is a duplicate of 984
+INFO. Doc with id: 6046 is a duplicate of 985
+INFO. Doc with id: 6047 is a duplicate of 986
+WARN. Between Docs with ids: 987 and 6048, could not detemine which to delete
+INFO. Doc with id: 6049 is a duplicate of 988
+INFO. Doc with id: 6050 is a duplicate of 989
+INFO. Doc with id: 6051 is a duplicate of 990
+INFO. Doc with id: 6052 is a duplicate of 991
+INFO. Doc with id: 6053 is a duplicate of 992
+INFO. Doc with id: 6054 is a duplicate of 993
+INFO. Doc with id: 6055 is a duplicate of 994
+INFO. Doc with id: 6056 is a duplicate of 995
+INFO. Doc with id: 6057 is a duplicate of 996
+INFO. Doc with id: 6059 is a duplicate of 998
+INFO. Doc with id: 6060 is a duplicate of 1000
+INFO. Doc with id: 6061 is a duplicate of 1001
+INFO. Doc with id: 6062 is a duplicate of 1002
+INFO. Doc with id: 6063 is a duplicate of 1003
+INFO. Doc with id: 6064 is a duplicate of 1004
+INFO. Doc with id: 6065 is a duplicate of 1005
+INFO. Doc with id: 6066 is a duplicate of 1006
+INFO. Doc with id: 6067 is a duplicate of 1007
+INFO. Doc with id: 6068 is a duplicate of 1008
+INFO. Doc with id: 6069 is a duplicate of 1009
+INFO. Doc with id: 6070 is a duplicate of 1010
+INFO. Doc with id: 6071 is a duplicate of 1011
+INFO. Doc with id: 6072 is a duplicate of 1012
+INFO. Doc with id: 6073 is a duplicate of 1013
+INFO. Doc with id: 6074 is a duplicate of 1014
+INFO. Doc with id: 6075 is a duplicate of 1016
+WARN. Between Docs with ids: 1017 and 6076, could not detemine which to delete
+INFO. Doc with id: 6077 is a duplicate of 1019
+INFO. Doc with id: 6078 is a duplicate of 1020
+INFO. Doc with id: 6079 is a duplicate of 1021
+INFO. Doc with id: 6080 is a duplicate of 1022
+INFO. Doc with id: 6081 is a duplicate of 1024
+INFO. Doc with id: 6082 is a duplicate of 1025
+INFO. Doc with id: 6083 is a duplicate of 1026
+INFO. Doc with id: 6084 is a duplicate of 1027
+INFO. Doc with id: 6085 is a duplicate of 1028
+INFO. Doc with id: 6086 is a duplicate of 1029
+WARN. Between Docs with ids: 1034 and 6087, could not detemine which to delete
+INFO. Doc with id: 6088 is a duplicate of 1035
+INFO. Doc with id: 6089 is a duplicate of 1036
+INFO. Doc with id: 6090 is a duplicate of 1037
+INFO. Doc with id: 6091 is a duplicate of 1038
+INFO. Doc with id: 6092 is a duplicate of 1039
+INFO. Doc with id: 6093 is a duplicate of 1041
+INFO. Doc with id: 6094 is a duplicate of 1042
+INFO. Doc with id: 6095 is a duplicate of 1043
+WARN. Between Docs with ids: 1044 and 6096, could not detemine which to delete
+WARN. Doc with id: 6097, has 3 (more than 2) duplicates.
+INFO. Doc with id: 6098 is a duplicate of 1048
+INFO. Doc with id: 6099 is a duplicate of 1051
+INFO. Doc with id: 6100 is a duplicate of 1052
+WARN. Between Docs with ids: 1053 and 6101, could not detemine which to delete
+INFO. Doc with id: 6102 is a duplicate of 1054
+WARN. Between Docs with ids: 1057 and 6103, could not detemine which to delete
+WARN. Between Docs with ids: 1058 and 6104, could not detemine which to delete
+INFO. Doc with id: 6105 is a duplicate of 1059
+INFO. Doc with id: 6106 is a duplicate of 1060
+INFO. Doc with id: 6107 is a duplicate of 1061
+WARN. Between Docs with ids: 1062 and 6108, could not detemine which to delete
+INFO. Doc with id: 6109 is a duplicate of 1063
+INFO. Doc with id: 6110 is a duplicate of 1065
+INFO. Doc with id: 6111 is a duplicate of 1066
+INFO. Doc with id: 6112 is a duplicate of 1067
+INFO. Doc with id: 6113 is a duplicate of 1068
+INFO. Doc with id: 6114 is a duplicate of 1069
+INFO. Doc with id: 6115 is a duplicate of 1070
+INFO. Doc with id: 6116 is a duplicate of 1071
+INFO. Doc with id: 6117 is a duplicate of 1073
+INFO. Doc with id: 6118 is a duplicate of 1074
+INFO. Doc with id: 6120 is a duplicate of 1076
+INFO. Doc with id: 6121 is a duplicate of 1077
+INFO. Doc with id: 6122 is a duplicate of 1078
+INFO. Doc with id: 6123 is a duplicate of 1079
+INFO. Doc with id: 6124 has no duplicates 
+INFO. Doc with id: 6125 is a duplicate of 1082
+INFO. Doc with id: 6126 is a duplicate of 1083
+INFO. Doc with id: 6127 is a duplicate of 1084
+INFO. Doc with id: 6128 is a duplicate of 1085
+INFO. Doc with id: 6129 is a duplicate of 1086
+INFO. Doc with id: 6130 is a duplicate of 1087
+INFO. Doc with id: 6131 is a duplicate of 1088
+INFO. Doc with id: 6132 is a duplicate of 1089
+INFO. Doc with id: 6133 is a duplicate of 1090
+INFO. Doc with id: 6134 is a duplicate of 1091
+INFO. Doc with id: 6135 is a duplicate of 1093
+INFO. Doc with id: 6136 is a duplicate of 1094
+INFO. Doc with id: 6137 is a duplicate of 1095
+INFO. Doc with id: 6138 is a duplicate of 1096
+INFO. Doc with id: 6139 is a duplicate of 1097
+INFO. Doc with id: 6140 is a duplicate of 1098
+INFO. Doc with id: 6141 is a duplicate of 1099
+INFO. Doc with id: 6142 is a duplicate of 1100
+WARN. Between Docs with ids: 1102 and 6143, could not detemine which to delete
+INFO. Doc with id: 6144 is a duplicate of 1103
+INFO. Doc with id: 6145 is a duplicate of 1105
+INFO. Doc with id: 6146 is a duplicate of 1106
+INFO. Doc with id: 6147 is a duplicate of 1107
+INFO. Doc with id: 6148 is a duplicate of 1108
+INFO. Doc with id: 6149 is a duplicate of 1109
+INFO. Doc with id: 6150 is a duplicate of 1110
+INFO. Doc with id: 6151 is a duplicate of 1111
+INFO. Doc with id: 6152 is a duplicate of 1112
+INFO. Doc with id: 6153 is a duplicate of 1113
+INFO. Doc with id: 6154 is a duplicate of 1114
+INFO. Doc with id: 6155 is a duplicate of 1115
+INFO. Doc with id: 6156 is a duplicate of 1116
+INFO. Doc with id: 6157 is a duplicate of 1117
+INFO. Doc with id: 6158 is a duplicate of 1118
+INFO. Doc with id: 6159 is a duplicate of 1119
+INFO. Doc with id: 6160 is a duplicate of 1120
+INFO. Doc with id: 6161 is a duplicate of 1121
+INFO. Doc with id: 6162 is a duplicate of 1122
+INFO. Doc with id: 6163 is a duplicate of 1123
+INFO. Doc with id: 6164 is a duplicate of 1125
+INFO. Doc with id: 6165 is a duplicate of 1126
+INFO. Doc with id: 6166 is a duplicate of 1128
+WARN. Between Docs with ids: 1127 and 6167, could not detemine which to delete
+INFO. Doc with id: 6168 is a duplicate of 1129
+INFO. Doc with id: 6169 is a duplicate of 1130
+INFO. Doc with id: 6170 is a duplicate of 1131
+INFO. Doc with id: 6171 is a duplicate of 1132
+INFO. Doc with id: 6172 is a duplicate of 1133
+INFO. Doc with id: 6173 is a duplicate of 1134
+INFO. Doc with id: 6174 is a duplicate of 1135
+INFO. Doc with id: 6175 is a duplicate of 1136
+INFO. Doc with id: 6176 is a duplicate of 1137
+INFO. Doc with id: 6177 is a duplicate of 1138
+INFO. Doc with id: 6178 is a duplicate of 1139
+INFO. Doc with id: 6179 is a duplicate of 1140
+INFO. Doc with id: 6180 is a duplicate of 1141
+INFO. Doc with id: 6181 is a duplicate of 1142
+INFO. Doc with id: 6182 is a duplicate of 1143
+INFO. Doc with id: 6183 is a duplicate of 1144
+INFO. Doc with id: 6184 is a duplicate of 1145
+INFO. Doc with id: 6185 is a duplicate of 1146
+INFO. Doc with id: 6186 is a duplicate of 1147
+INFO. Doc with id: 6187 is a duplicate of 1148
+INFO. Doc with id: 6188 is a duplicate of 1149
+INFO. Doc with id: 6189 is a duplicate of 1150
+WARN. Between Docs with ids: 1151 and 6190, could not detemine which to delete
+INFO. Doc with id: 6191 is a duplicate of 1152
+INFO. Doc with id: 6192 is a duplicate of 1153
+INFO. Doc with id: 6208 has no duplicates 
+INFO. Doc with id: 6209 has no duplicates 
+INFO. Doc with id: 6213 is a duplicate of 794
+INFO. Doc with id: 6214 is a duplicate of 795
+INFO. Doc with id: 6215 is a duplicate of 796
+INFO. Doc with id: 6216 is a duplicate of 797
+INFO. Doc with id: 6225 is a duplicate of 802
+INFO. Doc with id: 6226 is a duplicate of 803
+INFO. Doc with id: 6229 is a duplicate of 805
+INFO. Doc with id: 6230 is a duplicate of 806
+INFO. Doc with id: 6231 is a duplicate of 807
+INFO. Doc with id: 6232 is a duplicate of 808
+INFO. Doc with id: 6234 is a duplicate of 810
+INFO. Doc with id: 6235 is a duplicate of 811
+INFO. Doc with id: 6236 is a duplicate of 812
+INFO. Doc with id: 6239 is a duplicate of 814
+WARN. Between Docs with ids: 815 and 6240, could not detemine which to delete
+INFO. Doc with id: 6241 is a duplicate of 816
+INFO. Doc with id: 6242 is a duplicate of 817
+INFO. Doc with id: 6243 is a duplicate of 818
+INFO. Doc with id: 6244 is a duplicate of 819
+INFO. Doc with id: 6245 is a duplicate of 820
+INFO. Doc with id: 6246 is a duplicate of 821
+INFO. Doc with id: 6247 is a duplicate of 822
+INFO. Doc with id: 6248 is a duplicate of 823
+INFO. Doc with id: 6249 is a duplicate of 824
+INFO. Doc with id: 6254 is a duplicate of 826
+INFO. Doc with id: 6258 is a duplicate of 830
+INFO. Doc with id: 6259 is a duplicate of 832
+INFO. Doc with id: 6260 is a duplicate of 833
+INFO. Doc with id: 6261 is a duplicate of 834
+INFO. Doc with id: 6263 is a duplicate of 836
+INFO. Doc with id: 6264 is a duplicate of 837
+INFO. Doc with id: 6265 is a duplicate of 838
+INFO. Doc with id: 6266 is a duplicate of 839
+INFO. Doc with id: 6267 is a duplicate of 840
+INFO. Doc with id: 6269 is a duplicate of 842
+INFO. Doc with id: 6270 is a duplicate of 843
+INFO. Doc with id: 6274 is a duplicate of 847
+INFO. Doc with id: 6275 is a duplicate of 848
+INFO. Doc with id: 6277 is a duplicate of 850
+INFO. Doc with id: 6279 is a duplicate of 852
+INFO. Doc with id: 6280 is a duplicate of 853
+INFO. Doc with id: 6281 is a duplicate of 854
+INFO. Doc with id: 6284 is a duplicate of 857
+INFO. Doc with id: 6285 is a duplicate of 858
+INFO. Doc with id: 6286 is a duplicate of 859
+INFO. Doc with id: 6287 is a duplicate of 860
+INFO. Doc with id: 6288 is a duplicate of 861
+INFO. Doc with id: 6289 is a duplicate of 862
+INFO. Doc with id: 6290 is a duplicate of 863
+INFO. Doc with id: 6291 is a duplicate of 864
+INFO. Doc with id: 6292 is a duplicate of 865
+INFO. Doc with id: 6293 is a duplicate of 866
+INFO. Doc with id: 6294 is a duplicate of 867
+INFO. Doc with id: 6296 is a duplicate of 869
+INFO. Doc with id: 6297 is a duplicate of 870
+INFO. Doc with id: 6298 is a duplicate of 871
+INFO. Doc with id: 6299 is a duplicate of 872
+INFO. Doc with id: 6300 is a duplicate of 873
+INFO. Doc with id: 6301 is a duplicate of 874
+INFO. Doc with id: 6302 is a duplicate of 875
+INFO. Doc with id: 6305 is a duplicate of 877
+INFO. Doc with id: 6306 is a duplicate of 878
+INFO. Doc with id: 6310 is a duplicate of 884
+INFO. Doc with id: 6311 is a duplicate of 885
+INFO. Doc with id: 6312 is a duplicate of 886
+INFO. Doc with id: 6313 is a duplicate of 887
+INFO. Doc with id: 6314 is a duplicate of 888
+INFO. Doc with id: 6315 is a duplicate of 889
+INFO. Doc with id: 6316 is a duplicate of 890
+INFO. Doc with id: 6317 is a duplicate of 891
+INFO. Doc with id: 6318 is a duplicate of 892
+INFO. Doc with id: 6319 is a duplicate of 893
+INFO. Doc with id: 6321 is a duplicate of 895
+INFO. Doc with id: 6322 is a duplicate of 896
+INFO. Doc with id: 6323 is a duplicate of 897
+INFO. Doc with id: 6324 is a duplicate of 898
+INFO. Doc with id: 6325 is a duplicate of 899
+WARN. Between Docs with ids: 900 and 6326, could not detemine which to delete
+INFO. Doc with id: 6327 is a duplicate of 901
+INFO. Doc with id: 6328 is a duplicate of 902
+INFO. Doc with id: 6329 is a duplicate of 903
+INFO. Doc with id: 6331 is a duplicate of 905
+INFO. Doc with id: 6332 is a duplicate of 907
+INFO. Doc with id: 6333 is a duplicate of 908
+INFO. Doc with id: 6334 is a duplicate of 909
+INFO. Doc with id: 6335 is a duplicate of 910
+INFO. Doc with id: 6336 is a duplicate of 912
+INFO. Doc with id: 6337 is a duplicate of 913
+INFO. Doc with id: 6339 is a duplicate of 915
+INFO. Doc with id: 6340 is a duplicate of 916
+INFO. Doc with id: 6341 is a duplicate of 917
+INFO. Doc with id: 6342 is a duplicate of 918
+INFO. Doc with id: 6343 is a duplicate of 919
+INFO. Doc with id: 6344 is a duplicate of 920
+INFO. Doc with id: 6345 is a duplicate of 921
+INFO. Doc with id: 6346 is a duplicate of 922
+INFO. Doc with id: 6371 is a duplicate of 931
+INFO. Doc with id: 6372 is a duplicate of 932
+INFO. Doc with id: 6373 is a duplicate of 933
+INFO. Doc with id: 6374 is a duplicate of 934
+INFO. Deleting 275 duplicates
+INFO. 1 Deleted doc with id: 6144
+Successfully deleted: 1 Docs.
+INFO. 2 Deleted doc with id: 6145
+Successfully deleted: 2 Docs.
+INFO. 3 Deleted doc with id: 6146
+Successfully deleted: 3 Docs.
+INFO. 4 Deleted doc with id: 6147
+Successfully deleted: 4 Docs.
+INFO. 5 Deleted doc with id: 6148
+Successfully deleted: 5 Docs.
+INFO. 6 Deleted doc with id: 6149
+Successfully deleted: 6 Docs.
+INFO. 7 Deleted doc with id: 6150
+Successfully deleted: 7 Docs.
+INFO. 8 Deleted doc with id: 6151
+Successfully deleted: 8 Docs.
+INFO. 9 Deleted doc with id: 6152
+Successfully deleted: 9 Docs.
+INFO. 10 Deleted doc with id: 6153
+Successfully deleted: 10 Docs.
+INFO. 11 Deleted doc with id: 6154
+Successfully deleted: 11 Docs.
+INFO. 12 Deleted doc with id: 6155
+Successfully deleted: 12 Docs.
+INFO. 13 Deleted doc with id: 6156
+Successfully deleted: 13 Docs.
+INFO. 14 Deleted doc with id: 6157
+Successfully deleted: 14 Docs.
+INFO. 15 Deleted doc with id: 6158
+Successfully deleted: 15 Docs.
+INFO. 16 Deleted doc with id: 6159
+Successfully deleted: 16 Docs.
+INFO. 17 Deleted doc with id: 6160
+Successfully deleted: 17 Docs.
+INFO. 18 Deleted doc with id: 6161
+Successfully deleted: 18 Docs.
+INFO. 19 Deleted doc with id: 6162
+Successfully deleted: 19 Docs.
+INFO. 20 Deleted doc with id: 6163
+Successfully deleted: 20 Docs.
+INFO. 21 Deleted doc with id: 6164
+Successfully deleted: 21 Docs.
+INFO. 22 Deleted doc with id: 6165
+Successfully deleted: 22 Docs.
+INFO. 23 Deleted doc with id: 6166
+Successfully deleted: 23 Docs.
+INFO. 24 Deleted doc with id: 6168
+Successfully deleted: 24 Docs.
+INFO. 25 Deleted doc with id: 6169
+Successfully deleted: 25 Docs.
+INFO. 26 Deleted doc with id: 6170
+Successfully deleted: 26 Docs.
+INFO. 27 Deleted doc with id: 6171
+Successfully deleted: 27 Docs.
+INFO. 28 Deleted doc with id: 6172
+Successfully deleted: 28 Docs.
+INFO. 29 Deleted doc with id: 6173
+Successfully deleted: 29 Docs.
+INFO. 30 Deleted doc with id: 6174
+Successfully deleted: 30 Docs.
+INFO. 31 Deleted doc with id: 6175
+Successfully deleted: 31 Docs.
+INFO. 32 Deleted doc with id: 6176
+Successfully deleted: 32 Docs.
+INFO. 33 Deleted doc with id: 6177
+Successfully deleted: 33 Docs.
+INFO. 34 Deleted doc with id: 6178
+Successfully deleted: 34 Docs.
+INFO. 35 Deleted doc with id: 6179
+Successfully deleted: 35 Docs.
+INFO. 36 Deleted doc with id: 6180
+Successfully deleted: 36 Docs.
+INFO. 37 Deleted doc with id: 6181
+Successfully deleted: 37 Docs.
+INFO. 38 Deleted doc with id: 6182
+Successfully deleted: 38 Docs.
+INFO. 39 Deleted doc with id: 6183
+Successfully deleted: 39 Docs.
+INFO. 40 Deleted doc with id: 6184
+Successfully deleted: 40 Docs.
+INFO. 41 Deleted doc with id: 6185
+Successfully deleted: 41 Docs.
+INFO. 42 Deleted doc with id: 6186
+Successfully deleted: 42 Docs.
+INFO. 43 Deleted doc with id: 6187
+Successfully deleted: 43 Docs.
+INFO. 44 Deleted doc with id: 6188
+Successfully deleted: 44 Docs.
+INFO. 45 Deleted doc with id: 6189
+Successfully deleted: 45 Docs.
+INFO. 46 Deleted doc with id: 6191
+Successfully deleted: 46 Docs.
+INFO. 47 Deleted doc with id: 6192
+Successfully deleted: 47 Docs.
+INFO. 48 Deleted doc with id: 6213
+Successfully deleted: 48 Docs.
+INFO. 49 Deleted doc with id: 6214
+Successfully deleted: 49 Docs.
+INFO. 50 Deleted doc with id: 6215
+Successfully deleted: 50 Docs.
+INFO. 51 Deleted doc with id: 6216
+Successfully deleted: 51 Docs.
+INFO. 52 Deleted doc with id: 6225
+Successfully deleted: 52 Docs.
+INFO. 53 Deleted doc with id: 6226
+Successfully deleted: 53 Docs.
+INFO. 54 Deleted doc with id: 6229
+Successfully deleted: 54 Docs.
+INFO. 55 Deleted doc with id: 6230
+Successfully deleted: 55 Docs.
+INFO. 56 Deleted doc with id: 6231
+Successfully deleted: 56 Docs.
+INFO. 57 Deleted doc with id: 6232
+Successfully deleted: 57 Docs.
+INFO. 58 Deleted doc with id: 6234
+Successfully deleted: 58 Docs.
+INFO. 59 Deleted doc with id: 6235
+Successfully deleted: 59 Docs.
+INFO. 60 Deleted doc with id: 6236
+Successfully deleted: 60 Docs.
+INFO. 61 Deleted doc with id: 6239
+Successfully deleted: 61 Docs.
+INFO. 62 Deleted doc with id: 6241
+Successfully deleted: 62 Docs.
+INFO. 63 Deleted doc with id: 6242
+Successfully deleted: 63 Docs.
+INFO. 64 Deleted doc with id: 6243
+Successfully deleted: 64 Docs.
+INFO. 65 Deleted doc with id: 6244
+Successfully deleted: 65 Docs.
+INFO. 66 Deleted doc with id: 6245
+Successfully deleted: 66 Docs.
+INFO. 67 Deleted doc with id: 6246
+Successfully deleted: 67 Docs.
+INFO. 68 Deleted doc with id: 6247
+Successfully deleted: 68 Docs.
+INFO. 69 Deleted doc with id: 6248
+Successfully deleted: 69 Docs.
+INFO. 70 Deleted doc with id: 6249
+Successfully deleted: 70 Docs.
+INFO. 71 Deleted doc with id: 6254
+Successfully deleted: 71 Docs.
+INFO. 72 Deleted doc with id: 6258
+Successfully deleted: 72 Docs.
+INFO. 73 Deleted doc with id: 6259
+Successfully deleted: 73 Docs.
+INFO. 74 Deleted doc with id: 6260
+Successfully deleted: 74 Docs.
+INFO. 75 Deleted doc with id: 6261
+Successfully deleted: 75 Docs.
+INFO. 76 Deleted doc with id: 6263
+Successfully deleted: 76 Docs.
+INFO. 77 Deleted doc with id: 6264
+Successfully deleted: 77 Docs.
+INFO. 78 Deleted doc with id: 6265
+Successfully deleted: 78 Docs.
+INFO. 79 Deleted doc with id: 6266
+Successfully deleted: 79 Docs.
+INFO. 80 Deleted doc with id: 6267
+Successfully deleted: 80 Docs.
+INFO. 81 Deleted doc with id: 6269
+Successfully deleted: 81 Docs.
+INFO. 82 Deleted doc with id: 6270
+Successfully deleted: 82 Docs.
+INFO. 83 Deleted doc with id: 6274
+Successfully deleted: 83 Docs.
+INFO. 84 Deleted doc with id: 6275
+Successfully deleted: 84 Docs.
+INFO. 85 Deleted doc with id: 6277
+Successfully deleted: 85 Docs.
+INFO. 86 Deleted doc with id: 6279
+Successfully deleted: 86 Docs.
+INFO. 87 Deleted doc with id: 6280
+Successfully deleted: 87 Docs.
+INFO. 88 Deleted doc with id: 6281
+Successfully deleted: 88 Docs.
+INFO. 89 Deleted doc with id: 6284
+Successfully deleted: 89 Docs.
+INFO. 90 Deleted doc with id: 6285
+Successfully deleted: 90 Docs.
+INFO. 91 Deleted doc with id: 6286
+Successfully deleted: 91 Docs.
+INFO. 92 Deleted doc with id: 6287
+Successfully deleted: 92 Docs.
+INFO. 93 Deleted doc with id: 6288
+Successfully deleted: 93 Docs.
+INFO. 94 Deleted doc with id: 6289
+Successfully deleted: 94 Docs.
+INFO. 95 Deleted doc with id: 6290
+Successfully deleted: 95 Docs.
+INFO. 96 Deleted doc with id: 6291
+Successfully deleted: 96 Docs.
+INFO. 97 Deleted doc with id: 6292
+Successfully deleted: 97 Docs.
+INFO. 98 Deleted doc with id: 6293
+Successfully deleted: 98 Docs.
+INFO. 99 Deleted doc with id: 6294
+Successfully deleted: 99 Docs.
+INFO. 100 Deleted doc with id: 6296
+Successfully deleted: 100 Docs.
+INFO. 101 Deleted doc with id: 6297
+Successfully deleted: 101 Docs.
+INFO. 102 Deleted doc with id: 6298
+Successfully deleted: 102 Docs.
+INFO. 103 Deleted doc with id: 6299
+Successfully deleted: 103 Docs.
+INFO. 104 Deleted doc with id: 6300
+Successfully deleted: 104 Docs.
+INFO. 105 Deleted doc with id: 6301
+Successfully deleted: 105 Docs.
+INFO. 106 Deleted doc with id: 6302
+Successfully deleted: 106 Docs.
+INFO. 107 Deleted doc with id: 6305
+Successfully deleted: 107 Docs.
+INFO. 108 Deleted doc with id: 6306
+Successfully deleted: 108 Docs.
+INFO. 109 Deleted doc with id: 6310
+Successfully deleted: 109 Docs.
+INFO. 110 Deleted doc with id: 6311
+Successfully deleted: 110 Docs.
+INFO. 111 Deleted doc with id: 6312
+Successfully deleted: 111 Docs.
+INFO. 112 Deleted doc with id: 6313
+Successfully deleted: 112 Docs.
+INFO. 113 Deleted doc with id: 6314
+Successfully deleted: 113 Docs.
+INFO. 114 Deleted doc with id: 6315
+Successfully deleted: 114 Docs.
+INFO. 115 Deleted doc with id: 6316
+Successfully deleted: 115 Docs.
+INFO. 116 Deleted doc with id: 6317
+Successfully deleted: 116 Docs.
+INFO. 117 Deleted doc with id: 6318
+Successfully deleted: 117 Docs.
+INFO. 118 Deleted doc with id: 6319
+Successfully deleted: 118 Docs.
+INFO. 119 Deleted doc with id: 6321
+Successfully deleted: 119 Docs.
+INFO. 120 Deleted doc with id: 6322
+Successfully deleted: 120 Docs.
+INFO. 121 Deleted doc with id: 6323
+Successfully deleted: 121 Docs.
+INFO. 122 Deleted doc with id: 6324
+Successfully deleted: 122 Docs.
+INFO. 123 Deleted doc with id: 6325
+Successfully deleted: 123 Docs.
+INFO. 124 Deleted doc with id: 6327
+Successfully deleted: 124 Docs.
+INFO. 125 Deleted doc with id: 6328
+Successfully deleted: 125 Docs.
+INFO. 126 Deleted doc with id: 6329
+Successfully deleted: 126 Docs.
+INFO. 127 Deleted doc with id: 6331
+Successfully deleted: 127 Docs.
+INFO. 128 Deleted doc with id: 6332
+Successfully deleted: 128 Docs.
+INFO. 129 Deleted doc with id: 6333
+Successfully deleted: 129 Docs.
+INFO. 130 Deleted doc with id: 6334
+Successfully deleted: 130 Docs.
+INFO. 131 Deleted doc with id: 6335
+Successfully deleted: 131 Docs.
+INFO. 132 Deleted doc with id: 6336
+Successfully deleted: 132 Docs.
+INFO. 133 Deleted doc with id: 6337
+Successfully deleted: 133 Docs.
+INFO. 134 Deleted doc with id: 6339
+Successfully deleted: 134 Docs.
+INFO. 135 Deleted doc with id: 6340
+Successfully deleted: 135 Docs.
+INFO. 136 Deleted doc with id: 6341
+Successfully deleted: 136 Docs.
+INFO. 137 Deleted doc with id: 6342
+Successfully deleted: 137 Docs.
+INFO. 138 Deleted doc with id: 6343
+Successfully deleted: 138 Docs.
+INFO. 139 Deleted doc with id: 6344
+Successfully deleted: 139 Docs.
+INFO. 140 Deleted doc with id: 6345
+Successfully deleted: 140 Docs.
+INFO. 141 Deleted doc with id: 6346
+Successfully deleted: 141 Docs.
+INFO. 142 Deleted doc with id: 6371
+Successfully deleted: 142 Docs.
+INFO. 143 Deleted doc with id: 6372
+Successfully deleted: 143 Docs.
+INFO. 144 Deleted doc with id: 6373
+Successfully deleted: 144 Docs.
+INFO. 145 Deleted doc with id: 6374
+Successfully deleted: 145 Docs.
+INFO. 146 Deleted doc with id: 5994
+Successfully deleted: 146 Docs.
+INFO. 147 Deleted doc with id: 5995
+Successfully deleted: 147 Docs.
+INFO. 148 Deleted doc with id: 5997
+Successfully deleted: 148 Docs.
+INFO. 149 Deleted doc with id: 5998
+Successfully deleted: 149 Docs.
+INFO. 150 Deleted doc with id: 5999
+Successfully deleted: 150 Docs.
+INFO. 151 Deleted doc with id: 6000
+Successfully deleted: 151 Docs.
+INFO. 152 Deleted doc with id: 6001
+Successfully deleted: 152 Docs.
+INFO. 153 Deleted doc with id: 6002
+Successfully deleted: 153 Docs.
+INFO. 154 Deleted doc with id: 6003
+Successfully deleted: 154 Docs.
+INFO. 155 Deleted doc with id: 6004
+Successfully deleted: 155 Docs.
+INFO. 156 Deleted doc with id: 6005
+Successfully deleted: 156 Docs.
+INFO. 157 Deleted doc with id: 6006
+Successfully deleted: 157 Docs.
+INFO. 158 Deleted doc with id: 6007
+Successfully deleted: 158 Docs.
+INFO. 159 Deleted doc with id: 6008
+Successfully deleted: 159 Docs.
+INFO. 160 Deleted doc with id: 6009
+Successfully deleted: 160 Docs.
+INFO. 161 Deleted doc with id: 6010
+Successfully deleted: 161 Docs.
+INFO. 162 Deleted doc with id: 6011
+Successfully deleted: 162 Docs.
+INFO. 163 Deleted doc with id: 6016
+Successfully deleted: 163 Docs.
+INFO. 164 Deleted doc with id: 6017
+Successfully deleted: 164 Docs.
+INFO. 165 Deleted doc with id: 6018
+Successfully deleted: 165 Docs.
+INFO. 166 Deleted doc with id: 6019
+Successfully deleted: 166 Docs.
+INFO. 167 Deleted doc with id: 6020
+Successfully deleted: 167 Docs.
+INFO. 168 Deleted doc with id: 6021
+Successfully deleted: 168 Docs.
+INFO. 169 Deleted doc with id: 6022
+Successfully deleted: 169 Docs.
+INFO. 170 Deleted doc with id: 6023
+Successfully deleted: 170 Docs.
+INFO. 171 Deleted doc with id: 6024
+Successfully deleted: 171 Docs.
+INFO. 172 Deleted doc with id: 6025
+Successfully deleted: 172 Docs.
+INFO. 173 Deleted doc with id: 6026
+Successfully deleted: 173 Docs.
+INFO. 174 Deleted doc with id: 6027
+Successfully deleted: 174 Docs.
+INFO. 175 Deleted doc with id: 6028
+Successfully deleted: 175 Docs.
+INFO. 176 Deleted doc with id: 6029
+Successfully deleted: 176 Docs.
+INFO. 177 Deleted doc with id: 6030
+Successfully deleted: 177 Docs.
+INFO. 178 Deleted doc with id: 6031
+Successfully deleted: 178 Docs.
+INFO. 179 Deleted doc with id: 6032
+Successfully deleted: 179 Docs.
+INFO. 180 Deleted doc with id: 6033
+Successfully deleted: 180 Docs.
+INFO. 181 Deleted doc with id: 6034
+Successfully deleted: 181 Docs.
+INFO. 182 Deleted doc with id: 6037
+Successfully deleted: 182 Docs.
+INFO. 183 Deleted doc with id: 6038
+Successfully deleted: 183 Docs.
+INFO. 184 Deleted doc with id: 6039
+Successfully deleted: 184 Docs.
+INFO. 185 Deleted doc with id: 6040
+Successfully deleted: 185 Docs.
+INFO. 186 Deleted doc with id: 6041
+Successfully deleted: 186 Docs.
+INFO. 187 Deleted doc with id: 6042
+Successfully deleted: 187 Docs.
+INFO. 188 Deleted doc with id: 6043
+Successfully deleted: 188 Docs.
+INFO. 189 Deleted doc with id: 6044
+Successfully deleted: 189 Docs.
+INFO. 190 Deleted doc with id: 6045
+Successfully deleted: 190 Docs.
+INFO. 191 Deleted doc with id: 6046
+Successfully deleted: 191 Docs.
+INFO. 192 Deleted doc with id: 6047
+Successfully deleted: 192 Docs.
+INFO. 193 Deleted doc with id: 6049
+Successfully deleted: 193 Docs.
+INFO. 194 Deleted doc with id: 6050
+Successfully deleted: 194 Docs.
+INFO. 195 Deleted doc with id: 6051
+Successfully deleted: 195 Docs.
+INFO. 196 Deleted doc with id: 6052
+Successfully deleted: 196 Docs.
+INFO. 197 Deleted doc with id: 6053
+Successfully deleted: 197 Docs.
+INFO. 198 Deleted doc with id: 6054
+Successfully deleted: 198 Docs.
+INFO. 199 Deleted doc with id: 6055
+Successfully deleted: 199 Docs.
+INFO. 200 Deleted doc with id: 6056
+Successfully deleted: 200 Docs.
+INFO. 201 Deleted doc with id: 6057
+Successfully deleted: 201 Docs.
+INFO. 202 Deleted doc with id: 6059
+Successfully deleted: 202 Docs.
+INFO. 203 Deleted doc with id: 6060
+Successfully deleted: 203 Docs.
+INFO. 204 Deleted doc with id: 6061
+Successfully deleted: 204 Docs.
+INFO. 205 Deleted doc with id: 6062
+Successfully deleted: 205 Docs.
+INFO. 206 Deleted doc with id: 6063
+Successfully deleted: 206 Docs.
+INFO. 207 Deleted doc with id: 6064
+Successfully deleted: 207 Docs.
+INFO. 208 Deleted doc with id: 6065
+Successfully deleted: 208 Docs.
+INFO. 209 Deleted doc with id: 6066
+Successfully deleted: 209 Docs.
+INFO. 210 Deleted doc with id: 6067
+Successfully deleted: 210 Docs.
+INFO. 211 Deleted doc with id: 6068
+Successfully deleted: 211 Docs.
+INFO. 212 Deleted doc with id: 6069
+Successfully deleted: 212 Docs.
+INFO. 213 Deleted doc with id: 6070
+Successfully deleted: 213 Docs.
+INFO. 214 Deleted doc with id: 6071
+Successfully deleted: 214 Docs.
+INFO. 215 Deleted doc with id: 6072
+Successfully deleted: 215 Docs.
+INFO. 216 Deleted doc with id: 6073
+Successfully deleted: 216 Docs.
+INFO. 217 Deleted doc with id: 6074
+Successfully deleted: 217 Docs.
+INFO. 218 Deleted doc with id: 6075
+Successfully deleted: 218 Docs.
+INFO. 219 Deleted doc with id: 6077
+Successfully deleted: 219 Docs.
+INFO. 220 Deleted doc with id: 6078
+Successfully deleted: 220 Docs.
+INFO. 221 Deleted doc with id: 6079
+Successfully deleted: 221 Docs.
+INFO. 222 Deleted doc with id: 6080
+Successfully deleted: 222 Docs.
+INFO. 223 Deleted doc with id: 6081
+Successfully deleted: 223 Docs.
+INFO. 224 Deleted doc with id: 6082
+Successfully deleted: 224 Docs.
+INFO. 225 Deleted doc with id: 6083
+Successfully deleted: 225 Docs.
+INFO. 226 Deleted doc with id: 6084
+Successfully deleted: 226 Docs.
+INFO. 227 Deleted doc with id: 6085
+Successfully deleted: 227 Docs.
+INFO. 228 Deleted doc with id: 6086
+Successfully deleted: 228 Docs.
+INFO. 229 Deleted doc with id: 6088
+Successfully deleted: 229 Docs.
+INFO. 230 Deleted doc with id: 6089
+Successfully deleted: 230 Docs.
+INFO. 231 Deleted doc with id: 6090
+Successfully deleted: 231 Docs.
+INFO. 232 Deleted doc with id: 6091
+Successfully deleted: 232 Docs.
+INFO. 233 Deleted doc with id: 6092
+Successfully deleted: 233 Docs.
+INFO. 234 Deleted doc with id: 6093
+Successfully deleted: 234 Docs.
+INFO. 235 Deleted doc with id: 6094
+Successfully deleted: 235 Docs.
+INFO. 236 Deleted doc with id: 6095
+Successfully deleted: 236 Docs.
+INFO. 237 Deleted doc with id: 6098
+Successfully deleted: 237 Docs.
+INFO. 238 Deleted doc with id: 6099
+Successfully deleted: 238 Docs.
+INFO. 239 Deleted doc with id: 6100
+Successfully deleted: 239 Docs.
+INFO. 240 Deleted doc with id: 6102
+Successfully deleted: 240 Docs.
+INFO. 241 Deleted doc with id: 6105
+Successfully deleted: 241 Docs.
+INFO. 242 Deleted doc with id: 6106
+Successfully deleted: 242 Docs.
+INFO. 243 Deleted doc with id: 6107
+Successfully deleted: 243 Docs.
+INFO. 244 Deleted doc with id: 6109
+Successfully deleted: 244 Docs.
+INFO. 245 Deleted doc with id: 6110
+Successfully deleted: 245 Docs.
+INFO. 246 Deleted doc with id: 6111
+Successfully deleted: 246 Docs.
+INFO. 247 Deleted doc with id: 6112
+Successfully deleted: 247 Docs.
+INFO. 248 Deleted doc with id: 6113
+Successfully deleted: 248 Docs.
+INFO. 249 Deleted doc with id: 6114
+Successfully deleted: 249 Docs.
+INFO. 250 Deleted doc with id: 6115
+Successfully deleted: 250 Docs.
+INFO. 251 Deleted doc with id: 6116
+Successfully deleted: 251 Docs.
+INFO. 252 Deleted doc with id: 6117
+Successfully deleted: 252 Docs.
+INFO. 253 Deleted doc with id: 6118
+Successfully deleted: 253 Docs.
+INFO. 254 Deleted doc with id: 6120
+Successfully deleted: 254 Docs.
+INFO. 255 Deleted doc with id: 6121
+Successfully deleted: 255 Docs.
+INFO. 256 Deleted doc with id: 6122
+Successfully deleted: 256 Docs.
+INFO. 257 Deleted doc with id: 6123
+Successfully deleted: 257 Docs.
+INFO. 258 Deleted doc with id: 6125
+Successfully deleted: 258 Docs.
+INFO. 259 Deleted doc with id: 6126
+Successfully deleted: 259 Docs.
+INFO. 260 Deleted doc with id: 6127
+Successfully deleted: 260 Docs.
+INFO. 261 Deleted doc with id: 6128
+Successfully deleted: 261 Docs.
+INFO. 262 Deleted doc with id: 6129
+Successfully deleted: 262 Docs.
+INFO. 263 Deleted doc with id: 6130
+Successfully deleted: 263 Docs.
+INFO. 264 Deleted doc with id: 6131
+Successfully deleted: 264 Docs.
+INFO. 265 Deleted doc with id: 6132
+Successfully deleted: 265 Docs.
+INFO. 266 Deleted doc with id: 6133
+Successfully deleted: 266 Docs.
+INFO. 267 Deleted doc with id: 6134
+Successfully deleted: 267 Docs.
+INFO. 268 Deleted doc with id: 6135
+Successfully deleted: 268 Docs.
+INFO. 269 Deleted doc with id: 6136
+Successfully deleted: 269 Docs.
+INFO. 270 Deleted doc with id: 6137
+Successfully deleted: 270 Docs.
+INFO. 271 Deleted doc with id: 6138
+Successfully deleted: 271 Docs.
+INFO. 272 Deleted doc with id: 6139
+Successfully deleted: 272 Docs.
+INFO. 273 Deleted doc with id: 6140
+Successfully deleted: 273 Docs.
+INFO. 274 Deleted doc with id: 6141
+Successfully deleted: 274 Docs.
+INFO. 275 Deleted doc with id: 6142
+Successfully deleted: 275 Docs.
+BUILD SUCCESSFUL (total time: 8 minutes 20 seconds)
+

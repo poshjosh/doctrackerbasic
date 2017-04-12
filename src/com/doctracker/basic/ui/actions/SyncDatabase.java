@@ -16,8 +16,8 @@
 
 package com.doctracker.basic.ui.actions;
 
-import com.doctracker.basic.App;
-import com.doctracker.basic.jpa.JpaSync;
+import com.bc.appcore.actions.TaskExecutionException;
+import com.bc.jpa.sync.JpaSync;
 import com.doctracker.basic.pu.entities.Appointment;
 import com.doctracker.basic.pu.entities.Doc;
 import com.doctracker.basic.pu.entities.Task;
@@ -26,11 +26,13 @@ import com.doctracker.basic.pu.entities.Unit;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.bc.appcore.actions.Action;
+import com.bc.appbase.App;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 8, 2017 10:29:57 PM
  */
-public class SyncDatabase implements Action<Boolean> {
+public class SyncDatabase implements Action<App,Boolean> {
 
     @Override
     public Boolean execute(App app, Map<String, Object> params) throws TaskExecutionException {
@@ -39,13 +41,13 @@ public class SyncDatabase implements Action<Boolean> {
         
         if(jpaSync.isRunning()) {
             
-            app.getUI().showSuccessMessage("Sync already running");
+            app.getUIContext().showSuccessMessage("Sync already running");
             
             return Boolean.FALSE;
             
         }else{
             
-            app.getUI().showSuccessMessage("Running sync in background. You will be notified on completion");
+            app.getUIContext().showSuccessMessage("Running sync in background. You will be notified on completion");
             
             new Thread(this.getClass().getName()+"_Thread") {
                 @Override
@@ -62,17 +64,17 @@ public class SyncDatabase implements Action<Boolean> {
 //                            jpaSync.sync(new Class[]{Unit.class, Appointment.class, Taskresponse.class, Task.class, Doc.class});
 //                            jpaSync.sync(new Class[]{Doc.class, Task.class, Taskresponse.class, Appointment.class, Unit.class});  
 
-                            app.getUI().showSuccessMessage("Sync successful");
+                            app.getUIContext().showSuccessMessage("Sync successful");
                             
                         }else{
                             
-                            app.getUI().showSuccessMessage("Sync already running");
+                            app.getUIContext().showSuccessMessage("Sync already running");
                         }
                     }catch(RuntimeException e) {
                         
                         Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception syncing", e);
                         
-                        app.getUI().showErrorMessage(e, "Sync failed");
+                        app.getUIContext().showErrorMessage(e, "Sync failed");
                         
                     }finally{
                     

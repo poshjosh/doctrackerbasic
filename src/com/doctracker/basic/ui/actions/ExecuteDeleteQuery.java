@@ -17,9 +17,8 @@
 package com.doctracker.basic.ui.actions;
 
 /**
- * @author Chinomso Bassey Ikwuagwu on Feb 21, 2017 10:32:57 PM
+ * @author Chinomso Bassey Ikwuagwu on Mar 24, 2017 4:41:43 PM
  */
-public class ExecuteDeleteQuery extends ExecuteUpdateQuery {
-    
-}
+public class ExecuteDeleteQuery extends com.doctracker.basic.ui.actions.ExecuteUpdateQuery {
 
+}

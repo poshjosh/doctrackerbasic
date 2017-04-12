@@ -16,11 +16,11 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.jpa.dao.Dao;
-import com.doctracker.basic.util.TextHandler;
-import com.doctracker.basic.parameter.InvalidParameterException;
-import com.doctracker.basic.parameter.ParameterException;
-import com.doctracker.basic.parameter.ParameterNotFoundException;
+import com.bc.appcore.parameter.InvalidParameterException;
+import com.bc.appcore.parameter.ParameterException;
+import com.bc.appcore.parameter.ParameterNotFoundException;
 import com.doctracker.basic.pu.entities.Appointment;
 import com.doctracker.basic.pu.entities.Appointment_;
 import com.doctracker.basic.pu.entities.Task;
@@ -31,12 +31,15 @@ import java.util.Date;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
+import com.bc.appcore.util.TextHandler;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 2:15:30 PM
  */
-public class AddTaskresponse implements Action<Object> {
+public class AddTaskresponse implements Action<App,Object> {
     
     private transient static final Logger logger = Logger.getLogger(AddTaskresponse.class.getName());
 
@@ -75,7 +78,7 @@ public class AddTaskresponse implements Action<Object> {
             Date deadline = (Date)params.get(Taskresponse_.deadline.getName());
             final String respStr = (String)params.get(Taskresponse_.response.getName());
             if(deadline == null) {
-                final TextHandler textHandler = app.getTextHandler();
+                final TextHandler textHandler = app.get(TextHandler.class);
                 if(!textHandler.isNullOrEmpty(respStr)) {
                     final String dateStr = textHandler.getLastDateStr(respStr);
                     if(!textHandler.isNullOrEmpty(dateStr)) {
@@ -97,11 +100,16 @@ public class AddTaskresponse implements Action<Object> {
             app.getDao().begin().persistAndClose(response);
             app.getSlaveUpdates().addPersist(response);
 
-//            app.updateOutput(Collections.singletonList(task.getReponsibility()));
-            app.updateOutput();
+//            ((DtbApp)app).updateOutput(Collections.singletonList(task.getReponsibility()));
+            ((DtbApp)app).updateOutput();
             
-            app.getUI().showSuccessMessage("Success");
+            app.getUIContext().showSuccessMessage("Success");
             
+            try{
+                app.getAction(DtbActionCommands.REFRESH_RESULTS).execute(app, params);
+            }catch(TaskExecutionException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
+            }
         }catch(ParameterException e) {
            
             throw new TaskExecutionException(e);

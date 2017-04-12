@@ -16,10 +16,12 @@
 
 package com.doctracker.basic.parameter;
 
+import com.bc.appcore.parameter.ParameterException;
+import com.bc.appcore.parameter.ParameterNotFoundException;
+import com.bc.appcore.parameter.ParametersBuilder;
 import com.doctracker.basic.pu.entities.Doc_;
 import com.doctracker.basic.pu.entities.Task_;
-import com.doctracker.basic.pu.entities.Taskresponse_;
-import com.doctracker.basic.ui.DateFromUIBuilder;
+import com.bc.appbase.ui.DateFromUIBuilder;
 import com.doctracker.basic.ui.TaskPanel;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,19 +29,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.doctracker.basic.App;
+import com.bc.appcore.AppCore;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 9, 2017 12:10:53 AM
  */
 public class AddTaskParametersBuilder implements ParametersBuilder<TaskPanel> {
 
-    private App app;
+    private AppCore app;
     
     private TaskPanel newTaskPanel;
     
     @Override
-    public ParametersBuilder<TaskPanel> app(App app) {
+    public ParametersBuilder<TaskPanel> context(AppCore app) {
         this.app = app;
         return this;
     }
@@ -91,12 +93,7 @@ public class AddTaskParametersBuilder implements ParametersBuilder<TaskPanel> {
             params.put(Task_.reponsibility.getName(), responsibility);
         }
         
-        final String deadlineExpectation = newTaskPanel.getDeadlineExpectationTextfield().getText();
-        if(!this.isNullOrEmpty(deadlineExpectation)) {
-            params.put(Taskresponse_.response.getName(), deadlineExpectation);
-        }
-        
-        final DateFromUIBuilder builder = app.getUI().getDateFromUIBuilder();
+        final DateFromUIBuilder builder = app.get(DateFromUIBuilder.class);
         
         final Calendar cal = app.getCalendar();
         
@@ -123,17 +120,6 @@ public class AddTaskParametersBuilder implements ParametersBuilder<TaskPanel> {
                 .build(null);
         if(timeopened != null) {
             params.put(Task_.timeopened.getName(), timeopened);
-        }
-        
-        final Date deadline = builder.calendar(cal)
-                .hoursTextField(newTaskPanel.getDeadlineHoursTextfield())
-                .minutesTextField(newTaskPanel.getDeadlineMinutesTextfield())
-                .dayTextField(newTaskPanel.getDeadlineDayTextfield())
-                .monthComboBox(newTaskPanel.getDeadlineMonthCombobox())
-                .yearComboBox(newTaskPanel.getDeadlineYearCombobox())
-                .build(null);
-        if(deadline != null) {
-            params.put(Taskresponse_.deadline.getName(), deadline);
         }
         
         return params;

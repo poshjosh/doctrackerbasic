@@ -16,6 +16,7 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.jpa.dao.Dao;
 import com.doctracker.basic.pu.entities.Appointment;
 import com.doctracker.basic.pu.entities.Task;
@@ -24,17 +25,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
+import com.bc.appcore.parameter.ParameterException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 3:29:19 PM
  */
-public class DeleteTask implements Action<Object> {
+public class DeleteTask implements Action<App,Boolean> {
 
     @Override
-    public Object execute(App app, Map<String, Object> params) throws TaskExecutionException {
+    public Boolean execute(App app, Map<String, Object> params) throws TaskExecutionException {
         
-        final int selection = JOptionPane.showConfirmDialog(app.getUI().getMainFrame(), 
+        final int selection = JOptionPane.showConfirmDialog(app.getUIContext().getMainFrame(), 
                 "Are you sure you want to delete the selected task(s)?", "Confirm Delete", 
                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         
@@ -57,14 +63,18 @@ public class DeleteTask implements Action<Object> {
                 }
             }
             
-//            app.updateOutput(apptList);
-            app.updateOutput();
+//            ((DtbApp)app).updateOutput(apptList);
+            ((DtbApp)app).updateOutput();
         }
         
-        app.getAction(ActionCommands.REFRESH_RESULTS).execute(app, params);
+        app.getUIContext().showSuccessMessage("Success");
         
-        app.getUI().showSuccessMessage("Success");
+        try{
+            app.getAction(DtbActionCommands.REFRESH_RESULTS).execute(app, params);
+        }catch(ParameterException | TaskExecutionException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
+        }
         
-        return null;
+        return Boolean.TRUE;
     }
 }

@@ -16,6 +16,7 @@
 
 package com.doctracker.basic;
 
+import com.bc.appcore.UserBaseImpl;
 import com.doctracker.basic.pu.entities.Appointment;
 import java.io.Serializable;
 import java.util.Objects;
@@ -23,25 +24,17 @@ import java.util.Objects;
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 9, 2017 2:25:08 AM
  */
-public final class UserImpl implements User, Serializable {
+public class UserImpl extends UserBaseImpl implements User, Serializable {
 
-    private transient final App app;
-    
     private final Appointment appointment;
     
-    private final String name;
-    
-    private final boolean loggedIn;
-
-    public UserImpl(App app, User user, boolean loggedIn) {
-        this(app, user.getAppointment(), user.getName(), loggedIn);
+    public UserImpl(User user, boolean loggedIn) {
+        this(user.getAppointment(), user.getName(), loggedIn);
     }
     
-    public UserImpl(App app, Appointment appointment, String name, boolean loggedin) {
-        this.app = app;
+    public UserImpl(Appointment appointment, String name, boolean loggedin) {
+        super(name, loggedin);
         this.appointment = appointment;
-        this.name = name;
-        this.loggedIn = loggedin;
     }
 
     @Override
@@ -50,20 +43,10 @@ public final class UserImpl implements User, Serializable {
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public boolean isLoggedIn() {
-        return loggedIn;
-    }
-
-    @Override
     public int hashCode() {
         int hash = 7;
         hash = 89 * hash + Objects.hashCode(this.appointment);
-        hash = 89 * hash + Objects.hashCode(this.name);
+        hash = 89 * hash + super.hashCode();
         return hash;
     }
 
@@ -79,7 +62,10 @@ public final class UserImpl implements User, Serializable {
             return false;
         }
         final UserImpl other = (UserImpl) obj;
-        if (!Objects.equals(this.name, other.name)) {
+        if (!Objects.equals(this.isLoggedIn(), other.isLoggedIn())) {
+            return false;
+        }
+        if (!Objects.equals(this.getName(), other.getName())) {
             return false;
         }
         if (!Objects.equals(this.appointment, other.appointment)) {
@@ -90,6 +76,6 @@ public final class UserImpl implements User, Serializable {
 
     @Override
     public String toString() {
-        return "UserImpl{" + ", name=" + name + ", loggedIn=" + loggedIn + ", appointment=" + (appointment==null?null:appointment.getAbbreviation()) + '}';
+        return this.getClass().getSimpleName() + '{' + "Name=" + this.getName() + ", loggedIn=" + this.isLoggedIn() + ", appointment=" + (appointment==null?null:appointment.getAbbreviation()) + '}';
     }
 }

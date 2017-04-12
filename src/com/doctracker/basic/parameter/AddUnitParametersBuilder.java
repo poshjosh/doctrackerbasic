@@ -16,25 +16,28 @@
 
 package com.doctracker.basic.parameter;
 
+import com.bc.appcore.parameter.ParameterException;
+import com.bc.appcore.parameter.ParameterNotFoundException;
+import com.bc.appcore.parameter.ParametersBuilder;
 import com.doctracker.basic.pu.entities.Unit_;
 import com.doctracker.basic.ui.UnitPanel;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
-import com.doctracker.basic.App;
+import com.bc.appcore.AppCore;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 26, 2017 11:01:02 PM
  */
 public class AddUnitParametersBuilder implements ParametersBuilder<UnitPanel> {
 
-    private App app;
+    private AppCore app;
     
     private UnitPanel ui;
     
     @Override
-    public ParametersBuilder<UnitPanel> app(App app) {
+    public ParametersBuilder<UnitPanel> context(AppCore app) {
         this.app = app;
         return this;
     }

@@ -16,21 +16,25 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.doctracker.basic.pu.entities.Task;
 import java.util.Map;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.bc.appbase.App;
+import com.bc.appcore.parameter.ParameterException;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 8, 2017 10:46:44 PM
  */
-public class AddTaskAndDoc implements Action<Task> {
+public class AddTaskAndDoc implements Action<App,Task> {
 
     @Override
-    public Task execute(App app, Map<String, Object> params) throws TaskExecutionException {
+    public Task execute(App app, Map<String, Object> params) 
+            throws ParameterException, TaskExecutionException {
         
-        final Task task = (Task)app.getAction(ActionCommands.ADD_TASK).execute(app, params);
+        final Task task = (Task)app.getAction(DtbActionCommands.ADD_TASK).execute(app, params);
         
-        app.getAction(ActionCommands.CLEAR_TASK).execute(app, params);
+        app.getAction(DtbActionCommands.CLEAR_TASK).execute(app, params);
         
         return task;
     }

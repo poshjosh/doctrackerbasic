@@ -20,7 +20,6 @@ package com.doctracker.basic;
  * @author Chinomso Bassey Ikwuagwu on Feb 25, 2017 2:26:58 PM
  */
 public interface ConfigPrefixNames extends ConfigNames {
-    
     String COLUMNLABEL = "columnLabel";
-
+    String REPORT = "report";
 }

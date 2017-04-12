@@ -16,19 +16,22 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.doctracker.basic.ui.TaskFrame;
 import java.util.Map;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 10, 2017 6:39:14 PM
  */
-public class DisplayAddtaskUI implements Action<Object> {
+public class DisplayAddtaskUI implements Action<App,Object> {
     
     @Override
     public Object execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
         
-        final TaskFrame frame = app.getUI().getTaskFrame();
+        final TaskFrame frame = ((DtbApp)app).getUIContext().getTaskFrame();
         
         frame.pack();
         

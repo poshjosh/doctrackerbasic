@@ -16,16 +16,18 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.doctracker.basic.parameter.SearchParametersBuilder;
 import com.doctracker.basic.pu.entities.Task_;
 import java.util.Date;
 import java.util.Map;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.bc.appbase.App;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 6, 2017 10:58:07 PM
  */
-public class BuildSearchUIMessage implements Action<String> {
+public class BuildSearchUIMessage implements Action<App,String> {
 
     @Override
     public String execute(App app, Map<String, Object> params) throws TaskExecutionException {

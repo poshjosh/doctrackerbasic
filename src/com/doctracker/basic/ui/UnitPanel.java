@@ -15,13 +15,13 @@
  */
 package com.doctracker.basic.ui;
 
-import com.doctracker.basic.ui.actions.ActionCommands;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import com.doctracker.basic.App;
+import com.doctracker.basic.DtbApp;
+import com.doctracker.basic.ui.actions.DtbActionCommands;
 
 /**
  *
@@ -40,15 +40,14 @@ public class UnitPanel extends javax.swing.JPanel {
      * Creates new form UnitPanel and initializes it from
      * @param app
      */
-    public UnitPanel(App app) {
+    public UnitPanel(DtbApp app) {
         initComponents();
         if(app != null) {
             this.parentUnitComboBox.setModel(new DefaultComboBoxModel(
                     app.getUnitValuesForComboBox()
             ));
-            this.addUnitButton.setActionCommand(ActionCommands.ADD_UNIT);
-            this.addUnitButton.addActionListener(
-                    app.getUI().getActionListener(UnitPanel.this, ActionCommands.ADD_UNIT));
+            this.addUnitButton.setActionCommand(DtbActionCommands.ADD_UNIT);
+            this.addUnitButton.addActionListener(app.getUIContext().getActionListener(UnitPanel.this, DtbActionCommands.ADD_UNIT));
         }
     }
 

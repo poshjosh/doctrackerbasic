@@ -49,7 +49,7 @@
                               <Component id="deadlinePanel" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="0" pref="8" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="35" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -59,29 +59,30 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="formNoteLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="taskidLabel" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="responseLabel" min="-2" pref="35" max="-2" attributes="0"/>
-                  <Component id="responseTextAreaScrollPane" min="-2" pref="123" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="authorLabel" alignment="0" min="-2" pref="35" max="-2" attributes="0"/>
-                  <Component id="authorCombobox" alignment="0" min="-2" pref="35" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="deadlineLabel" min="-2" pref="35" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="formNoteLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="taskidLabel" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="responseLabel" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="responseTextAreaScrollPane" min="-2" pref="123" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="authorLabel" alignment="0" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="authorCombobox" alignment="0" min="-2" pref="35" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="deadlineLabel" min="-2" pref="35" max="-2" attributes="0"/>
+                  </Group>
                   <Component id="deadlinePanel" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="addresponseButton" min="-2" pref="35" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -176,7 +177,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="com.doctracker.basic.ui.DateTimePanelLarge" name="deadlinePanel">
+    <Component class="com.bc.appbase.ui.DateTimePanel" name="deadlinePanel">
     </Component>
   </SubComponents>
 </Form>

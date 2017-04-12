@@ -16,16 +16,13 @@
 
 package com.doctracker.basic;
 
+import com.bc.appcore.UserBase;
 import com.doctracker.basic.pu.entities.Appointment;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 3:52:50 AM
  */
-public interface User {
+public interface User extends UserBase {
     
-    String getName();
-    
-    boolean isLoggedIn();
-
     Appointment getAppointment();
 }

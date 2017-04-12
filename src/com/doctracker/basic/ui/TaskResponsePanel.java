@@ -16,23 +16,76 @@
 
 package com.doctracker.basic.ui;
 
+import com.bc.appbase.ui.DateTimePanel;
+import com.bc.appbase.ui.DateUIUpdater;
+import com.doctracker.basic.ConfigNames;
+import java.util.Calendar;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import com.doctracker.basic.DtbApp;
+import com.doctracker.basic.ui.actions.DtbActionCommands;
 
 /**
- *
  * @author Josh
  */
 public class TaskResponsePanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form TaskResponsePanel
-     */
     public TaskResponsePanel() {
+        this(null);
+    }
+    
+    public TaskResponsePanel(DtbApp app) {
         initComponents();
+        if(app != null) {
+            this.init(app);
+        }
+    }
+
+    public void reset(DtbApp app) {
+        this.setToDefaults(app);
+    }
+    
+    public void init(DtbApp app) {
+        
+        final String [] values = app.getAppointmentValuesForComboBox();
+        
+        this.getAuthorCombobox().setModel(new DefaultComboBoxModel<>(values));
+        
+        this.getAddresponseButton().setActionCommand(DtbActionCommands.ADD_TASKRESPONSE);
+        
+        app.getUIContext().addActionListeners(
+                this,
+                this.getAddresponseButton());
+        
+        this.setToDefaults(app);
+    }
+    
+    public void setToDefaults(DtbApp app) {
+
+        this.getTaskidLabel().setText(null);
+        
+        this.getResponseTextArea().setText(null);
+        
+        this.getAuthorCombobox().setSelectedIndex(0);
+        
+        final DateUIUpdater updater = app.get(DateUIUpdater.class);
+        
+        final Calendar cal = app.getCalendar();
+        
+        final int deadlineHours = app.getConfig().getInt(ConfigNames.DEFAULT_DEADLINE_EXTENSION_HOURS, 6);
+        cal.add(Calendar.HOUR_OF_DAY, deadlineHours);
+        
+        DateTimePanel deadlinePanel = this.getDeadlinePanel();
+        updater.updateField(deadlinePanel.getHoursTextfield(), cal, Calendar.HOUR_OF_DAY);
+        updater.updateField(deadlinePanel.getMinutesTextfield(), cal, Calendar.MINUTE);
+        
+//        updater.updateField(deadlinePanel.getDayTextfield(), cal, Calendar.DAY_OF_MONTH);
+        updater.updateMonth(deadlinePanel.getMonthCombobox(), cal);
+        updater.updateYear(deadlinePanel.getYearCombobox(), cal);
     }
 
     /**
@@ -53,7 +106,7 @@ public class TaskResponsePanel extends javax.swing.JPanel {
         taskidLabel = new javax.swing.JLabel();
         responseTextAreaScrollPane = new javax.swing.JScrollPane();
         responseTextArea = new javax.swing.JTextArea();
-        deadlinePanel = new com.doctracker.basic.ui.DateTimePanelLarge();
+        deadlinePanel = new com.bc.appbase.ui.DateTimePanel();
 
         setPreferredSize(new java.awt.Dimension(600, 400));
 
@@ -111,31 +164,31 @@ public class TaskResponsePanel extends javax.swing.JPanel {
                                 .addComponent(deadlineLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(deadlinePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 8, Short.MAX_VALUE)))
+                        .addGap(0, 35, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(formNoteLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(taskidLabel))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(responseLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(responseTextAreaScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(authorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(authorCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(deadlineLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(formNoteLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(taskidLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(responseLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(responseTextAreaScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(authorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(authorCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(deadlineLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(deadlinePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(addresponseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(addresponseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -145,7 +198,7 @@ public class TaskResponsePanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> authorCombobox;
     private javax.swing.JLabel authorLabel;
     private javax.swing.JLabel deadlineLabel;
-    private com.doctracker.basic.ui.DateTimePanelLarge deadlinePanel;
+    private com.bc.appbase.ui.DateTimePanel deadlinePanel;
     private javax.swing.JLabel formNoteLabel;
     private javax.swing.JLabel responseLabel;
     private javax.swing.JTextArea responseTextArea;

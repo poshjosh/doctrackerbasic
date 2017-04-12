@@ -26,7 +26,7 @@ import com.doctracker.basic.pu.entities.Task_;
 import com.doctracker.basic.pu.entities.Taskresponse;
 import com.doctracker.basic.pu.entities.Taskresponse_;
 import java.util.Date;
-import com.doctracker.basic.App;
+import com.doctracker.basic.DtbApp;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 20, 2017 6:54:22 PM
@@ -50,7 +50,7 @@ public class SelectDaoBuilderImplOld<T>
         
         this.checkBuildAttempted();
         
-        final App app = this.getApp();
+        final DtbApp app = this.getApp();
         final String query = this.getQuery();
         final Date deadlineFrom = this.getDeadlineFrom();
         final Date deadlineTo = this.getDeadlineTo();

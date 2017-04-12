@@ -16,57 +16,41 @@
 
 package com.doctracker.basic.ui.actions;
 
-import com.bc.jpa.dao.Dao;
-import com.doctracker.basic.pu.entities.Appointment;
-import com.doctracker.basic.pu.entities.Task;
-import com.doctracker.basic.pu.entities.Task_;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.bc.appbase.App;
+import com.bc.appcore.actions.TaskExecutionException;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.bc.appcore.parameter.ParameterException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 13, 2017 12:09:41 PM
  */
-public class CloseTask implements Action<Object> {
+public class CloseTask implements Action<App,Boolean> {
 
     @Override
-    public Object execute(App app, Map<String, Object> params) throws TaskExecutionException {
+    public Boolean execute(App app, Map<String, Object> params) 
+            throws ParameterException, TaskExecutionException {
         
-        final int selection = JOptionPane.showConfirmDialog(app.getUI().getMainFrame(), 
-                "Are you sure you want to close the selected task(s)?", "Confirm Close", 
+        final int selection = JOptionPane.showConfirmDialog(app.getUIContext().getMainFrame(), 
+                "Are you sure you want to CLOSE the selected task(s)?", "Confirm Close", 
                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         
         if(selection == JOptionPane.YES_OPTION) {
             
-            final List taskidList = (List)params.get(Task_.taskid.getName()+"List");
+            app.getAction(DtbActionCommands.SET_TIMECLOSED).execute(app, params);
+
+            app.getUIContext().showSuccessMessage("Success");
             
-            final List<Appointment> apptList = new ArrayList<>();
-
-            final Date timeClosed = new Date();
-
-            for(Object taskid : taskidList) {
-
-                final Dao dao = app.getDao();
-
-                final Task managedEntity = dao.find(Task.class, taskid);
-
-                managedEntity.setTimeclosed(timeClosed);
-
-                dao.begin().mergeAndClose(managedEntity);
-                app.getSlaveUpdates().addMerge(managedEntity);
-                
-                apptList.add(managedEntity.getReponsibility());
+            try{
+                app.getAction(DtbActionCommands.REFRESH_RESULTS).execute(app, params);
+            }catch(TaskExecutionException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
             }
-            
-//            app.updateOutput(apptList);
-            app.updateOutput();
-
-            app.getUI().showSuccessMessage("Success");
         }
         
-        return null;
+        return Boolean.TRUE;
     }
 }

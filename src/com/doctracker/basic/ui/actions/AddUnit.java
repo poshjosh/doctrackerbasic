@@ -16,8 +16,9 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.jpa.dao.BuilderForSelect;
-import com.doctracker.basic.parameter.ParameterNotFoundException;
+import com.bc.appcore.parameter.ParameterNotFoundException;
 import com.doctracker.basic.pu.entities.Unit;
 import com.doctracker.basic.pu.entities.Unit_;
 import com.doctracker.basic.ui.AppointmentPanel;
@@ -26,12 +27,14 @@ import java.awt.Window;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 26, 2017 8:53:28 PM
  */
-public class AddUnit implements Action<Unit> {
+public class AddUnit implements Action<App,Unit> {
 
     private static final Logger logger = Logger.getLogger(AddUnit.class.getName());
 
@@ -78,7 +81,7 @@ public class AddUnit implements Action<Unit> {
             final AppointmentPanel forUpdate = (AppointmentPanel)app.getAttributes().get(name);
             if(forUpdate != null) {
                 forUpdate.getUnitComboBox().setModel(new DefaultComboBoxModel(
-                        app.getUnitValuesForComboBox()
+                        ((DtbApp)app).getUnitValuesForComboBox()
                 ));
                 forUpdate.getUnitComboBox().setSelectedItem(unit.getUnit());
                 app.getAttributes().remove(name);

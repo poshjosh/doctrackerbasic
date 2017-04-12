@@ -15,7 +15,6 @@
  */
 package com.doctracker.basic.ui;
 
-import com.doctracker.basic.ui.actions.ActionCommands;
 import java.awt.Dimension;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -24,7 +23,8 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import com.doctracker.basic.App;
+import com.doctracker.basic.DtbApp;
+import com.doctracker.basic.ui.actions.DtbActionCommands;
 
 /**
  *
@@ -39,7 +39,7 @@ public class SelectAppointmentOrCreateNewPanel extends javax.swing.JPanel {
         this(null);
     }
 
-    public SelectAppointmentOrCreateNewPanel(App app) {
+    public SelectAppointmentOrCreateNewPanel(DtbApp app) {
         initComponents();
         if(app != null) {
             DefaultListModel listModel = new DefaultListModel();
@@ -50,8 +50,8 @@ public class SelectAppointmentOrCreateNewPanel extends javax.swing.JPanel {
             Dimension dim = new Dimension(155, 120);
             this.appointmentsList.setPreferredSize(dim);
             this.appointmentsScrollPane.setPreferredSize(dim);
-            this.addAppointmentButton.setActionCommand(ActionCommands.DISPLAY_APPOINTMENT_UI);
-            app.getUI().addActionListeners(
+            this.addAppointmentButton.setActionCommand(DtbActionCommands.DISPLAY_APPOINTMENT_UI);
+            app.getUIContext().addActionListeners(
                     SelectAppointmentOrCreateNewPanel.this, this.addAppointmentButton);
         }
     }

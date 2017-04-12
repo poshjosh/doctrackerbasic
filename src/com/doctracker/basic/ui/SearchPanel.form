@@ -21,29 +21,10 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="separator" alignment="0" max="32767" attributes="0"/>
+          <Component id="separator" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="fromLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="fromDateTimePanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="fromDeadlineDateTimePanel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="periodLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="347" max="-2" attributes="0"/>
-                      <Component id="deadlineLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="toLabel" min="-2" pref="38" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="toDateTimePanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                      <Component id="toDeadlineDateTimePanel" min="-2" max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="searchTextfield" alignment="0" max="32767" attributes="0"/>
@@ -57,6 +38,32 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="searchButton" min="-2" pref="150" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="periodLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="347" max="-2" attributes="0"/>
+                      <Component id="deadlineLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="fromLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="toLabel" alignment="0" min="-2" pref="38" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="fromDateTimePanel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="fromDeadlineDateTimePanel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="toDateTimePanel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="toDeadlineDateTimePanel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
           </Group>
@@ -86,15 +93,22 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="fromLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="fromDateTimePanel" min="-2" max="-2" attributes="0"/>
-                  <Component id="fromDeadlineDateTimePanel" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="toLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="toDeadlineDateTimePanel" min="-2" max="-2" attributes="0"/>
-                  <Component id="toDateTimePanel" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="fromLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="toLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="fromDateTimePanel" min="-2" max="-2" attributes="0"/>
+                          <Component id="fromDeadlineDateTimePanel" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="toDateTimePanel" min="-2" max="-2" attributes="0"/>
+                          <Component id="toDeadlineDateTimePanel" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
           </Group>
       </Group>
@@ -190,13 +204,13 @@
         <Property name="text" type="java.lang.String" value="Deadline"/>
       </Properties>
     </Component>
-    <Component class="com.doctracker.basic.ui.DateTimePanelLarge" name="fromDateTimePanel">
+    <Component class="com.bc.appbase.ui.DateTimePanel" name="fromDateTimePanel">
     </Component>
-    <Component class="com.doctracker.basic.ui.DateTimePanelLarge" name="fromDeadlineDateTimePanel">
+    <Component class="com.bc.appbase.ui.DateTimePanel" name="toDateTimePanel">
     </Component>
-    <Component class="com.doctracker.basic.ui.DateTimePanelLarge" name="toDateTimePanel">
+    <Component class="com.bc.appbase.ui.DateTimePanel" name="fromDeadlineDateTimePanel">
     </Component>
-    <Component class="com.doctracker.basic.ui.DateTimePanelLarge" name="toDeadlineDateTimePanel">
+    <Component class="com.bc.appbase.ui.DateTimePanel" name="toDeadlineDateTimePanel">
     </Component>
   </SubComponents>
 </Form>

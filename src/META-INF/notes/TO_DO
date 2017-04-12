@@ -1,9 +1,32 @@
+wAS INSTALLED ALWAYS FALSE
+Help wrongly placed
+Immediate refresh
+NewTaskResponse remove some UI
+
+Override 2 methods get and set in TaskResultModel to use super type logic
+
+all executequery actions should have ParamNames.resulttype
+
+Test import excel data
+
+SELECT DISTINCT t1.taskid AS a1, t1.description AS a2, t1.timeclosed AS a3, t1.timecreated AS a4, t1.timemodified AS a5, t1.timeopened AS a6, t1.author AS a7, t1.doc AS a8, t1.reponsibility AS a9 
+FROM task t1 LEFT OUTER JOIN taskresponse t0 ON (t0.task = t1.taskid), doc t2 
+WHERE (((((t1.description LIKE ? OR t2.subject LIKE ?) OR t2.referencenumber LIKE ?) OR t0.response LIKE ?) AND (t1.timeclosed IS NULL)) AND (t2.docid = t1.doc)) 
+ORDER BY t1.taskid DESC LIMIT ?, ?
+
+Search 'Quey on 13 Mar' = 13 results
+Track start 27 Feb 00 to 28 Feb 00 = 43 results 
+
 root
 authsvc
 idisc
 tracker
 
+If Desktop.Action.OPEN is not support disable or remove menu ViewTableAsExcel
+
 Verify reports being generated
+
+This class should accessed via SearchManager.getSelectDaoBuilder SelectTaskresponseBuilder()
 
 Ability to add 'remark' as well as 'query on'
 

@@ -16,31 +16,32 @@
 
 package com.doctracker.basic.ui.actions;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.TaskExecutionException;
+import java.util.Map;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
+import com.bc.appcore.parameter.ParameterException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * @author Chinomso Bassey Ikwuagwu on Feb 21, 2017 10:32:48 PM
+ * @author Chinomso Bassey Ikwuagwu on Mar 24, 2017 4:40:20 PM
  */
-public class ExecuteUpdateQuery extends AbstractExecuteQuery {
+public class ExecuteUpdateQuery extends com.bc.appbase.ui.actions.ExecuteUpdateQuery {
 
     @Override
-    public Integer execute(App app, String sql) {
+    public Integer execute(App app, Map<String, Object> params) throws TaskExecutionException {
+
+        final Integer output = super.execute(app, params); 
         
-        final EntityManager em = app.getEntityManager();
-        final Query query = em.createNativeQuery(sql, Integer.class);
-        final int UPDATE_COUNT = query.executeUpdate();
+        ((DtbApp)app).updateOutput();
         
-        final StringBuilder msg = new StringBuilder();
-        msg.append("<html>");
-        msg.append(sql);
+        try{
+            app.getAction(DtbActionCommands.REFRESH_RESULTS).execute(app, params);
+        }catch(ParameterException | TaskExecutionException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
+        }
         
-        final String PREFIX = UPDATE_COUNT == 1 ? "row updated" : "rows updated";
-        msg.append("<br/><tt>").append(UPDATE_COUNT).append(' ').append(PREFIX).append("</tt>");
-        
-        msg.append("</html>");
-        
-        return UPDATE_COUNT;
+        return output;
     }
 }

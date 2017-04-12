@@ -16,6 +16,7 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.jpa.dao.Dao;
 import com.doctracker.basic.pu.entities.Task;
 import com.doctracker.basic.pu.entities.Task_;
@@ -23,13 +24,15 @@ import com.doctracker.basic.ui.TaskResponseFrame;
 import com.doctracker.basic.ui.TaskResponsePanel;
 import java.util.List;
 import java.util.Map;
-import com.doctracker.basic.App;
 import javax.swing.SwingUtilities;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 2:41:04 PM
  */
-public class DisplayAddResponseUI implements Action<Object> {
+public class DisplayAddResponseUI implements Action<App,Object> {
     
     @Override
     public Object execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
@@ -41,10 +44,10 @@ public class DisplayAddResponseUI implements Action<Object> {
             for(Object taskid : taskidList) {
                 final Task task = dao.find(Task.class, taskid);
                 if(eventThread) {
-                    this.execute(app, task);
+                    this.execute(((DtbApp)app), task);
                 }else{
                     java.awt.EventQueue.invokeLater(() -> {
-                        execute(app, task);
+                        execute(((DtbApp)app), task);
                     });
                 }
             }
@@ -53,9 +56,9 @@ public class DisplayAddResponseUI implements Action<Object> {
         return Boolean.TRUE;
     }
 
-    public TaskResponseFrame execute(final App app, final Task task) {
+    public TaskResponseFrame execute(DtbApp app, final Task task) {
         
-        final TaskResponseFrame frame = app.getUI().createTaskResponseFrame();
+        final TaskResponseFrame frame = app.getUIContext().createTaskResponseFrame();
 
         final TaskResponsePanel panel = frame.getTaskResponsePanel();
 
@@ -77,7 +80,7 @@ public class DisplayAddResponseUI implements Action<Object> {
         return frame;
     }
     
-    public void beforeDisplay(final App app, final TaskResponseFrame frame) {
+    public void beforeDisplay(DtbApp app, final TaskResponseFrame frame) {
         frame.getTitleLabel().setText("Add Response to Task");
         frame.getTaskResponsePanel().getAuthorCombobox().setSelectedItem(null);
     }

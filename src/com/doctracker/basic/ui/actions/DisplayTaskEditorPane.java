@@ -16,24 +16,27 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.jpa.dao.Dao;
 import com.doctracker.basic.pu.entities.Task;
 import com.doctracker.basic.pu.entities.Task_;
 import com.doctracker.basic.ui.EditorPaneFrame;
-import com.doctracker.basic.ui.SearchResultsPanel;
+import com.bc.appbase.ui.SearchResultsPanel;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 3:24:17 PM
  */
-public class DisplayTaskEditorPane implements Action<Object> {
+public class DisplayTaskEditorPane implements Action<App,Boolean> {
     
     @Override
-    public Object execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
+    public Boolean execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
         
         final List taskidList = (List)params.get(Task_.taskid.getName()+"List");
         
@@ -47,14 +50,14 @@ public class DisplayTaskEditorPane implements Action<Object> {
             }        
         }
         
-        return null;
+        return Boolean.TRUE;
     }
         
     public Object execute(final App app, Task task, SearchResultsPanel resultsPanel) throws TaskExecutionException {
         
         final String html = app.getHtmlBuilder(Task.class).with(task).build();
 
-        final EditorPaneFrame frame = app.getUI().createEditorPaneFrame(resultsPanel);
+        final EditorPaneFrame frame = ((DtbApp)app).getUIContext().createEditorPaneFrame(resultsPanel);
 
         java.awt.EventQueue.invokeLater(new Runnable(){
             @Override
@@ -62,7 +65,7 @@ public class DisplayTaskEditorPane implements Action<Object> {
 
                 try{
                     
-                    app.getUI().positionHalfScreenRight(frame);
+                    app.getUIContext().positionHalfScreenRight(frame);
                     
                     frame.getEditorPane().setContentType("text/html");
                     frame.getEditorPane().setText(html);
@@ -76,7 +79,7 @@ public class DisplayTaskEditorPane implements Action<Object> {
                     
                     Logger.getLogger(this.getClass().getName()).log(Level.WARNING, msg, e);
                     
-                    app.getUI().showErrorMessage(e, msg);
+                    app.getUIContext().showErrorMessage(e, msg);
                 }
             }
         });

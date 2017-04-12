@@ -16,24 +16,28 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.jpa.dao.SelectDao;
 import com.bc.jpa.search.SearchResults;
 import com.doctracker.basic.pu.entities.Task;
 import com.doctracker.basic.pu.entities.Taskresponse_;
-import com.doctracker.basic.jpa.SearchManager;
-import com.doctracker.basic.ui.SearchResultsFrame;
+import com.bc.appbase.ui.SearchResultsFrame;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
+import com.doctracker.basic.jpa.DtbSearchContext;
+import com.bc.appcore.jpa.SearchContext;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 14, 2017 10:39:51 PM
  */
-public class SearchDeadlineTasks implements Action<Boolean> {
+public class SearchDeadlineTasks implements Action<App,Boolean> {
     
     @Override
     public Boolean execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
@@ -77,13 +81,13 @@ public class SearchDeadlineTasks implements Action<Boolean> {
         
         if(searchResults == null) {
             
-            final SearchManager<Task> sm = app.getSearchManager(Task.class);
+            final DtbSearchContext<Task> searchContext = ((DtbApp)app).getSearchContext(Task.class);
 
-            final SelectDao<Task> selectDao = sm.getSelectDaoBuilder(Task.class)
+            final SelectDao<Task> selectDao = searchContext.getSelectDaoBuilder(Task.class)
                     .closed(false)
                     .deadlineTo(deadline).build();
 
-            searchResults = sm.getSearchResults(selectDao);
+            searchResults = searchContext.getSearchResults(selectDao);
             
             app.getAttributes().put(KEY, searchResults);
         }
@@ -92,8 +96,10 @@ public class SearchDeadlineTasks implements Action<Boolean> {
     }
 
     private void createAndShowSearchResultsFrame(App app, SearchResults<Task> searchResults, String KEY, Object msg) {
-        final SearchResultsFrame frame = app.getUI().createSearchResultsFrame(searchResults, KEY, 0, 1, Task.class, msg.toString(), true);
-        app.getUI().positionHalfScreenRight(frame);
+        final SearchContext<Task> searchContext = app.getSearchContext(Task.class);
+        final SearchResultsFrame frame = app.getUIContext().createSearchResultsFrame(
+                searchContext, searchResults, KEY, 0, 1, msg.toString(), true);
+        app.getUIContext().positionHalfScreenRight(frame);
         frame.pack();
         frame.setVisible(true);
     }

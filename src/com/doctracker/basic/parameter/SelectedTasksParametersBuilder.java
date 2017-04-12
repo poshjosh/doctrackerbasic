@@ -16,12 +16,12 @@
 
 package com.doctracker.basic.parameter;
 
+import com.bc.appcore.parameter.ParametersBuilder;
 import com.bc.jpa.search.SearchResults;
 import com.doctracker.basic.pu.entities.Task;
 import com.doctracker.basic.pu.entities.Task_;
-import com.doctracker.basic.ui.SearchResultsPanel;
-import com.doctracker.basic.ui.model.ResultModel;
-import java.awt.Window;
+import com.bc.appbase.ui.SearchResultsPanel;
+import com.bc.appcore.jpa.model.ResultModel;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,7 +31,8 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
-import com.doctracker.basic.App;
+import com.bc.appcore.AppCore;
+import com.doctracker.basic.DtbApp;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 4:04:19 PM
@@ -40,12 +41,12 @@ public class SelectedTasksParametersBuilder implements ParametersBuilder<SearchR
     
     private transient final Logger logger = Logger.getLogger(SelectedTasksParametersBuilder.class.getName());
 
-    private App app;
+    private AppCore app;
     
     private SearchResultsPanel searchResultsPanel;
     
     @Override
-    public ParametersBuilder<SearchResultsPanel> app(App app) {
+    public ParametersBuilder<SearchResultsPanel> context(AppCore app) {
         this.app = app;
         return this;
     }
@@ -79,7 +80,9 @@ public class SelectedTasksParametersBuilder implements ParametersBuilder<SearchR
             
             for(int i = 0; i < selectedRowIndices.length; i++) {
                 
-                selectedTaskids[i] = this.getTaskid(resultModel, selectedRowIndices[i]);
+                final Integer taskid = this.getTaskid(resultModel, selectedRowIndices[i]);
+                
+                selectedTaskids[i] = taskid;
             }
             
             params.put(Task_.taskid.getName()+"List", Arrays.asList(selectedTaskids));
@@ -103,7 +106,7 @@ public class SelectedTasksParametersBuilder implements ParametersBuilder<SearchR
     }
     
     private Task getTask(int tableRowIndex) {
-        final SearchResults<Task> searchResults = this.getSearchResults();
+        final SearchResults<Task> searchResults = ((DtbApp)app).getUIContext().getLinkedSearchResults(searchResultsPanel);
         final List<Task> currentpage = searchResults.getCurrentPage();
         if(tableRowIndex < currentpage.size()) {
             return currentpage.get(tableRowIndex);
@@ -115,11 +118,5 @@ public class SelectedTasksParametersBuilder implements ParametersBuilder<SearchR
             }
             return searchResults.get(resultsRowIndex);
         }
-    }
-    
-    private SearchResults<Task> getSearchResults() {
-        final Window window = (Window)searchResultsPanel.getTopLevelAncestor();
-        final SearchResults<Task> searchResults = (SearchResults<Task>)app.getAttributes().get(window.getName());
-        return searchResults;
     }
 }

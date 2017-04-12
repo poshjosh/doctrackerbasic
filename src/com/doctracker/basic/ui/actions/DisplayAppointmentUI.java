@@ -16,22 +16,25 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.doctracker.basic.ui.AppointmentPanel;
 import java.util.Map;
 import javax.swing.JFrame;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 26, 2017 10:23:56 PM
  */
-public class DisplayAppointmentUI implements Action<AppointmentPanel> {
+public class DisplayAppointmentUI implements Action<App,AppointmentPanel> {
     
     @Override
     public AppointmentPanel execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
 
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        AppointmentPanel apptPanel = app.getUI().createAppointmentPanel();
+        AppointmentPanel apptPanel = ((DtbApp)app).getUIContext().createAppointmentPanel();
         frame.getContentPane().add(apptPanel);
         
         frame.pack();

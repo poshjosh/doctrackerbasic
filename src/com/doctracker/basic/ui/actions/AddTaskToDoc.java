@@ -16,26 +16,30 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.doctracker.basic.pu.entities.Task;
 import com.doctracker.basic.ui.TaskPanel;
 import java.util.Map;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
+import com.bc.appcore.parameter.ParameterException;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 12, 2017 4:04:42 PM
  */
-public class AddTaskToDoc implements Action<Task> {
+public class AddTaskToDoc implements Action<App,Task> {
 
     @Override
-    public Task execute(App app, Map<String, Object> params) throws TaskExecutionException {
+    public Task execute(App app, Map<String, Object> params) 
+            throws ParameterException, TaskExecutionException {
         
-        final Task task = (Task)app.getAction(ActionCommands.ADD_TASK).execute(app, params);
+        final Task task = (Task)app.getAction(DtbActionCommands.ADD_TASK).execute(app, params);
         
-        final TaskPanel taskPanel = app.getUI().getTaskFrame().getTaskPanel();
+        final TaskPanel taskPanel = ((DtbApp)app).getUIContext().getTaskFrame().getTaskPanel();
         
         taskPanel.getTaskTextArea().setText(null);
         taskPanel.getResponsiblityCombobox().setSelectedIndex(0);
-        taskPanel.getDeadlineExpectationTextfield().setText(null);
         taskPanel.getDocidLabel().setText(String.valueOf(task.getDoc().getDocid()));
         
         return task;

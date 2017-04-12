@@ -1,3 +1,7 @@
+All files in the working dir whose filename end with 'temp' before the file 
+extension part (e.g table_3temp.xls, text_temp.doc) are to be deleted, either
+on startup, on shutdown or at both times.
+
 MASTER SLAVE REPLICATION NOTES
 ------------------------------
 Had to implement replication logic between a local database as master and a

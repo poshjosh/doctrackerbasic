@@ -18,19 +18,19 @@ package com.doctracker.basic.jpa;
 
 import com.bc.jpa.dao.BuilderForSelect;
 import com.bc.jpa.dao.Criteria;
-import com.doctracker.basic.App;
 import com.doctracker.basic.pu.entities.Appointment;
 import com.doctracker.basic.pu.entities.Appointment_;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.doctracker.basic.DtbApp;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 10, 2017 3:57:32 PM
  */
 public abstract class AbstractSelectionBuilder<T> implements SelectionBuilder<T> {
 
-    private App app;
+    private DtbApp app;
     private String query;
     private Date from;
     private Date to;
@@ -43,7 +43,7 @@ public abstract class AbstractSelectionBuilder<T> implements SelectionBuilder<T>
     protected AbstractSelectionBuilder() {  }
     
     @Override
-    public SelectionBuilder<T> app(App app) {
+    public SelectionBuilder<T> app(DtbApp app) {
         this.app = app;
         return this;
     }
@@ -108,7 +108,7 @@ public abstract class AbstractSelectionBuilder<T> implements SelectionBuilder<T>
         return this;
     }
 
-    public App getApp() {
+    public DtbApp getApp() {
         return app;
     }
 

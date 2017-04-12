@@ -16,22 +16,24 @@
 
 package com.doctracker.basic.ui.actions;
 
-import com.doctracker.basic.ui.TaskPanel;
+import com.bc.appcore.actions.TaskExecutionException;
 import java.util.Map;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 10, 2017 7:06:08 PM
  */
-public class ClearTaskPanel implements Action<Object> {
+public class ClearTaskPanel implements Action<App,Object> {
 
     @Override
-    public Object execute(App app, Map<String, Object> params) throws TaskExecutionException {
+    public Object execute(App appBase, Map<String, Object> params) throws TaskExecutionException {
         
-        final TaskPanel taskPanel = app.getUI().getTaskFrame().getTaskPanel();
+        final DtbApp app = ((DtbApp)appBase);
         
-        app.getUI().getContainerManager(taskPanel).reset(taskPanel);
+        app.getUIContext().getTaskFrame().getTaskPanel().reset(app);
         
-        return null;
+        return Boolean.TRUE;
     }
 }

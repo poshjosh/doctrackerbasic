@@ -16,14 +16,13 @@
 
 package com.doctracker.basic.jpa;
 
-import com.doctracker.basic.predicates.DateRangeTest;
+import com.bc.appcore.predicates.DateIsWithinRange;
 import com.bc.jpa.search.SearchResults;
-import com.doctracker.basic.App;
 import com.doctracker.basic.pu.entities.Appointment;
 import com.doctracker.basic.pu.entities.Task;
 import com.doctracker.basic.pu.entities.Taskresponse;
-import com.doctracker.basic.ui.model.EntityTableModel;
-import com.doctracker.basic.ui.model.ResultModel;
+import com.bc.appbase.ui.model.EntityTableModel;
+import com.bc.appcore.jpa.model.ResultModel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -32,6 +31,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.TableModel;
+import com.doctracker.basic.DtbApp;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 10, 2017 3:35:00 PM
@@ -55,7 +55,7 @@ public class TableModelBuilderImpl
         
         this.checkBuildAttempted();
         
-        final App app = this.getApp();
+        final DtbApp app = this.getApp();
         final String query = this.getQuery();
         final Date deadlineFrom = this.getDeadlineFrom();
         final Date deadlineTo = this.getDeadlineTo();
@@ -82,7 +82,7 @@ public class TableModelBuilderImpl
                 
                 if(from != null || to != null) {
                     
-                    final boolean acceptTimeopened = new DateRangeTest(from, to).test(task.getTimeopened());
+                    final boolean acceptTimeopened = new DateIsWithinRange(from, to).test(task.getTimeopened());
                     if(acceptTimeopened) {
                         toSave.add(task);
                         continue;
@@ -93,7 +93,7 @@ public class TableModelBuilderImpl
                     final List<Taskresponse> trList = task.getTaskresponseList();
                     final Date deadline = this.getLatestDeadline(trList);
 
-                    final boolean acceptDeadline = new DateRangeTest(deadlineFrom, deadlineTo).test(deadline);
+                    final boolean acceptDeadline = new DateIsWithinRange(deadlineFrom, deadlineTo).test(deadline);
 
                     if(acceptDeadline) {
                         toSave.add(task);

@@ -16,16 +16,19 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import java.io.IOException;
 import java.util.Map;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 4:54:19 AM
  */
-public class About implements Action<Object> {
+public class About implements Action<App,Object> {
 
     @Override
     public Object execute(App app, Map<String, Object> params) throws TaskExecutionException {
@@ -34,14 +37,16 @@ public class About implements Action<Object> {
 
             final JFrame frame = new JFrame();
             
-            frame.setIconImage(app.getUI().getImageIcon().getImage()); 
+            if(app.getUIContext().getImageIcon() != null) {
+                frame.setIconImage(app.getUIContext().getImageIcon().getImage()); 
+            }
             
             JEditorPane editor = new JEditorPane();
             editor.setContentType("text/html");
-            editor.setPage(App.class.getResource("about.html"));
+            editor.setPage(DtbApp.class.getResource("about.html"));
             frame.getContentPane().add(editor);
             
-            app.getUI().positionHalfScreenRight(frame);
+            app.getUIContext().positionHalfScreenRight(frame);
             frame.pack();
             frame.setVisible(true);
             

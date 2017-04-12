@@ -16,22 +16,25 @@
 
 package com.doctracker.basic.ui.actions;
 
+import com.bc.appcore.actions.TaskExecutionException;
 import com.doctracker.basic.ui.UnitPanel;
 import java.util.Map;
 import javax.swing.JFrame;
-import com.doctracker.basic.App;
+import com.bc.appcore.actions.Action;
+import com.doctracker.basic.DtbApp;
+import com.bc.appbase.App;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 26, 2017 9:05:05 PM
  */
-public class DisplayUnitUI implements Action<UnitPanel> {
+public class DisplayUnitUI implements Action<App,UnitPanel> {
     
     @Override
-    public UnitPanel execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
+    public UnitPanel execute(App app, final Map<String, Object> params) throws TaskExecutionException {
         
         final JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        UnitPanel unitPanel = app.getUI().createUnitPanel();
+        UnitPanel unitPanel = ((DtbApp)app).getUIContext().createUnitPanel();
         frame.getContentPane().add(unitPanel);
         
         frame.pack();

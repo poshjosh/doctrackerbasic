@@ -16,6 +16,9 @@
 
 package com.doctracker.basic.ui;
 
+import com.bc.appbase.ui.DateUIUpdater;
+import java.util.Calendar;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -23,20 +26,74 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import com.doctracker.basic.DtbApp;
+import com.doctracker.basic.ui.actions.DtbActionCommands;
 
 /**
- *
  * @author Josh
  */
 public class TaskPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form NewTaskPanel
-     */
     public TaskPanel() {
+        this(null);
+    }
+    
+    public TaskPanel(DtbApp app) {
         initComponents();
+        if(app != null) {
+            this.init(app);
+        }
     }
 
+    public void reset(DtbApp app) {
+        this.setToDefaults(app);
+    }
+    
+    public void init(DtbApp app) {
+        
+        final String [] values = app.getAppointmentValuesForComboBox();
+        
+        this.getResponsiblityCombobox().setModel(new DefaultComboBoxModel<>(values));
+        
+        this.getAddTaskAndDocButton().setActionCommand(DtbActionCommands.ADD_TASK_AND_DOC);
+        this.getAddTaskToDocButton().setActionCommand(DtbActionCommands.ADD_TASK_TO_DOC);
+        this.getCleartaskButton().setActionCommand(DtbActionCommands.CLEAR_TASK);
+        
+        app.getUIContext().addActionListeners(
+                this,
+                this.getAddTaskAndDocButton(), 
+                this.getAddTaskToDocButton(),
+                this.getCleartaskButton());
+        
+        this.setToDefaults(app);
+    }
+    
+    public void setToDefaults(DtbApp app) {
+        
+        this.getDocidLabel().setText("DOC ID");
+        this.getReferencenumberTextfield().setText(null);
+        this.getSubjectTextfield().setText(null);
+        this.getTaskTextArea().setText(null);
+        
+        this.getResponsiblityCombobox().setSelectedIndex(0);
+        
+        final DateUIUpdater updater = app.get(DateUIUpdater.class);
+        
+        final Calendar cal = app.getCalendar();
+        
+//        updater.updateField(taskPanel.getDatesignedDayTextfield(), cal, Calendar.DAY_OF_MONTH);
+        this.getDatesignedDayTextfield().setText(null);
+        updater.updateMonth(this.getDatesignedMonthCombobox(), cal);
+        updater.updateYear(this.getDatesignedYearCombobox(), cal);
+        
+        updater.updateField(this.getTimeopenedHoursTextfield(), cal, Calendar.HOUR_OF_DAY);
+        updater.updateField(this.getTimeopenedMinutesTextfield(), cal, Calendar.MINUTE);
+        
+//        updater.updateField(taskPanel.getTimeopenedDayTextfield(), cal, Calendar.DAY_OF_MONTH);
+        updater.updateMonth(this.getTimeopenedMonthCombobox(), cal);
+        updater.updateYear(this.getTimeopenedYearCombobox(), cal);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -57,18 +114,10 @@ public class TaskPanel extends javax.swing.JPanel {
         timeopenedHoursTextfield = new javax.swing.JTextField();
         timeopenedDayTextfield = new javax.swing.JTextField();
         timeopenedMonthCombobox = new javax.swing.JComboBox<>();
-        deadlineLabel = new javax.swing.JLabel();
-        deadlineHoursTextfield = new javax.swing.JTextField();
-        deadlineDayTextfield = new javax.swing.JTextField();
-        deadlineMonthCombobox = new javax.swing.JComboBox<>();
         timeopenedYearCombobox = new javax.swing.JComboBox<>();
-        deadlineYearCombobox = new javax.swing.JComboBox<>();
         addTaskAndDocButton = new javax.swing.JButton();
         cleartaskButton = new javax.swing.JButton();
         timeopendHoursLabel = new javax.swing.JLabel();
-        timeopendDeadlineLabel = new javax.swing.JLabel();
-        deadlineExpectationLabel = new javax.swing.JLabel();
-        deadlineExpectationTextfield = new javax.swing.JTextField();
         formNoteLabel = new javax.swing.JLabel();
         addTaskToDocButton = new javax.swing.JButton();
         docidLabel = new javax.swing.JLabel();
@@ -77,7 +126,6 @@ public class TaskPanel extends javax.swing.JPanel {
         datesignedMonthCombobox = new javax.swing.JComboBox<>();
         datesignedYearCombobox = new javax.swing.JComboBox<>();
         timeopenedMinutesTextfield = new javax.swing.JTextField();
-        deadlineMinutesTextfield = new javax.swing.JTextField();
         separator = new javax.swing.JSeparator();
         taskdetailsLabel = new javax.swing.JLabel();
         taskTextAreaScrollPane = new javax.swing.JScrollPane();
@@ -113,21 +161,8 @@ public class TaskPanel extends javax.swing.JPanel {
         timeopenedMonthCombobox.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         timeopenedMonthCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        deadlineLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        deadlineLabel.setText("Deadline");
-
-        deadlineHoursTextfield.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-
-        deadlineDayTextfield.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-
-        deadlineMonthCombobox.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        deadlineMonthCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         timeopenedYearCombobox.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         timeopenedYearCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        deadlineYearCombobox.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        deadlineYearCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         addTaskAndDocButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         addTaskAndDocButton.setText("Add Task");
@@ -141,16 +176,6 @@ public class TaskPanel extends javax.swing.JPanel {
         timeopendHoursLabel.setForeground(new java.awt.Color(153, 153, 153));
         timeopendHoursLabel.setText("Hrs");
         timeopendHoursLabel.setToolTipText("Time tracking begins. You may set this later.");
-
-        timeopendDeadlineLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        timeopendDeadlineLabel.setForeground(new java.awt.Color(153, 153, 153));
-        timeopendDeadlineLabel.setText("Hrs");
-        timeopendDeadlineLabel.setToolTipText("Time tracking begins. You may set this later.");
-
-        deadlineExpectationLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        deadlineExpectationLabel.setText("Expectation");
-
-        deadlineExpectationTextfield.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
         formNoteLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         formNoteLabel.setText("<html>Asterixed (<span style=\"color:red\">*</span>) fields are mandatory</html>");
@@ -175,8 +200,6 @@ public class TaskPanel extends javax.swing.JPanel {
         datesignedYearCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         timeopenedMinutesTextfield.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-
-        deadlineMinutesTextfield.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
         taskdetailsLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         taskdetailsLabel.setText("Task Details");
@@ -215,10 +238,6 @@ public class TaskPanel extends javax.swing.JPanel {
                             .addComponent(taskTextAreaScrollPane)
                             .addComponent(responsiblityCombobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(deadlineExpectationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(deadlineExpectationTextfield))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(datesignedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -229,44 +248,28 @@ public class TaskPanel extends javax.swing.JPanel {
                                 .addGap(10, 10, 10)
                                 .addComponent(datesignedYearCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(168, 168, 168)
-                                .addComponent(taskdetailsLabel))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(timeopendLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(deadlineLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(timeopendLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(deadlineDayTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(deadlineMonthCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(10, 10, 10)
-                                        .addComponent(deadlineYearCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(timeopenedDayTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(timeopenedMonthCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(10, 10, 10)
-                                        .addComponent(timeopenedYearCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(timeopenedDayTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(timeopenedMonthCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(timeopenedYearCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(37, 37, 37)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(timeopenedHoursTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(deadlineHoursTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(timeopenedHoursTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(timeopenedMinutesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(deadlineMinutesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(timeopenedMinutesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(timeopendHoursLabel)
-                                    .addComponent(timeopendDeadlineLabel, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                .addComponent(timeopendHoursLabel))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(addTaskAndDocButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(addTaskToDocButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(cleartaskButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(cleartaskButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(168, 168, 168)
+                                .addComponent(taskdetailsLabel)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -315,35 +318,21 @@ public class TaskPanel extends javax.swing.JPanel {
                             .addComponent(timeopenedHoursTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(timeopendHoursLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(timeopenedMinutesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(deadlineHoursTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(timeopendDeadlineLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(deadlineMinutesTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(timeopendLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(deadlineLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(addTaskAndDocButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(addTaskToDocButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cleartaskButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(timeopenedDayTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(timeopenedMonthCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(timeopenedYearCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(deadlineDayTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(deadlineMonthCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(deadlineYearCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(deadlineExpectationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deadlineExpectationTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addTaskAndDocButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cleartaskButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addTaskToDocButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -356,14 +345,6 @@ public class TaskPanel extends javax.swing.JPanel {
     private javax.swing.JLabel datesignedLabel;
     private javax.swing.JComboBox<String> datesignedMonthCombobox;
     private javax.swing.JComboBox<String> datesignedYearCombobox;
-    private javax.swing.JTextField deadlineDayTextfield;
-    private javax.swing.JLabel deadlineExpectationLabel;
-    private javax.swing.JTextField deadlineExpectationTextfield;
-    private javax.swing.JTextField deadlineHoursTextfield;
-    private javax.swing.JLabel deadlineLabel;
-    private javax.swing.JTextField deadlineMinutesTextfield;
-    private javax.swing.JComboBox<String> deadlineMonthCombobox;
-    private javax.swing.JComboBox<String> deadlineYearCombobox;
     private javax.swing.JLabel docidLabel;
     private javax.swing.JLabel formNoteLabel;
     private javax.swing.JLabel referencenumberLabel;
@@ -377,7 +358,6 @@ public class TaskPanel extends javax.swing.JPanel {
     private javax.swing.JTextArea taskTextArea;
     private javax.swing.JScrollPane taskTextAreaScrollPane;
     private javax.swing.JLabel taskdetailsLabel;
-    private javax.swing.JLabel timeopendDeadlineLabel;
     private javax.swing.JLabel timeopendHoursLabel;
     private javax.swing.JLabel timeopendLabel;
     private javax.swing.JTextField timeopenedDayTextfield;
@@ -397,26 +377,6 @@ public class TaskPanel extends javax.swing.JPanel {
 
     public JButton getCleartaskButton() {
         return cleartaskButton;
-    }
-
-    public JTextField getDeadlineDayTextfield() {
-        return deadlineDayTextfield;
-    }
-
-    public JTextField getDeadlineHoursTextfield() {
-        return deadlineHoursTextfield;
-    }
-
-    public JLabel getDeadlineLabel() {
-        return deadlineLabel;
-    }
-
-    public JComboBox<String> getDeadlineMonthCombobox() {
-        return deadlineMonthCombobox;
-    }
-
-    public JComboBox<String> getDeadlineYearCombobox() {
-        return deadlineYearCombobox;
     }
 
     public JLabel getDocidLabel() {
@@ -483,20 +443,8 @@ public class TaskPanel extends javax.swing.JPanel {
         return timeopenedYearCombobox;
     }
 
-    public JLabel getDeadlineExpectationLabel() {
-        return deadlineExpectationLabel;
-    }
-
-    public JTextField getDeadlineExpectationTextfield() {
-        return deadlineExpectationTextfield;
-    }
-
     public JLabel getFormNoteLabel() {
         return formNoteLabel;
-    }
-
-    public JLabel getTimeopendDeadlineLabel() {
-        return timeopendDeadlineLabel;
     }
 
     public JLabel getTimeopendHoursLabel() {
@@ -517,10 +465,6 @@ public class TaskPanel extends javax.swing.JPanel {
 
     public JComboBox<String> getDatesignedYearCombobox() {
         return datesignedYearCombobox;
-    }
-
-    public JTextField getDeadlineMinutesTextfield() {
-        return deadlineMinutesTextfield;
     }
 
     public JTextField getTimeopenedMinutesTextfield() {

@@ -36,7 +36,8 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
-import com.doctracker.basic.App;
+import javax.persistence.EntityManager;
+import com.doctracker.basic.DtbApp;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 3, 2017 11:39:11 PM
@@ -54,13 +55,32 @@ public class SelectDaoBuilderImpl<T>
         this.resultType = resultType;
         return this;
     }
+    
+    public void searchTask(CriteriaBuilder cb, Root task, List<Predicate> likes, String toFind) {
+        if(likes != null) {
+            likes.add(cb.like(task.get(Task_.description), toFind));
+        }
+    }
+    
+    public void searchDoc(CriteriaBuilder cb, Join<Task, Doc> taskDoc, List<Predicate> likes, String toFind) {
+        if(likes != null && taskDoc != null) {
+            likes.add(cb.like(taskDoc.get(Doc_.subject), toFind));
+            likes.add(cb.like(taskDoc.get(Doc_.referencenumber), toFind));
+        }
+    }
+    
+    public void searchTaskresponse(CriteriaBuilder cb, Join<Task, Taskresponse> taskTr, List<Predicate> likes, String toFind) {
+        if(likes != null && taskTr != null) {
+            likes.add(cb.like(taskTr.get(Taskresponse_.response), toFind));  
+        }
+    }
 
     @Override
     public SelectDao<T> build() {
         
         this.checkBuildAttempted();
         
-        final App app = this.getApp();
+        final DtbApp app = this.getApp();
         final String query = this.getQuery();
         final Date deadlineFrom = this.getDeadlineFrom();
         final Date deadlineTo = this.getDeadlineTo();
@@ -76,33 +96,28 @@ public class SelectDaoBuilderImpl<T>
         
         final String q = !hasQuery ? null : '%'+query+'%';
         
-        final BuilderForSelect<T> dao = new BuilderForSelectImpl(
-                app.getEntityManager(), resultType);
+        final EntityManager em = app.getEntityManager();
+
+        final BuilderForSelect<T> dao = resultType == null ? 
+                new BuilderForSelectImpl(em) : new BuilderForSelectImpl(em, resultType);
         
         final CriteriaBuilder cb = dao.getCriteriaBuilder();
         
-        final CriteriaQuery cq = dao.getCriteriaQuery();
+        final CriteriaQuery<T> cq = dao.getCriteriaQuery();
         
         cq.distinct(true);
         
         final List<Predicate> likes = !hasQuery ? null : new ArrayList();
         
         final Root task = cq.from(Task.class); 
-        if(likes != null) {
-            likes.add(cb.like(task.get(Task_.description), q));
-        }
+        this.searchTask(cb, task, likes, q);
         
         final Join<Task, Doc> taskDoc = !joinDoc ? null : task.join(Task_.doc); 
-        if(likes != null && taskDoc != null) {
-            likes.add(cb.like(taskDoc.get(Doc_.subject), q));
-            likes.add(cb.like(taskDoc.get(Doc_.referencenumber), q));
-        }
+        this.searchDoc(cb, taskDoc, likes, q);
         
-        // If you don't specify lef join here then some searches will return incorrect results
+        // If you don't specify left join here then some searches will return incorrect results
         final Join<Task, Taskresponse> taskTr = !joinTr ? null : task.join(Task_.taskresponseList, JoinType.LEFT);
-        if(likes != null && taskTr != null) {
-            likes.add(cb.like(taskTr.get(Taskresponse_.response), q));  
-        }
+        this.searchTaskresponse(cb, taskTr, likes, q);
 
         final List<Predicate> where = new ArrayList<>();
         
