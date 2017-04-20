@@ -60,50 +60,83 @@ import com.bc.appbase.App;
 import com.bc.appcore.parameter.ParameterException;
 import com.bc.appcore.util.Util;
 import com.doctracker.basic.jpa.DtbSearchContext;
+import com.doctracker.basic.jpa.predicates.TaskDocTaskresponseContainsText;
+import java.awt.Font;
+import java.text.SimpleDateFormat;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 2, 2017 6:20:01 PM
  */
 public class SaveReports implements Action<App,List<File>> {
     
+    private long startTime;
+    
+    private static long lastStartTime;
+    
+    private static final AtomicInteger busyCount = new AtomicInteger();
+    
+    private static final AtomicInteger completedAttempts = new AtomicInteger();
+    
+    private static final AtomicInteger totalPeriod = new AtomicInteger();
+    
     private transient static final Logger logger = Logger.getLogger(SaveReports.class.getName());
     
     @Override
     public List<File> execute(App app, Map<String, Object> params) 
             throws ParameterException, TaskExecutionException {
+        
+        try{
+            
+            startTime = lastStartTime = System.currentTimeMillis();
+            
+            busyCount.incrementAndGet();
+        
+            final List<File> output = new ArrayList();
 
-        final List<File> output = new ArrayList();
-            
-        final String targetFilename = app.getConfig().getString(ConfigNames.REPORT_FOLDER_PATH);
-        
-        logger.log(Level.FINE, "Target folder: {0}", targetFilename);
-        
-        if(!this.isNullOrEmpty(targetFilename)) {
-            
-            final Map<Path, Map<String, TableModel>> tableModels = this.getTableModels(app, params);
-            
-            for(Path path : tableModels.keySet()) {
-                
-                final Map saveTableParams = this.getParams(path, tableModels.get(path));
-                saveTableParams.put(java.awt.Font.class.getName(), app.getUIContext().getFont(JTable.class));
-                
-                final File file = (File)app.getAction(DtbActionCommands.SAVE_TABLE_MODEL).execute(
-                        app, saveTableParams);
-                
-                logger.log(Level.FINER, "Param names: {0}", saveTableParams.keySet());
-                
-                if(file != null) {
-                    output.add(file);
+            final String targetFilename = app.getConfig().getString(ConfigNames.REPORT_FOLDER_PATH);
+
+            logger.log(Level.FINE, "Target folder: {0}", targetFilename);
+
+            if(!this.isNullOrEmpty(targetFilename)) {
+
+                final Map<Path, Map<String, TableModel>> tableModels = this.getTableModels(app, params);
+
+                logger.log(Level.FINE, "Number of reports: {0}", (tableModels==null?null:tableModels.size()));
+
+                for(Path path : tableModels.keySet()) {
+
+                    final Map saveTableParams = this.getParams(path, tableModels.get(path));
+                    final Font tableFont = app.getUIContext().getFont(JTable.class);
+                    final Font reportFont = tableFont.deriveFont(tableFont.getStyle(), app.getConfig().getInt(ConfigNames.OUTPUT_FONT_SIZE, tableFont.getSize()));
+                    saveTableParams.put(java.awt.Font.class.getName(), reportFont);
+
+                    final File file = (File)app.getAction(DtbActionCommands.SAVE_TABLE_MODEL).execute(
+                            app, saveTableParams);
+
+                    logger.log(Level.FINER, "Param names: {0}", saveTableParams.keySet());
+
+                    if(file != null) {
+                        output.add(file);
+                    }
                 }
+
+                if(!output.isEmpty()) {
+                    app.getAction(DtbActionCommands.REFRESH_REPORTS_FROM_BACKUP).execute(
+                            app, Collections.EMPTY_MAP);
+                }
+                
+                completedAttempts.incrementAndGet();
+                
+                totalPeriod.addAndGet((int)(System.currentTimeMillis() - startTime));
             }
+
+            return output;
             
-            if(!output.isEmpty()) {
-                app.getAction(DtbActionCommands.REFRESH_OUTPUT_FROM_BACKUP).execute(
-                        app, Collections.EMPTY_MAP);
-            }
+        }finally{
+            
+            busyCount.decrementAndGet();
         }
-       
-        return output;
     }
     
     private Map<String, Object> getParams(Path path, Map<String, TableModel> data) {
@@ -123,28 +156,30 @@ public class SaveReports implements Action<App,List<File>> {
         
         final List<Appointment> apptList = new ArrayList(
                 (List<Appointment>)params.get(Appointment.class.getName()+"List"));
+//        final List<Appointment> apptList = new ArrayList();
         apptList.add(0, null);
         
         final Map<Path, Map<String, TableModel>> output = new HashMap();
         
-        final Calendar calendar = app.getCalendar();
-//        calendar.set(2017, 1, 28);
-        calendar.set(2017, 2, 3);
+        final Calendar today = app.getCalendar();
+//        today.set(2017, 1, 28);
+//        calendar.set(2017, 2, 3);
 
-        final Date date_today_start = this.getStartDate(calendar).getTime();
-        final Date date_today_end = this.getEndDate(calendar, 1).getTime();
+        final Date date_today_start = this.getStartDate(today).getTime();
+        final Date date_today_end = this.getEndDate(today, 1).getTime();
         
-        final Predicate<Date> dateRangeTest = new DateIsWithinRange(date_today_start, date_today_end);
+        if(logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "From: {0}, to: {1}", new Object[]{date_today_start, date_today_end});
+        }
+        
+        final Predicate<Date> dateWithinToday = new DateIsWithinRange(date_today_start, date_today_end);
        
-        final DateFormat dateFormat = app.getDateFormat();
-        
         final ResultModel<Task> resultModel = app.getResultModel(Task.class, null);
         
         final String workingDir = app.getWorkingDir().toString();
 
-        final DtbSearchContext<Task> sm = ((DtbApp)app).getSearchContext(Task.class);
-        final SelectDao<Task> dao = sm.getSelectDaoBuilder(Task.class).closed(false).build();
-        final SearchResults searchResults = sm.getSearchResults(dao);
+        final DtbSearchContext<Task> searchContext = ((DtbApp)app).getSearchContext(Task.class);
+        final SearchResults searchResults = searchContext.getSearchResults();
 
         logger.log(Level.FINER, "All search results size {0}", searchResults.getSize());
             
@@ -152,16 +187,27 @@ public class SaveReports implements Action<App,List<File>> {
                 getBackupPath(workingDir, FileNames.REPORT_BACKUP_FILENAME), 
                 output);
         
-        this.addTableModels(app, searchResults, resultModel, apptList, new TaskTimeopenedTest(dateRangeTest), 
+        this.addTableModels(app, searchResults, resultModel, apptList, new TaskTimeopenedTest(dateWithinToday), 
                 getBackupPath(workingDir, FileNames.REPORT_TRACK_START_TODAY_FILE_ID+'.'+FileNames.REPORT_BACKUP_FILE_EXT), 
                 output);
         
-        this.addTableModels(app, searchResults, resultModel, apptList, new TaskLatestDeadlineTest(dateRangeTest), 
+        final DateFormat dateFormat = new SimpleDateFormat("dd MMM");
+        dateFormat.setCalendar(today);
+        dateFormat.setTimeZone(app.getTimeZone());
+        final String queryTodaySearchText = dateFormat.format(today.getTime());
+        if(logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Query on {0}", queryTodaySearchText);
+        }
+
+        final Predicate<Task> containsQueryTodyText = new TaskDocTaskresponseContainsText("Query on " + queryTodaySearchText, true);
+        final Predicate<Task> deadlineWithinToday = new TaskLatestDeadlineTest(dateWithinToday);
+        final Predicate<Task> queryToday = deadlineWithinToday.or(containsQueryTodyText);
+        this.addTableModels(app, searchResults, resultModel, apptList, queryToday, 
                 getBackupPath(workingDir, FileNames.REPORT_QUERY_TODAY_FILE_ID+'.'+FileNames.REPORT_BACKUP_FILE_EXT), 
                 output);
         
         final Predicate startOrDeadlineRange = 
-                new TaskTimeopenedTest(dateRangeTest).or(new TaskLatestDeadlineTest(dateRangeTest));
+                new TaskTimeopenedTest(dateWithinToday).or(new TaskLatestDeadlineTest(dateWithinToday));
         this.addTableModels(app, searchResults, resultModel, apptList, startOrDeadlineRange, 
                 getBackupPath(workingDir, FileNames.REPORT_TODAY_FILE_ID+'.'+FileNames.REPORT_BACKUP_FILE_EXT), 
                 output);
@@ -196,7 +242,7 @@ public class SaveReports implements Action<App,List<File>> {
         
         final int range_days = 2;
         final Date date_48hrs_start =  date_today_start;
-        final Date date_48hrs_end = this.getEndDate(calendar, 2).getTime();
+        final Date date_48hrs_end = this.getEndDate(today, 2).getTime();
         if(logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Start: {0}. End: {1}", new Object[]{date_48hrs_start, date_48hrs_end});
         }
@@ -205,19 +251,19 @@ public class SaveReports implements Action<App,List<File>> {
             
             final String [] queries = input.get(fname);
             
-            this.addDeadlineTableModels(app, sm, resultModel, apptList, null, null, 
+            this.addDeadlineTableModels(app, searchContext, resultModel, apptList, null, null, 
                     queries, getBackupPath(workingDir, fname+'.'+FileNames.REPORT_BACKUP_FILE_EXT), 
                     output);
             
-            this.addDeadlineTableModels(app, sm, resultModel, apptList, date_today_start, date_today_end, 
+            this.addDeadlineTableModels(app, searchContext, resultModel, apptList, date_today_start, date_today_end, 
                     queries, getBackupPath(workingDir, fname+"_today."+FileNames.REPORT_BACKUP_FILE_EXT), 
                     output);
 
-            this.addDeadlineTableModels(app, sm, resultModel, apptList, null, date_today_end, 
+            this.addDeadlineTableModels(app, searchContext, resultModel, apptList, null, date_today_end, 
                     queries, getBackupPath(workingDir, fname+"_outstanding."+FileNames.REPORT_BACKUP_FILE_EXT), 
                     output);
             
-            this.addDeadlineTableModels(app, sm, resultModel, apptList, date_48hrs_start, date_48hrs_end, 
+            this.addDeadlineTableModels(app, searchContext, resultModel, apptList, date_48hrs_start, date_48hrs_end, 
                     queries, getBackupPath(workingDir, fname + '_' + (TimeUnit.DAYS.toHours(range_days)) + "_hours." + FileNames.REPORT_BACKUP_FILE_EXT), 
                     output);
         }
@@ -274,6 +320,8 @@ public class SaveReports implements Action<App,List<File>> {
             List<Appointment> apptList, Predicate<Task> test,
             Path path, final Map<Path, Map<String, TableModel>> appendTo) {
         
+        logger.log(Level.FINER, "Adding TableModels for: {0}", path);
+        
         appendTo.put(path, this.getTableModels(app, sr, resultModel, apptList, test));
     }
     private void addDeadlineTableModels(
@@ -281,15 +329,26 @@ public class SaveReports implements Action<App,List<File>> {
             List<Appointment> apptList, Date deadlineFrom, Date deadlineTo, String [] queries,
             Path path, final Map<Path, Map<String, TableModel>> appendTo) {
         
+        logger.log(Level.FINER, "Adding TableModels for: {0}", path);
+        
         appendTo.put(path, this.getDeadlineTableModels(app, sm, resultModel, apptList, deadlineFrom, deadlineTo, queries));
     }
     
     private Map<String, TableModel> getTableModels(App app, SearchResults<Task> sr, 
             final ResultModel<Task> resultModel, List<Appointment> apptList, Predicate<Task> test) {
+        
         final Map<String, TableModel> output = new HashMap();
         for(Appointment appt : apptList) {
+            
             final String sheetName = this.getSheetName(appt);
+            
             final TableModel allModel = this.getTableModel(app, sr, resultModel, appt, test);
+            
+            if(logger.isLoggable(Level.FINER)) {
+                logger.log(Level.FINER, "Appointment: {0}, sheet name: {1}, rows: {2}",
+                        new Object[]{appt, sheetName, allModel.getRowCount()});
+            }
+                    
             output.put(sheetName, allModel);
         }
         return output;
@@ -316,9 +375,10 @@ public class SaveReports implements Action<App,List<File>> {
 
             final Task task = searchResults.get(i);
             
-            if(appt == null || task.getReponsibility().equals(appt)) {
+            if(appt == null || task.getReponsibility().getAppointmentid().equals(appt.getAppointmentid())) {
                 
                 if(test.test(task)) {
+                    
                     toSave.add(task);
                 }
             }
@@ -326,8 +386,8 @@ public class SaveReports implements Action<App,List<File>> {
         
         final TableModel tableModel = new EntityTableModel(app, new ArrayList(toSave), resultModel);
 
-        if(logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, "{0} results filtered to {1} for appointment: {2} using predicate: {3}",
+        if(logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "{0} results filtered to {1} for appointment: {2} using predicate: {3}",
                     new Object[]{searchResults.getSize(), tableModel.getRowCount(), 
                         appt == null ? null : appt.getAbbreviation(), test.getClass().getSimpleName()});
         }
@@ -347,10 +407,10 @@ public class SaveReports implements Action<App,List<File>> {
         for(String query : queries) {
             final SelectDao<Task> dao = (SelectDao<Task>)new SelectTaskresponseBuilder()
                     .resultType(Task.class)
-                    .app((DtbApp)app)
+                    .jpaContext(app.getJpaContext())
                     .closed(false)
                     .deadlineFrom(deadlineFrom).deadlineTo(deadlineTo)
-                    .who(appt).query(query).build();
+                    .who(appt).textToFind(query).build();
             
             final List<Task> queryResults = dao.getResultsAndClose();
             results.addAll(queryResults);
@@ -370,6 +430,10 @@ public class SaveReports implements Action<App,List<File>> {
     
     private boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
+    }
+    
+    public ActionStatus getLastStatus() {
+        return new ActionStatusImpl(lastStartTime, busyCount, completedAttempts, totalPeriod);
     }
 }
 /**

@@ -44,9 +44,10 @@ public class AddTaskresponse implements Action<App,Object> {
     private transient static final Logger logger = Logger.getLogger(AddTaskresponse.class.getName());
 
     @Override
-    public Object execute(App app, Map<String, Object> params) throws TaskExecutionException {
+    public Object execute(App app, Map<String, Object> params) 
+            throws ParameterException, TaskExecutionException {
         
-        try(Dao dao = app.getDao()){
+        try(Dao dao = app.getDao(Task.class)){
             
             final Object taskid = params.get(Task_.taskid.getName());
 
@@ -97,24 +98,15 @@ public class AddTaskresponse implements Action<App,Object> {
             response.setResponse(respStr);
             response.setTask(task); 
             
-            app.getDao().begin().persistAndClose(response);
+            app.getDao(Taskresponse.class).begin().persistAndClose(response);
             app.getSlaveUpdates().addPersist(response);
 
-//            ((DtbApp)app).updateOutput(Collections.singletonList(task.getReponsibility()));
-            ((DtbApp)app).updateOutput();
+//            ((DtbApp)app).updateReports(Collections.singletonList(task.getReponsibility()), true);
+            ((DtbApp)app).updateReports(true);
             
             app.getUIContext().showSuccessMessage("Success");
-            
-            try{
-                app.getAction(DtbActionCommands.REFRESH_RESULTS).execute(app, params);
-            }catch(TaskExecutionException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
-            }
-        }catch(ParameterException e) {
-           
-            throw new TaskExecutionException(e);
         }
         
-        return null;
+        return Boolean.TRUE;
     }
 }

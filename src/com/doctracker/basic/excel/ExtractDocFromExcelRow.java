@@ -264,7 +264,7 @@ public class ExtractDocFromExcelRow implements ExcelRowHandler<Doc> {
         
         final List<Object> slaveUpdates = new ArrayList();
         
-        try(Dao dao = app.getDao()) {
+        try(Dao dao = app.getDao(Doc.class)) {
 
             if(cells.length < 4) {
                 log("ERRO ["+row+":]\tSKIPPING ROW. Insufficient cells");

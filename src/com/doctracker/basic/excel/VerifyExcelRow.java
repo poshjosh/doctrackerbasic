@@ -56,9 +56,9 @@ public class VerifyExcelRow implements ExcelRowHandler<Boolean> {
             
             final String str = cells[col].getContents();
             
-            final SelectDaoBuilder<Task> sb = this.app.getSearchContext(Task.class).getSelectDaoBuilder(Task.class);
+            final SelectDaoBuilder<Task> sb = this.app.getSearchContext(Task.class).getSelectDaoBuilder();
             
-            List<Task> results = sb.query(str).build().getResultsAndClose(0, 1);
+            final List<Task> results = sb.textToFind(str).build().getResultsAndClose(0, 1);
         
             if(results == null || results.isEmpty()) {
                 

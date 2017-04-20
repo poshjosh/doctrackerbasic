@@ -24,5 +24,5 @@ import com.bc.appcore.jpa.SearchContext;
  */
 public interface DtbSearchContext<T> extends SearchContext<T> {
     
-    SelectDaoBuilder<T> getSelectDaoBuilder(Class<T> resultType);
+    SelectDaoBuilder<T> getSelectDaoBuilder();
 }

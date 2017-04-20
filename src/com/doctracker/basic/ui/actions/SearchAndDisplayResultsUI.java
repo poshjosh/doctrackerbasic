@@ -44,8 +44,6 @@ public class SearchAndDisplayResultsUI implements Action<App,String> {
         
         final String KEY = UUID.randomUUID().toString();
         
-        app.getAttributes().put(KEY, searchResults);
-        
         final Object msg = app.getAction(DtbActionCommands.BUILD_SEARCHUI_MESSAGE).execute(app, params);
                 
         if(SwingUtilities.isEventDispatchThread()) {

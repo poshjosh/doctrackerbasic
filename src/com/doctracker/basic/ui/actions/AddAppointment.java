@@ -88,7 +88,7 @@ public class AddAppointment implements Action<App,Appointment> {
             appt.setAppointment(apptStr);
             appt.setParentappointment(parent);
             appt.setUnit(unit);
-            app.getDao().begin().persistAndClose(appt);
+            app.getDao(Appointment.class).begin().persistAndClose(appt);
             app.getSlaveUpdates().addPersist(appt);
         }
 

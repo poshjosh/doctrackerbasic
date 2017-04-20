@@ -23,10 +23,11 @@ import com.bc.appcore.predicates.AcceptAll;
 import com.doctracker.basic.ConfigPrefixNames;
 import com.doctracker.basic.DtbApp;
 import com.doctracker.basic.jpa.predicates.AppointmentTest;
-import com.doctracker.basic.jpa.predicates.MasterPersistenceUnitTest;
+import com.bc.appcore.jpa.predicates.MasterPersistenceUnitTest;
 import com.doctracker.basic.pu.entities.Appointment;
 import com.doctracker.basic.pu.entities.Task;
 import com.doctracker.basic.pu.entities.Taskresponse;
+import com.doctracker.basic.pu.entities.Taskresponse_;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,15 +68,18 @@ public class DtbResultModel<T> extends ResultModelImpl<T> {
     }
     
     @Override
-    public void update(Object entity, String columnName, Object value) {
-        final int answer = JOptionPane.showConfirmDialog(
-                this.getApp().getUIContext().getMainFrame(), "Update: "+columnName+'?', "Update?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if(answer == JOptionPane.YES_OPTION) {
+    public void update(Object entity, String columnName, Object columnValue) {
+        
+        final int response = JOptionPane.showConfirmDialog(
+                this.getApp().getUIContext().getMainFrame(), "Update: "+columnName+'?', 
+                "Update?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        
+        if(response == JOptionPane.YES_OPTION) {
             try{
                 
-                super.update(entity, columnName, value);
+                super.update(entity, columnName, columnValue);
                 
-                this.getApp().updateOutput();
+                this.getApp().updateReports(true);
                 
             }catch(RuntimeException e) {
                 final String msg = "Error updating "+columnName;
@@ -83,6 +87,23 @@ public class DtbResultModel<T> extends ResultModelImpl<T> {
                 this.getApp().getUIContext().showErrorMessage(e, msg);
             }
         }
+    }
+    
+    @Override
+    public String getUpdateActionId(Class entityClass, Object entity, 
+            String columnName, Object columnValue) {
+        final String output;
+        if(entity instanceof Taskresponse && 
+                Taskresponse_.response.getName().equals(columnName) && 
+                columnValue == null) {
+            output = REMOVE;
+        }else{
+            output = super.getUpdateActionId(entityClass, entity, columnName, columnValue);
+        }
+        if(logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Action ID: {0}, entity: {1}, update: {2} = {3}", new Object[]{output, entity, columnName, columnValue});
+        }
+        return output;
     }
     
     public Taskresponse getRemark(Task task, String columnName, boolean createIfNone) {

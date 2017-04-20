@@ -17,9 +17,12 @@
 package com.doctracker.basic.ui.actions;
 
 import com.bc.appbase.App;
+import com.bc.appbase.ui.actions.ActionCommands;
+import com.bc.appbase.ui.actions.ParamNames;
 import com.bc.appcore.actions.Action;
 import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.appcore.parameter.ParameterException;
+import com.doctracker.basic.pu.entities.Task;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -49,8 +52,10 @@ public class OpenTask implements Action<App,Boolean> {
             app.getUIContext().showSuccessMessage("Success");
 
             try{
-                app.getAction(DtbActionCommands.REFRESH_RESULTS).execute(app, params);
-            }catch(TaskExecutionException e) {
+                Map<String, Object> map = new HashMap(params);
+                map.put(ParamNames.RESULT_TYPE, Task.class);
+                app.getAction(ActionCommands.REFRESH_ALL_RESULTS).execute(app, map);
+            }catch(ParameterException | TaskExecutionException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
             }
         }

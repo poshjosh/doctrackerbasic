@@ -106,7 +106,7 @@ public class DtbUIContextImpl extends UIContexImpl implements DtbUIContext {
 
     @Override
     public EditorPaneFrame createEditorPaneFrame(SearchResultsPanel resultsPanel) {
-        EditorPaneFrame frame = new EditorPaneFrame();
+        final EditorPaneFrame frame = new EditorPaneFrame();
         if(this.getImageIcon() != null) {
             frame.setIconImage(this.getImageIcon().getImage());
         }

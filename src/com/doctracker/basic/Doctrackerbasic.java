@@ -23,7 +23,6 @@ import com.bc.config.ConfigService;
 import com.bc.config.SimpleConfigService;
 import com.bc.jpa.JpaContext;
 import com.bc.jpa.JpaContextImpl;
-import com.bc.jpa.dao.SelectDao;
 import com.bc.jpa.search.SearchResults;
 import com.bc.util.Util;
 import com.doctracker.basic.pu.entities.Task;
@@ -42,16 +41,14 @@ import com.bc.appcore.ResourceContext;
 import com.bc.appcore.ResourceContextImpl;
 import com.bc.appcore.util.BlockingQueueThreadPoolExecutor;
 import com.bc.appcore.util.LoggingConfigManagerImpl;
-import com.bc.appcore.util.Settings;
-import com.bc.appcore.util.SettingsImpl;
 import com.bc.jpa.sync.JpaSync;
 import com.bc.jpa.sync.impl.JpaSyncImpl;
 import com.bc.jpa.sync.impl.RemoteUpdaterImpl;
 import com.bc.jpa.sync.SlaveUpdates;
 import com.bc.jpa.sync.impl.SlaveUpdatesImpl;
 import com.bc.jpa.sync.predicates.PersistenceCommunicationsLinkFailureTest;
-import com.doctracker.basic.jpa.predicates.MasterPersistenceUnitTest;
-import com.doctracker.basic.jpa.predicates.SlavePersistenceUnitTest;
+import com.bc.appcore.jpa.predicates.MasterPersistenceUnitTest;
+import com.bc.appcore.jpa.predicates.SlavePersistenceUnitTest;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import com.doctracker.basic.pu.entities.Unit;
@@ -110,7 +107,7 @@ public class Doctrackerbasic {
             final String [] filesToCreate = new String[]{propsFile, loggingConfigFile};
             final ResourceContext fileManager = new ResourceContextImpl(dirsToCreate, filesToCreate);
             
-            new LoggingConfigManagerImpl(fileManager).init(defaultLoggingConfigFile, loggingConfigFile);
+            new LoggingConfigManagerImpl(fileManager).init(defaultLoggingConfigFile, loggingConfigFile, null);
             
             uiLog.log("Loading configurations");
             
@@ -122,9 +119,8 @@ public class Doctrackerbasic {
             uiLog.log("Setting look and feel");
             
             new SetLookAndFeel().execute(null, 
-                    Collections.singletonMap(
-                            ParamNames.LOOK_AND_FEEL, 
-                            config.getString(ConfigNames.LOOK_AND_FEEL)));
+                    Collections.singletonMap(ParamNames.LOOK_AND_FEEL_NAME, 
+                            config.getString(ConfigNames.LOOK_AND_FEEL, "Nimbus")));
             
             final boolean WAS_INSTALLED = config.getBoolean(ConfigNames.INSTALLED);
             
@@ -132,8 +128,8 @@ public class Doctrackerbasic {
         
             final String persistenceFile = config.getString(ConfigNames.PERSISTENCE_FILE);
             logger.log(Level.INFO, "Peristence file: {0}", persistenceFile);
-            final URI peristenceURI = fileManager.getResource(persistenceFile).toURI();
-            final JpaContext jpaContext = new JpaContextImpl(peristenceURI, null);
+            final URI persistenceURI = fileManager.getResource(persistenceFile).toURI();
+            final JpaContext jpaContext = new JpaContextImpl(persistenceURI, null);
             jpaContext.getBuilderForSelect(Unit.class).from(Unit.class).getResultsAndClose(0, 10);
 
             final ExecutorService updateOutputService = 
@@ -155,14 +151,13 @@ public class Doctrackerbasic {
             
             final Properties settingsMetaData = new Properties();
             
-            try(Reader reader = new InputStreamReader(fileManager.getResourceAsStream("META-INF/properties/settings.properties"))) {
+            try(Reader reader = new InputStreamReader(
+                    fileManager.getResourceAsStream("META-INF/properties/settings.properties"))) {
                 settingsMetaData.load(reader);
             }
             
-            final Settings settings = new SettingsImpl(configService, config, settingsMetaData);
-            
             final DtbApp app = new DtbAppImpl(
-                    Paths.get(workingDir), configService, config, settings, jpaContext,
+                    Paths.get(workingDir), configService, config, settingsMetaData, jpaContext,
                     updateOutputService, slaveUpdates, jpaSync
             );
             
@@ -178,14 +173,14 @@ public class Doctrackerbasic {
                         
                         uiLog.log("Configuring user interface");
                         
-                        final DtbUIContext ui = ((DtbApp)app).getUIContext();
+                        final DtbUIContext uiContext = ((DtbApp)app).getUIContext();
                         
-                        final DtbMainFrame mainFrame = ui.getMainFrame();
+                        final DtbMainFrame mainFrame = uiContext.getMainFrame();
                         
                         final SearchResultsPanel resultsPanel = mainFrame.getSearchResultsPanel();
                         
                         resultsPanel.getAddButton().setActionCommand(DtbActionCommands.DISPLAY_ADD_TASK_UI);
-                        ui.addActionListeners(resultsPanel, resultsPanel.getAddButton());
+                        uiContext.addActionListeners(resultsPanel, resultsPanel.getAddButton());
                         
                         uiLog.log("Loading search results");
                         
@@ -193,14 +188,11 @@ public class Doctrackerbasic {
                         
                         final DtbSearchContext<Task> searchContext = app.getSearchContext(entityType);
                         
-                        final SelectDao<Task> selectDao = searchContext.getSelectDaoBuilder(entityType)
-                                .resultType(entityType).closed(false).build();
+                        final SearchResults<Task> searchResults = searchContext.getSearchResults();
                         
-                        final SearchResults<Task> searchResults = searchContext.getSearchResults(selectDao);
+                        uiContext.positionFullScreen(mainFrame);
                         
-                        ui.positionFullScreen(mainFrame);
-                        
-                        ui.loadSearchResultsUI(resultsPanel, searchContext, 
+                        uiContext.loadSearchResultsUI(resultsPanel, searchContext, 
                                 searchResults, "AppMainFrame", 0, 1, true);
 
                         mainFrame.pack();
@@ -225,7 +217,7 @@ public class Doctrackerbasic {
                         final ExecutorService scheduleDeadlineTasksReminderSvc = 
                                 (ExecutorService)app.getAction(DtbActionCommands.SCHEDULE_DEADLINE_TASKS_REMINDER).execute(app, params);
                         
-                        app.updateOutput();
+                        app.updateReports(false);
                         
                         if(!WAS_INSTALLED) {
                             

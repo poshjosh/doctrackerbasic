@@ -19,12 +19,13 @@ package com.doctracker.basic.ui.actions;
 import com.bc.appcore.actions.TaskExecutionException;
 import com.doctracker.basic.ConfigNames;
 import com.bc.appcore.parameter.InvalidParameterException;
-import com.bc.appcore.parameter.ParameterException;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import com.bc.appcore.actions.Action;
 import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
+import com.bc.appcore.parameter.ParameterException;
+import java.io.IOException;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 3, 2017 2:31:07 PM
@@ -32,7 +33,8 @@ import com.bc.appbase.App;
 public class ChangeReportsFontSize implements Action<App,Integer> {
 
     @Override
-    public Integer execute(App app, Map<String, Object> params) throws TaskExecutionException {
+    public Integer execute(App app, Map<String, Object> params) 
+            throws ParameterException, TaskExecutionException {
         try{
             
             final String input = JOptionPane.showInputDialog(
@@ -53,13 +55,15 @@ public class ChangeReportsFontSize implements Action<App,Integer> {
                 }
                 
                 app.getConfig().setInt(ConfigNames.OUTPUT_FONT_SIZE, outputFontSize);
+                
+                app.getConfigService().store();
 
-                ((DtbApp)app).updateOutput();
+                ((DtbApp)app).updateReports(false);
             }
 
             return outputFontSize;
             
-        }catch(ParameterException e) {
+        }catch(IOException e) {
             
             throw new TaskExecutionException(e);
         }

@@ -18,7 +18,6 @@ package com.doctracker.basic.parameter;
 
 import com.bc.appcore.parameter.ParameterException;
 import com.bc.appcore.parameter.ParametersBuilder;
-import com.doctracker.basic.pu.entities.Task_;
 import com.bc.appbase.ui.DateFromUIBuilder;
 import com.doctracker.basic.ui.SearchPanel;
 import java.util.Calendar;
@@ -30,13 +29,8 @@ import com.bc.appcore.AppCore;
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 10, 2017 2:48:38 PM
  */
-public class SearchParametersBuilder implements ParametersBuilder<SearchPanel> {
+public class SearchParametersBuilder implements SearchParameters, ParametersBuilder<SearchPanel> {
     
-    public static final String CLOSED_TASKS = "closedtasks";
-    public static final String DEADLINE_FROM = "deadlineFrom";
-    public static final String DEADLINE_TO = "deadlineTo";
-    
-
     private AppCore app;
     
     private SearchPanel searchPanel;
@@ -62,15 +56,15 @@ public class SearchParametersBuilder implements ParametersBuilder<SearchPanel> {
         
         Object responsibility = searchPanel.getResponsiblityCombobox().getSelectedItem();
         if(!this.isNullOrEmpty(responsibility)) {
-            params.put(Task_.reponsibility.getName(), responsibility);
+            params.put(SearchParameters.PARAM_WHO, responsibility);
         }
         
         final String text = searchPanel.getSearchTextfield().getText();
         
-        params.put(CLOSED_TASKS, searchPanel.getClosedTasksCheckBox().isSelected());
+        params.put(PARAM_CLOSED, searchPanel.getClosedTasksCheckBox().isSelected());
         
         if(!this.isNullOrEmpty(text)) {
-            params.put("query", text);
+            params.put(SearchParameters.PARAM_QUERY, text);
         }
         
         final DateFromUIBuilder builder = app.get(DateFromUIBuilder.class);
@@ -83,7 +77,7 @@ public class SearchParametersBuilder implements ParametersBuilder<SearchPanel> {
                 .ui(searchPanel.getFromDateTimePanel())
                 .build(null);
         if(from != null) {
-            params.put("from", from);
+            params.put(SearchParameters.PARAM_FROM, from);
         }
         
         final Date to = builder.calendar(cal)
@@ -92,7 +86,7 @@ public class SearchParametersBuilder implements ParametersBuilder<SearchPanel> {
                 .ui(searchPanel.getToDateTimePanel())
                 .build(null);
         if(to != null) {
-            params.put("to", to);
+            params.put(SearchParameters.PARAM_TO, to);
         }
         
         final Date deadlineFrom = builder.calendar(cal)
@@ -101,7 +95,7 @@ public class SearchParametersBuilder implements ParametersBuilder<SearchPanel> {
                 .ui(searchPanel.getFromDeadlineDateTimePanel())
                 .build(null);
         if(deadlineFrom != null) {
-            params.put(DEADLINE_FROM, deadlineFrom);
+            params.put(PARAM_DEADLINE_FROM, deadlineFrom);
         }
         
         final Date deadlineTo = builder.calendar(cal)
@@ -110,7 +104,7 @@ public class SearchParametersBuilder implements ParametersBuilder<SearchPanel> {
                 .ui(searchPanel.getToDeadlineDateTimePanel())
                 .build(null);
         if(deadlineTo != null) {
-            params.put(DEADLINE_TO, deadlineTo);
+            params.put(PARAM_DEADLINE_TO, deadlineTo);
         }
         
         return params;

@@ -71,7 +71,7 @@ public class AddUnit implements Action<App,Unit> {
                 unit.setAbbreviation(abbrevStr);
                 unit.setParentunit(parent);
                 unit.setUnit(unitStr);
-                app.getDao().begin().persistAndClose(unit);
+                app.getDao(Unit.class).begin().persistAndClose(unit);
                 app.getSlaveUpdates().addPersist(unit);
             }
             

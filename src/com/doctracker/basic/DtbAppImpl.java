@@ -17,13 +17,14 @@
 package com.doctracker.basic;
 
 import com.bc.appbase.AbstractApp;
+import com.bc.appbase.parameter.SelectedRecordsParametersBuilder;
 import com.bc.appbase.ui.SearchResultsPanel;
+import com.bc.appbase.ui.actions.ActionCommands;
 import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.appcore.html.HtmlBuilder;
 import com.bc.appcore.jpa.model.ResultModel;
 import com.bc.appcore.parameter.ParameterException;
 import com.bc.appcore.parameter.ParametersBuilder;
-import com.bc.appcore.util.Settings;
 import com.bc.config.Config;
 import com.bc.config.ConfigService;
 import com.bc.jpa.JpaContext;
@@ -39,7 +40,6 @@ import com.doctracker.basic.parameter.AddResponseParametersBuilder;
 import com.doctracker.basic.parameter.AddTaskParametersBuilder;
 import com.doctracker.basic.parameter.AddUnitParametersBuilder;
 import com.doctracker.basic.parameter.SearchParametersBuilder;
-import com.doctracker.basic.parameter.SelectedTasksParametersBuilder;
 import com.doctracker.basic.pu.entities.Appointment;
 import com.doctracker.basic.pu.entities.Appointment_;
 import com.doctracker.basic.pu.entities.Doc_;
@@ -67,6 +67,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
@@ -88,10 +89,10 @@ public class DtbAppImpl extends AbstractApp implements DtbApp {
     private ResultModel<Task> taskResultModel;
     
     public DtbAppImpl(
-            Path workingDir, ConfigService configService, Config config, Settings settings, JpaContext jpaContext,
+            Path workingDir, ConfigService configService, Config config, Properties settingsConfig, JpaContext jpaContext,
             ExecutorService dataOutputService, SlaveUpdates slaveUpdates, JpaSync jpaSync) {
         
-        super(workingDir, configService, config, settings, jpaContext, dataOutputService, slaveUpdates, jpaSync);
+        super(workingDir, configService, config, settingsConfig, jpaContext, dataOutputService, slaveUpdates, jpaSync);
         
         this.updateOutputService = Objects.requireNonNull(dataOutputService);
         
@@ -132,9 +133,8 @@ public class DtbAppImpl extends AbstractApp implements DtbApp {
     }
 
     @Override
-    public EntityManager getEntityManager() {
-        final Class anyClassInDb = com.doctracker.basic.pu.entities.Task.class;
-        return this.getJpaContext().getEntityManager(anyClassInDb);
+    public EntityManager getEntityManager(Class resultType) {
+        return this.getJpaContext().getEntityManager(resultType);
     }
 
     @Override
@@ -194,21 +194,30 @@ public class DtbAppImpl extends AbstractApp implements DtbApp {
     }
 
     @Override
-    public void updateOutput() {
+    public void updateReports(boolean refreshDisplay) {
         final List<Appointment> branchChiefs = this.getBranchChiefs();
-        this.updateOutput(branchChiefs);
+        this.updateReports(branchChiefs, refreshDisplay);
     }
     
     @Override
-    public void updateOutput(List<Appointment> appointmentList) {
+    public void updateReports(List<Appointment> appointmentList, boolean refreshDisplay) {
 
         final Callable<List<File>> updateOutputTask = new Callable() {
             @Override
             public List<File> call() {
                 try{
-                    return (List<File>)DtbAppImpl.this.getAction(DtbActionCommands.SAVE_REPORTS).execute(DtbAppImpl.this, Collections.singletonMap(Appointment.class.getName()+"List", appointmentList));
+                    
+                    final DtbApp app = DtbAppImpl.this;
+                    
+                    if(refreshDisplay) {
+                        app.getAction(ActionCommands.REFRESH_ALL_RESULTS).execute(app, Collections.EMPTY_MAP);
+                    }
+                    
+                    return (List<File>)app.getAction(DtbActionCommands.SAVE_REPORTS).execute(
+                            app, Collections.singletonMap(Appointment.class.getName()+"List", appointmentList));
+                    
                 }catch(ParameterException | TaskExecutionException | RuntimeException e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
+                    logger.log(Level.WARNING, "Unexpected exception", e);
                     return null;
                 }
             }
@@ -257,16 +266,16 @@ public class DtbAppImpl extends AbstractApp implements DtbApp {
         }else if(source instanceof SearchPanel && DtbActionCommands.SEARCH_AND_DISPLAY_RESULTS_UI.equals(actionCommand)) {    
             builder = new SearchParametersBuilder();
         }else if(source instanceof SearchResultsPanel && DtbActionCommands.DISPLAY_TASKEDITORPANE.equals(actionCommand)) {    
-            builder = new SelectedTasksParametersBuilder();
+            builder = new SelectedRecordsParametersBuilder();
         }else if(source instanceof SearchResultsPanel && 
                 (DtbActionCommands.CLOSE_TASK.equals(actionCommand) || DtbActionCommands.OPEN_TASK.equals(actionCommand))) {    
-            builder = new SelectedTasksParametersBuilder();
+            builder = new SelectedRecordsParametersBuilder();
         }else if(source instanceof SearchResultsPanel && DtbActionCommands.DELETE_TASK.equals(actionCommand)) {    
-            builder = new SelectedTasksParametersBuilder();
+            builder = new SelectedRecordsParametersBuilder();
         }else if(source instanceof SearchResultsPanel && 
                 (DtbActionCommands.DISPLAY_ADD_RESPONSE_UI.equals(actionCommand) ||
                 DtbActionCommands.DISPLAY_ADD_REMARK_UI.equals(actionCommand))) {    
-            builder = new SelectedTasksParametersBuilder();
+            builder = new SelectedRecordsParametersBuilder();
         }else if(source instanceof AppointmentPanel && DtbActionCommands.ADD_APPOINTMENT.equals(actionCommand)) {
             builder = new AddAppointmentParametersBuilder();
         }else if(source instanceof UnitPanel && DtbActionCommands.ADD_UNIT.equals(actionCommand)) {

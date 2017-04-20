@@ -39,7 +39,7 @@ public class DisplayAddResponseUI implements Action<App,Object> {
         
         final List taskidList = (List)params.get(Task_.taskid.getName() + "List");
         final boolean eventThread = SwingUtilities.isEventDispatchThread();
-        try(Dao dao = app.getDao()) {
+        try(Dao dao = app.getDao(Task.class)) {
             dao.begin();
             for(Object taskid : taskidList) {
                 final Task task = dao.find(Task.class, taskid);

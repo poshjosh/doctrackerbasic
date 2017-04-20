@@ -37,9 +37,9 @@ import com.bc.appcore.util.Util;
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 3, 2017 1:33:32 PM
  */
-public class RefreshOutputFromBackup implements Action<App,List<File>> {
+public class RefreshReportsFromBackup implements Action<App,List<File>> {
     
-    private transient static final Logger logger = Logger.getLogger(RefreshOutputFromBackup.class.getName());
+    private transient static final Logger logger = Logger.getLogger(RefreshReportsFromBackup.class.getName());
 
     @Override
     public List<File> execute(App app, Map<String, Object> params) throws TaskExecutionException {

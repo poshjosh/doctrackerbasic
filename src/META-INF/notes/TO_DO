@@ -1,9 +1,4 @@
-wAS INSTALLED ALWAYS FALSE
-Help wrongly placed
 Immediate refresh
-NewTaskResponse remove some UI
-
-Override 2 methods get and set in TaskResultModel to use super type logic
 
 all executequery actions should have ParamNames.resulttype
 
@@ -22,23 +17,10 @@ authsvc
 idisc
 tracker
 
-If Desktop.Action.OPEN is not support disable or remove menu ViewTableAsExcel
-
-Verify reports being generated
-
-This class should accessed via SearchManager.getSelectDaoBuilder SelectTaskresponseBuilder()
-
-Ability to add 'remark' as well as 'query on'
-
-Settings. Add table settings fontSize, outputPath, combine
-
-Addresponse, closeTask, deletetask buttons on task editor pane may not work on multi-selection
 When adding response, if user adds date without year use current year
   - search java how to make dateformat use current year when none
 Importing of data, some taskresponse not showing
 Execute update and delete
-
-Print also ask page range
 
 if user press wrong add button in taskpanel
 Should TaskPanel clear docidLabel on reset

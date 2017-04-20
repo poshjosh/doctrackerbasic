@@ -55,7 +55,7 @@ public class SetTimeclosed implements Action<App,Boolean> {
 
         for(Object taskid : taskidList) {
 
-            final Dao dao = app.getDao();
+            final Dao dao = app.getDao(Task.class);
 
             final Task managedEntity = dao.find(Task.class, taskid);
 
@@ -67,8 +67,8 @@ public class SetTimeclosed implements Action<App,Boolean> {
             apptList.add(managedEntity.getReponsibility());
         }
 
-//            ((DtbApp)app).updateOutput(apptList);
-        ((DtbApp)app).updateOutput();
+//            ((DtbApp)app).updateReports(apptList, true);
+        ((DtbApp)app).updateReports(true);
 
         return Boolean.TRUE;
     }

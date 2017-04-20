@@ -27,8 +27,6 @@ public interface DtbActionCommands extends com.bc.appbase.ui.actions.ActionComma
     
     String BUILD_SEARCHUI_MESSAGE = BuildSearchUIMessage.class.getName();
     
-    String REFRESH_MAIN_RESULTS = RefreshMainResults.class.getName();
-
     String DISPLAY_TASKEDITORPANE = DisplayTaskEditorPane.class.getName();
 
     String DISPLAY_ADD_TASK_UI = DisplayAddtaskUI.class.getName();
@@ -70,7 +68,7 @@ public interface DtbActionCommands extends com.bc.appbase.ui.actions.ActionComma
     
     String SCHEDULE_DEADLINE_TASKS_REMINDER = ScheduleDeadlineTasksReminder.class.getName();
     
-    String REFRESH_OUTPUT_FROM_BACKUP = RefreshOutputFromBackup.class.getName();
+    String REFRESH_REPORTS_FROM_BACKUP = RefreshReportsFromBackup.class.getName();
     
     String CHANGE_FONT_SIZE_OF_REPORTS = ChangeReportsFontSize.class.getName();
     
@@ -79,4 +77,8 @@ public interface DtbActionCommands extends com.bc.appbase.ui.actions.ActionComma
     String OPEN_FOLDER_FOR_REPORTS = OpenReportsFolder.class.getName();
     
     String SYNC_DATABASE = SyncDatabase.class.getName();
+    
+    String DISPLAY_TRACK_START_TODAY_REPORT = DisplayTrackStartTodayReport.class.getName();
+    
+    String DISPLAY_QUERY_TODAY_REPORT = DisplayQueryTodayReport.class.getName();
 }

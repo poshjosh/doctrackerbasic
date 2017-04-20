@@ -87,7 +87,7 @@ public class ImportExcelData implements Action<App,Boolean> {
 
                 verifier.execute(file, sheetName, rowOffset, Integer.MAX_VALUE);
 
-                ((DtbApp)app).updateOutput();
+                ((DtbApp)app).updateReports(true);
                 
                 uiLog.querySaveLogThenSave();
                 

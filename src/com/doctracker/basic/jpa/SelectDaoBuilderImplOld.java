@@ -16,6 +16,7 @@
 
 package com.doctracker.basic.jpa;
 
+import com.bc.jpa.JpaContext;
 import com.bc.jpa.dao.Criteria;
 import com.bc.jpa.dao.SelectDao;
 import com.doctracker.basic.pu.entities.Appointment;
@@ -26,31 +27,22 @@ import com.doctracker.basic.pu.entities.Task_;
 import com.doctracker.basic.pu.entities.Taskresponse;
 import com.doctracker.basic.pu.entities.Taskresponse_;
 import java.util.Date;
-import com.doctracker.basic.DtbApp;
+import java.util.Objects;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 20, 2017 6:54:22 PM
  */
-public class SelectDaoBuilderImplOld<T> 
-        extends AbstractSelectionBuilder<SelectDao<T>> 
-        implements SelectDaoBuilder<T> {
+public class SelectDaoBuilderImplOld<T> extends AbstractSelectDaoBuilder<T> {
     
-    private Class<T> resultType;
-
     public SelectDaoBuilderImplOld() { }
     
-    @Override
-    public SelectDaoBuilder resultType(Class<T> resultType) {
-        this.resultType = resultType;
-        return this;
-    }
-
     @Override
     public SelectDao<T> build() {
         
         this.checkBuildAttempted();
         
-        final DtbApp app = this.getApp();
+        final JpaContext jpaContext = this.getJpaContext();
+        final Class resultType = this.getResultType();
         final String query = this.getQuery();
         final Date deadlineFrom = this.getDeadlineFrom();
         final Date deadlineTo = this.getDeadlineTo();
@@ -60,8 +52,10 @@ public class SelectDaoBuilderImplOld<T>
         final Date from = this.getFrom();
         final Date to = this.getTo();
         
+        Objects.requireNonNull(resultType);
+        
         final JoinDocTaskTaskresponse<T> dao = new JoinDocTaskTaskresponse(
-                app.getEntityManager(), resultType, null);
+                jpaContext.getEntityManager(resultType), resultType, null);
         
 //        dao.from(Task.class);
         

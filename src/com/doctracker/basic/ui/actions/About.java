@@ -17,44 +17,27 @@
 package com.doctracker.basic.ui.actions;
 
 import com.bc.appcore.actions.TaskExecutionException;
-import java.io.IOException;
 import java.util.Map;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import com.bc.appcore.actions.Action;
 import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
+import com.bc.appbase.ui.actions.DisplayResource;
+import com.bc.appcore.parameter.ParameterException;
+import java.util.HashMap;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 4:54:19 AM
  */
-public class About implements Action<App,Object> {
+public class About extends DisplayResource {
 
     @Override
-    public Object execute(App app, Map<String, Object> params) throws TaskExecutionException {
+    public Boolean execute(App app, Map<String, Object> params) 
+            throws ParameterException, TaskExecutionException {
         
-        try{
-
-            final JFrame frame = new JFrame();
-            
-            if(app.getUIContext().getImageIcon() != null) {
-                frame.setIconImage(app.getUIContext().getImageIcon().getImage()); 
-            }
-            
-            JEditorPane editor = new JEditorPane();
-            editor.setContentType("text/html");
-            editor.setPage(DtbApp.class.getResource("about.html"));
-            frame.getContentPane().add(editor);
-            
-            app.getUIContext().positionHalfScreenRight(frame);
-            frame.pack();
-            frame.setVisible(true);
-            
-        }catch(IOException e) {
-            throw new TaskExecutionException(e);
-        }
+        params = new HashMap();
+        params.put(CONTENT_TYPE, "text/html");
+        params.put(RESOURCE, DtbApp.class.getResource("about.html"));
         
-        return null;
+        return super.execute(app, params);
     }
 }
 

@@ -28,9 +28,6 @@ import javax.swing.JOptionPane;
 import com.bc.appcore.actions.Action;
 import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
-import com.bc.appcore.parameter.ParameterException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 3:29:19 PM
@@ -52,7 +49,7 @@ public class DeleteTask implements Action<App,Boolean> {
             
             for(Object taskid : taskidList) {
                 
-                try(Dao dao = app.getDao()) {
+                try(Dao dao = app.getDao(Task.class)) {
 
                     final Task managedEntity = dao.find(Task.class, taskid);
                     
@@ -63,18 +60,16 @@ public class DeleteTask implements Action<App,Boolean> {
                 }
             }
             
-//            ((DtbApp)app).updateOutput(apptList);
-            ((DtbApp)app).updateOutput();
+            app.getUIContext().showSuccessMessage("Success");
+            
+//            ((DtbApp)app).updateReports(apptList, true);
+            ((DtbApp)app).updateReports(true);
+            
+            return Boolean.TRUE;
+            
+        }else{
+        
+            return Boolean.FALSE;
         }
-        
-        app.getUIContext().showSuccessMessage("Success");
-        
-        try{
-            app.getAction(DtbActionCommands.REFRESH_RESULTS).execute(app, params);
-        }catch(ParameterException | TaskExecutionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
-        }
-        
-        return Boolean.TRUE;
     }
 }

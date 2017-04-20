@@ -20,9 +20,6 @@ import com.bc.appcore.actions.TaskExecutionException;
 import java.util.Map;
 import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
-import com.bc.appcore.parameter.ParameterException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 24, 2017 4:40:20 PM
@@ -34,13 +31,7 @@ public class ExecuteUpdateQuery extends com.bc.appbase.ui.actions.ExecuteUpdateQ
 
         final Integer output = super.execute(app, params); 
         
-        ((DtbApp)app).updateOutput();
-        
-        try{
-            app.getAction(DtbActionCommands.REFRESH_RESULTS).execute(app, params);
-        }catch(ParameterException | TaskExecutionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
-        }
+        ((DtbApp)app).updateReports(true);
         
         return output;
     }

@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package com.doctracker.basic.jpa.predicates;
+package com.doctracker.basic.parameter;
 
-import java.io.Serializable;
-import java.util.function.Predicate;
+import com.bc.appbase.ui.actions.ParamNames;
 
 /**
- * @author Chinomso Bassey Ikwuagwu on Mar 23, 2017 9:07:17 PM
+ * @author Chinomso Bassey Ikwuagwu on Apr 14, 2017 10:23:45 PM
  */
-public class MasterPersistenceUnitTest implements Predicate<String>, Serializable {
-
-    @Override
-    public boolean test(String persistenceUnitName) {
-        return persistenceUnitName.contains("master");
-    }
+public interface SearchParameters {
+    String PARAM_JPACONTEXT = "jpaContext";
+    String PARAM_RESULT_TYPE = ParamNames.RESULT_TYPE;
+    String PARAM_QUERY = "query";
+    String PARAM_FROM = "from";
+    String PARAM_TO = "to";
+    String PARAM_OPENED = "opened";
+    String PARAM_CLOSED = "closed";
+    String PARAM_WHO = "responsibility"; //Task_.reponsibility.getName();
+    String PARAM_DEADLINE_FROM = "deadlineFrom";
+    String PARAM_DEADLINE_TO = "deadlineto";
 }

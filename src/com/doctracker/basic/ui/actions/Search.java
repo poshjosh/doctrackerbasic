@@ -20,8 +20,6 @@ import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.jpa.dao.SelectDao;
 import com.bc.jpa.search.SearchResults;
 import com.doctracker.basic.parameter.SearchParametersBuilder;
-import com.doctracker.basic.pu.entities.Task;
-import com.doctracker.basic.pu.entities.Task_;
 import java.util.Date;
 import java.util.Map;
 import com.doctracker.basic.jpa.SelectDaoBuilder;
@@ -29,6 +27,10 @@ import com.bc.appcore.actions.Action;
 import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
 import com.doctracker.basic.jpa.DtbSearchContext;
+import com.doctracker.basic.parameter.SearchParameters;
+import com.doctracker.basic.pu.entities.Task;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 6, 2017 10:49:16 PM
@@ -38,31 +40,38 @@ public class Search implements Action<App,SearchResults> {
     @Override
     public SearchResults execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
         
-        final String s = (String)params.get("query");
-        final String query = s == null || s.isEmpty() ? null : s;
+        Logger.getLogger(this.getClass().getName()).log(Level.FINE, "Parameters: {0}", params);
         
-        final Date from = (Date)params.get("from");
-        final Date to = (Date)params.get("to");
-        final Boolean b = (Boolean)params.get(SearchParametersBuilder.CLOSED_TASKS);
-        final boolean closed = b == null ? false : b;
-        final String who = (String)params.get(Task_.reponsibility.getName());
-        final Date deadlineFrom = (Date)params.get(SearchParametersBuilder.DEADLINE_FROM);
-        final Date deadlineTo = (Date)params.get(SearchParametersBuilder.DEADLINE_TO);
+        final Class resultType = (Class)params.get(SearchParameters.PARAM_RESULT_TYPE);
+        final String query = (String)params.get(SearchParameters.PARAM_QUERY);
+        final Date from = (Date)params.get(SearchParameters.PARAM_FROM);
+        final Date to = (Date)params.get(SearchParameters.PARAM_TO);
+        final Boolean opened = (Boolean)params.get(SearchParametersBuilder.PARAM_OPENED);
+        final Boolean closed = (Boolean)params.get(SearchParametersBuilder.PARAM_CLOSED);
+        final String who = (String)params.get(SearchParameters.PARAM_WHO);
+        final Date deadlineFrom = (Date)params.get(SearchParametersBuilder.PARAM_DEADLINE_FROM);
+        final Date deadlineTo = (Date)params.get(SearchParametersBuilder.PARAM_DEADLINE_TO);
         
-        final DtbSearchContext<Task> searchContext = ((DtbApp)app).getSearchContext(Task.class);
+        final DtbApp dtbApp = (DtbApp)app;
+        
+        final DtbSearchContext searchContext = dtbApp.getSearchContext(resultType);
                     
-        final SelectDaoBuilder<Task> selectionBuilder = searchContext.getSelectDaoBuilder(Task.class);
+        final SelectDaoBuilder selectionBuilder = searchContext.getSelectDaoBuilder();
         
-        final SelectDao<Task> selectDao = selectionBuilder
-                .query(query)
+        final SelectDao selectDao = selectionBuilder
+                .jpaContext(dtbApp.getJpaContext())
+                .resultType(resultType==null?Task.class:resultType)
+                .textToFind(query==null || query.isEmpty() ? null : query)
+                .deadlineFrom(deadlineFrom)
+                .deadlineTo(deadlineTo)
                 .from(from)
                 .to(to)
-                .closed(closed)
+                .opened(opened==null?Boolean.TRUE:opened)
+                .closed(closed==null?Boolean.FALSE:closed)
                 .who(who)
-                .deadlineFrom(deadlineFrom)
-                .deadlineTo(deadlineTo).build();
+                .build();
         
-        final SearchResults<Task> searchResults = searchContext.getSearchResults(selectDao);
+        final SearchResults searchResults = searchContext.getSearchResults(selectDao);
 
         return searchResults;
     }

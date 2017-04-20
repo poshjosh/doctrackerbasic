@@ -16,10 +16,13 @@
 
 package com.doctracker.basic;
 
+import com.bc.appbase.ObjectFactory;
 import com.bc.appbase.ObjectFactoryImpl;
 import com.bc.appcore.exceptions.ObjectFactoryException;
+import com.bc.appcore.jpa.EntityMapBuilder;
 import com.doctracker.basic.jpa.DtbSelectionContext;
 import com.bc.appcore.jpa.SelectionContext;
+import com.bc.util.MapBuilder;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 31, 2017 5:24:29 PM
@@ -35,6 +38,11 @@ public class DtbObjectFactory extends ObjectFactoryImpl {
         Object output;
         if(type.equals(SelectionContext.class)){
             output = new DtbSelectionContext(this.getApp());
+        }else if(type.equals(MapBuilder.class)){
+            output = new EntityMapBuilder(this.getApp())
+                    .nullsAllowed(true).maxCollectionSize(0).maxDepth(3);
+        }else if(type.equals(ObjectFactory.class)){
+            output = new DtbObjectFactory(this.getApp());
         }else{
             try{
                 output = super.get(type);

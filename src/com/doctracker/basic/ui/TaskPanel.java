@@ -90,6 +90,7 @@ public class TaskPanel extends javax.swing.JPanel {
         updater.updateField(this.getTimeopenedMinutesTextfield(), cal, Calendar.MINUTE);
         
 //        updater.updateField(taskPanel.getTimeopenedDayTextfield(), cal, Calendar.DAY_OF_MONTH);
+        this.getTimeopenedDayTextfield().setText(null);
         updater.updateMonth(this.getTimeopenedMonthCombobox(), cal);
         updater.updateYear(this.getTimeopenedYearCombobox(), cal);
     }

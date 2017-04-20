@@ -16,15 +16,17 @@
 
 package com.doctracker.basic;
 
+import com.bc.appcore.jpa.predicates.MasterPersistenceUnitTest;
 import com.bc.jpa.JpaContext;
 import com.bc.jpa.JpaContextImpl;
+import com.bc.jpa.JpaMetaData;
 import com.bc.jpa.JpaUtil;
-import com.doctracker.basic.pu.remote.entities.Unit;
+import com.bc.jpa.util.PrintRelationships;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.logging.Level;
+import java.util.function.Predicate;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 23, 2017 8:49:44 PM
@@ -35,12 +37,32 @@ public class JpaTests {
         try{
             final URI peristenceURI = Thread.currentThread().getContextClassLoader().getResource("META-INF/persistence.xml").toURI();
             final JpaContext jpa = new JpaContextImpl(peristenceURI, null);
-            final Unit unit = jpa.getDao(Unit.class).find(Unit.class, 2);
-            JpaTests.removeManyToOnes(jpa, unit);
+//            final Unit unit = jpa.getDao(Unit.class).find(Unit.class, 2);
+//            JpaTests.removeManyToOnes(jpa, unit);
+            final JpaMetaData metaData = jpa.getMetaData();
+            final String [] puNames = metaData.getPersistenceUnitNames();
+            final Predicate<String> masterPuTest = new MasterPersistenceUnitTest();
+            
+            final PrintRelationships pr = new PrintRelationships(jpa);
+            
+            for(String puName : puNames) {
+                if(!masterPuTest.test(puName)) {
+                    continue;
+                }
+                final Class [] puClasses = metaData.getEntityClasses(puName);
+                for(Class puClass : puClasses) {
+                    
+                    final Object entity = jpa.getBuilderForSelect(puClass).getResultsAndClose(0, 1).get(0);
+                    
+                    pr.execute(entity);
+                }
+            }
         }catch(Exception e) {
+            
             e.printStackTrace();
         }    
     }
+    
     private static void removeManyToOnes(JpaContext jpa, Object local) {
         final Class refClass = local.getClass();
         final Class [] refingClasses = jpa.getMetaData().getReferencingClasses(refClass);

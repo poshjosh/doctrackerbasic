@@ -77,13 +77,13 @@ public class SearchDeadlineTasks implements Action<App,Boolean> {
     
     private SearchResults<Task> getSearchResults(App app, String KEY, Date deadline) {
         
-        SearchResults<Task> searchResults = (SearchResults<Task>)app.getAttributes().get(KEY);
+        SearchResults<Task> searchResults = app.getUIContext().getLinkedSearchResults(KEY, null);
         
         if(searchResults == null) {
             
             final DtbSearchContext<Task> searchContext = ((DtbApp)app).getSearchContext(Task.class);
 
-            final SelectDao<Task> selectDao = searchContext.getSelectDaoBuilder(Task.class)
+            final SelectDao<Task> selectDao = searchContext.getSelectDaoBuilder()
                     .closed(false)
                     .deadlineTo(deadline).build();
 

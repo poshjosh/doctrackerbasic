@@ -16,9 +16,6 @@
 
 package com.doctracker.basic.ui;
 
-import com.bc.jpa.dao.SelectDao;
-import com.bc.jpa.search.SearchResults;
-import com.doctracker.basic.pu.entities.Task;
 import java.awt.Font;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -26,7 +23,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
-import com.doctracker.basic.jpa.DtbSearchContext;
 import com.doctracker.basic.ui.actions.DtbActionCommands;
 
 /**
@@ -44,14 +40,16 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
     private javax.swing.JMenuItem importMenuItem;
     private javax.swing.JMenuItem newtaskMenuItem;
     private javax.swing.JMenu reportsMenu;
-    private javax.swing.JMenuItem refreshMenuItem;
     private javax.swing.JMenuItem refreshReportsMenuItem;
     private javax.swing.JMenu remoteMenu;
     private javax.swing.JMenuItem changeFolderForReportsMenuItem;
     private javax.swing.JMenu sqlMenu;
     private javax.swing.JMenuItem syncMenuItem;
     private javax.swing.JMenuItem openReportsFolderMenuItem;
-    
+    private javax.swing.JMenu viewReportMenu;
+    private javax.swing.JMenuItem queryTodayMenuItem;
+    private javax.swing.JMenuItem trackStartTodayMenuItem;
+            
     public DtbMainFrame() {
         this(null);
     }
@@ -70,12 +68,13 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
         super.init(app);
         
         this.getNewtaskMenuItem().setActionCommand(DtbActionCommands.DISPLAY_ADD_TASK_UI);
-        this.getRefreshMenuItem().setActionCommand(DtbActionCommands.REFRESH_MAIN_RESULTS);
         this.getImportMenuItem().setActionCommand(DtbActionCommands.IMPORT);
         this.getExecuteSelectMenuItem().setActionCommand(DtbActionCommands.EXECUTE_SELECT_QUERY);
         this.getExecuteUpdateMenuItem().setActionCommand(DtbActionCommands.EXECUTE_UPDATE_QUERY);
         this.getExecuteDeleteMenuItem().setActionCommand(DtbActionCommands.EXECUTE_DELETE_QUERY);
         this.getRefreshReportsMenuItem().setActionCommand(DtbActionCommands.REFRESH_REPORTS);
+        this.getQueryTodayMenuItem().setActionCommand(DtbActionCommands.DISPLAY_QUERY_TODAY_REPORT);
+        this.getTrackStartTodayMenuItem().setActionCommand(DtbActionCommands.DISPLAY_TRACK_START_TODAY_REPORT);
         this.getChangeFontSizeForReportsMenuItem().setActionCommand(DtbActionCommands.CHANGE_FONT_SIZE_OF_REPORTS);
         this.getChangeFolderForReportsMenuItem().setActionCommand(DtbActionCommands.CHANGE_FOLDER_FOR_REPORTS);
         this.getOpenReportsFolderMenuItem().setActionCommand(DtbActionCommands.OPEN_FOLDER_FOR_REPORTS);
@@ -83,28 +82,18 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
         
         app.getUIContext().addActionListeners(this, 
                 this.getNewtaskMenuItem(), 
-                this.getRefreshMenuItem(),
                 this.getImportMenuItem(),
                 this.getExecuteSelectMenuItem(), 
                 this.getExecuteUpdateMenuItem(),
                 this.getExecuteDeleteMenuItem(), 
                 this.getRefreshReportsMenuItem(),
+                this.getQueryTodayMenuItem(),
+                this.getTrackStartTodayMenuItem(),
                 this.getChangeFontSizeForReportsMenuItem(), 
                 this.getChangeFolderForReportsMenuItem(),
                 this.getOpenReportsFolderMenuItem(),
                 this.getSyncMenuItem()
         );
-    }
-    
-    @Override
-    public void reset(App app) {
-        
-        super.reset(app);
-        
-        final DtbSearchContext<Task> searchContext = ((DtbApp)app).getSearchContext(Task.class);
-        final SelectDao<Task> selectDao = searchContext.getSelectDaoBuilder(Task.class).closed(false).build();
-        final SearchResults<Task> searchResults = searchContext.getSearchResults(selectDao);
-        this.getSearchResultsPanel().reset(app, searchContext, searchResults);
     }
     
     @Override
@@ -116,14 +105,13 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
     public void reset(App app, JPanel topPanel) { 
         (((SearchPanel)topPanel)).reset((DtbApp)app);
     }
-
+    
     @Override
     public void initComponents() {
         
         super.initComponents(); 
         
         newtaskMenuItem = new javax.swing.JMenuItem();
-        refreshMenuItem = new javax.swing.JMenuItem();
         importMenuItem = new javax.swing.JMenuItem();
         sqlMenu = new javax.swing.JMenu();
         executeSelectMenuItem = new javax.swing.JMenuItem();
@@ -133,9 +121,12 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
         refreshReportsMenuItem = new javax.swing.JMenuItem();
         changeFolderForReportsMenuItem = new javax.swing.JMenuItem();
         openReportsFolderMenuItem = new javax.swing.JMenuItem();
+        viewReportMenu = new javax.swing.JMenu();
         changeFontSizeForReportsMenuItem = new javax.swing.JMenuItem();
         remoteMenu = new javax.swing.JMenu();
         syncMenuItem = new javax.swing.JMenuItem();
+        queryTodayMenuItem = new javax.swing.JMenuItem();
+        trackStartTodayMenuItem = new javax.swing.JMenuItem();
 
         JMenuBar menuBar = this.getJMenuBar();
         JMenu fileMenu = this.getFileMenu();
@@ -145,10 +136,6 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
         newtaskMenuItem.setMnemonic('o');
         newtaskMenuItem.setText("New Task");
         fileMenu.add(newtaskMenuItem);
-
-        refreshMenuItem.setFont(menuFont);
-        refreshMenuItem.setText("Refresh");
-        fileMenu.add(refreshMenuItem);
 
         importMenuItem.setFont(menuFont);
         importMenuItem.setText("Import");
@@ -177,7 +164,20 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
 
         reportsMenu.setText("Reports");
         reportsMenu.setFont(menuFont);
-
+        
+        viewReportMenu.setFont(menuFont);
+        viewReportMenu.setText("View Report");
+        
+        queryTodayMenuItem.setFont(menuFont);
+        queryTodayMenuItem.setText("Query Today");
+        viewReportMenu.add(queryTodayMenuItem);
+        
+        trackStartTodayMenuItem.setFont(menuFont);
+        trackStartTodayMenuItem.setText("Track Start Today");
+        viewReportMenu.add(trackStartTodayMenuItem);
+        
+        reportsMenu.add(viewReportMenu);
+        
         refreshReportsMenuItem.setFont(menuFont);
         refreshReportsMenuItem.setText("Refresh");
         reportsMenu.add(refreshReportsMenuItem);
@@ -236,10 +236,6 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
         return reportsMenu;
     }
 
-    public JMenuItem getRefreshMenuItem() {
-        return refreshMenuItem;
-    }
-
     public JMenuItem getRefreshReportsMenuItem() {
         return refreshReportsMenuItem;
     }
@@ -256,11 +252,23 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
         return openReportsFolderMenuItem;
     }
 
+    public JMenu getViewReportMenu() {
+        return viewReportMenu;
+    }
+
     public JMenu getSqlMenu() {
         return sqlMenu;
     }
 
     public JMenuItem getSyncMenuItem() {
         return syncMenuItem;
+    }
+
+    public JMenuItem getQueryTodayMenuItem() {
+        return queryTodayMenuItem;
+    }
+
+    public JMenuItem getTrackStartTodayMenuItem() {
+        return trackStartTodayMenuItem;
     }
 }

@@ -19,21 +19,21 @@ package com.doctracker.basic.ui.actions;
 import com.bc.appbase.App;
 import com.bc.appbase.ui.actions.ActionCommands;
 import com.bc.appbase.ui.actions.OpenFile;
-import com.bc.appbase.ui.actions.ParamNames;
 import com.bc.appcore.actions.Action;
 import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.appcore.parameter.ParameterException;
-import com.doctracker.basic.ConfigNames;
+import com.doctracker.basic.FileNames;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Chinomso Bassey Ikwuagwu on Apr 8, 2017 5:55:10 PM
+ * @author Chinomso Bassey Ikwuagwu on Apr 18, 2017 12:14:05 PM
  */
-public class OpenReportsFolder implements Action<App,File> {
-    
+public class DisplayTrackStartTodayReport implements Action<App, File> {
+
     @Override
     public File execute(App app, Map<String, Object> params) 
             throws ParameterException, TaskExecutionException {
@@ -50,16 +50,20 @@ public class OpenReportsFolder implements Action<App,File> {
             
         }else{
             
-            final Map<String, Object> map = new HashMap<>();
-            map.put(ParamNames.TITLE, "Folder where reports will be automatically saved");
-            map.put(ParamNames.CURRENT_DIR, app.getConfig().getString(ConfigNames.REPORT_FOLDER_PATH));
+            final String workingDir = app.getWorkingDir().toString();
 
-            output = (File)app.getAction(ActionCommands.DISPLAY_OPEN_DIALOG).execute(app, map);
+            final Path path = Paths.get(workingDir, FileNames.REPORT_OUTPUT_DIR, 
+                    FileNames.REPORT_TRACK_START_TODAY_FILE_ID+'.'+FileNames.REPORT_FILE_EXT);
 
-            if(output != null && output.isFile()) {
+            final File file = path.toFile();
 
-                app.getAction(ActionCommands.OPEN_FILE).execute(
-                        app, Collections.singletonMap(OpenFile.FILE, output));
+            final Boolean success = (Boolean)app.getAction(ActionCommands.OPEN_FILE).execute(
+                    app, Collections.singletonMap(OpenFile.FILE, file));
+
+            if(success) {
+                output = file;
+            }else{
+                output = null;
             }
         }
         

@@ -42,7 +42,7 @@ public class DisplayTaskEditorPane implements Action<App,Boolean> {
         
         final SearchResultsPanel resultsPanel = (SearchResultsPanel)params.get(SearchResultsPanel.class.getName());
         
-        try(final Dao dao = app.getDao()) {
+        try(final Dao dao = app.getDao(Task.class)) {
             
             for(Object taskid : taskidList) {
                 

@@ -33,6 +33,8 @@ public interface FileNames {
     
     String REPORT_BACKUP_DIR = "backup";
     
+    String REPORT_OUTPUT_DIR = "output";
+    
     String REPORT_BACKUP_FILE_ID = "tasks";
     
     String REPORT_BACKUP_FILE_EXT = "backup";

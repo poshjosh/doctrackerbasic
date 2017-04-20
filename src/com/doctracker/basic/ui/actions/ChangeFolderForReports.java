@@ -24,6 +24,7 @@ import java.util.Map;
 import com.bc.appcore.actions.Action;
 import com.bc.appbase.App;
 import com.bc.appcore.parameter.ParameterException;
+import java.io.IOException;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 3, 2017 2:43:48 PM
@@ -47,7 +48,13 @@ public class ChangeFolderForReports implements Action<App,File> {
                 
                 app.getConfig().setString(ConfigNames.REPORT_FOLDER_PATH, selectedDirname);
                 
-                app.getAction(DtbActionCommands.REFRESH_OUTPUT_FROM_BACKUP).execute(app, Collections.EMPTY_MAP);
+                try{
+                    app.getConfigService().store();
+                }catch(IOException e) {
+                    throw new TaskExecutionException(e);
+                }
+                
+                app.getAction(DtbActionCommands.REFRESH_REPORTS_FROM_BACKUP).execute(app, Collections.EMPTY_MAP);
             }
         }
         

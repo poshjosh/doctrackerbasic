@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package com.doctracker.basic.jpa;
+package com.doctracker.basic.ui.actions;
 
-import javax.swing.table.TableModel;
+import java.util.concurrent.TimeUnit;
 
 /**
- * @author Chinomso Bassey Ikwuagwu on Mar 10, 2017 4:15:09 PM
+ * @author Chinomso Bassey Ikwuagwu on Apr 19, 2017 2:59:48 PM
  */
-public interface TableModelBuilder<S> extends SelectionBuilder<TableModel> {
-    
-    TableModelBuilder<S> with(S source);
+public interface ActionStatus {
+
+    long getAverageTimeTaken(TimeUnit timeUnit);
+
+    int getBusyCount();
+
+    long getEstimatedTimeLeft(TimeUnit timeUnit);
+
+    long getStartTime();
+
+    long getTimeSpent(TimeUnit timeUnit);
+
+    boolean isAnyBusy();
 }

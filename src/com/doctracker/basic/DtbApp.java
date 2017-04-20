@@ -36,9 +36,9 @@ public interface DtbApp extends App {
     @Override
     public DtbUIContext getUIContext();
     
-    void updateOutput();
+    void updateReports(boolean refreshDisplay);
     
-    void updateOutput(List<Appointment> appointmentList);
+    void updateReports(List<Appointment> appointmentList, boolean refreshDisplay);
     
     String [] getAppointmentValuesForComboBox();
     

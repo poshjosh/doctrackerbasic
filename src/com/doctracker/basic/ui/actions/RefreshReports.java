@@ -42,7 +42,7 @@ public class RefreshReports implements Action<App,Boolean>{
                     
                     app.getAction(DtbActionCommands.SAVE_REPORTS).execute(app, Collections.singletonMap(Appointment.class.getName()+"List", ((DtbApp)app).getBranchChiefs()));
                     
-                    app.getAction(DtbActionCommands.REFRESH_OUTPUT_FROM_BACKUP).execute(app, Collections.EMPTY_MAP);
+                    app.getAction(DtbActionCommands.REFRESH_REPORTS_FROM_BACKUP).execute(app, Collections.EMPTY_MAP);
                     
                     app.getUIContext().showSuccessMessage("Output has been successfully refreshed");
                     

@@ -19,6 +19,7 @@ package com.doctracker.basic.jpa;
 import com.bc.appcore.jpa.SearchContextImpl;
 import com.doctracker.basic.ConfigNames;
 import com.bc.appcore.jpa.model.ResultModel;
+import com.bc.jpa.dao.SelectDao;
 import java.util.Objects;
 import com.doctracker.basic.DtbApp;
 
@@ -37,9 +38,16 @@ public class DtbSearchContextImpl<T> extends SearchContextImpl<T> implements Dtb
     }
 
     @Override
-    public SelectDaoBuilder<T> getSelectDaoBuilder(Class<T> resultType) {
-        SelectDaoBuilder builder = new SelectDaoBuilderImpl();
-        builder.resultType(resultType).app(app);
+    public SelectDao<T> getSelectDao() {
+        final SelectDao<T> selectDao = this.getSelectDaoBuilder().closed(false).build();
+        return selectDao;
+    }
+
+    @Override
+    public SelectDaoBuilder<T> getSelectDaoBuilder() {
+        final Class<T> resultType = this.getResultType();
+        final SelectDaoBuilder builder = new SelectDaoBuilderImpl();
+        builder.resultType(resultType).jpaContext(app.getJpaContext());
         return builder;
     }
 }

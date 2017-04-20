@@ -17,12 +17,11 @@
 package com.doctracker.basic.ui.actions;
 
 import com.bc.appcore.actions.TaskExecutionException;
-import com.doctracker.basic.parameter.SearchParametersBuilder;
-import com.doctracker.basic.pu.entities.Task_;
 import java.util.Date;
 import java.util.Map;
 import com.bc.appcore.actions.Action;
 import com.bc.appbase.App;
+import com.doctracker.basic.parameter.SearchParameters;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 6, 2017 10:58:07 PM
@@ -32,16 +31,16 @@ public class BuildSearchUIMessage implements Action<App,String> {
     @Override
     public String execute(App app, Map<String, Object> params) throws TaskExecutionException {
      
-        final String s = (String)params.get("query");
+        final String s = (String)params.get(SearchParameters.PARAM_QUERY);
         final String query = s == null || s.isEmpty() ? null : s;
         
-        final Date from = (Date)params.get("from");
-        final Date to = (Date)params.get("to");
-        final Boolean b = (Boolean)params.get(SearchParametersBuilder.CLOSED_TASKS);
+        final Date from = (Date)params.get(SearchParameters.PARAM_FROM);
+        final Date to = (Date)params.get(SearchParameters.PARAM_TO);
+        final Boolean b = (Boolean)params.get(SearchParameters.PARAM_CLOSED);
         final boolean closed = b == null ? false : b;
-        final String who = (String)params.get(Task_.reponsibility.getName());
-        final Date deadlineFrom = (Date)params.get(SearchParametersBuilder.DEADLINE_FROM);
-        final Date deadlineTo = (Date)params.get(SearchParametersBuilder.DEADLINE_TO);
+        final String who = (String)params.get(SearchParameters.PARAM_WHO);
+        final Date deadlineFrom = (Date)params.get(SearchParameters.PARAM_DEADLINE_FROM);
+        final Date deadlineTo = (Date)params.get(SearchParameters.PARAM_DEADLINE_TO);
         
         StringBuilder msg = new StringBuilder();
         msg.append("<html>");

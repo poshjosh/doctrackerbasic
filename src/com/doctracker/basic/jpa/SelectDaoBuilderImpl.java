@@ -16,6 +16,7 @@
 
 package com.doctracker.basic.jpa;
 
+import com.bc.jpa.JpaContext;
 import com.bc.jpa.dao.BuilderForSelect;
 import com.bc.jpa.dao.BuilderForSelectImpl;
 import com.bc.jpa.dao.SelectDao;
@@ -37,24 +38,18 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 import javax.persistence.EntityManager;
-import com.doctracker.basic.DtbApp;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 3, 2017 11:39:11 PM
  */
-public class SelectDaoBuilderImpl<T> 
-        extends AbstractSelectionBuilder<SelectDao<T>> 
-        implements SelectDaoBuilder<T> {
-    
-    private Class<T> resultType;
+public class SelectDaoBuilderImpl<T> extends AbstractSelectDaoBuilder<T> {
 
-    public SelectDaoBuilderImpl() { }
+    private static final Logger logger = Logger.getLogger(SelectDaoBuilderImpl.class.getName());
     
-    @Override
-    public SelectDaoBuilder resultType(Class<T> resultType) {
-        this.resultType = resultType;
-        return this;
-    }
+    public SelectDaoBuilderImpl() { }
     
     public void searchTask(CriteriaBuilder cb, Root task, List<Predicate> likes, String toFind) {
         if(likes != null) {
@@ -80,8 +75,11 @@ public class SelectDaoBuilderImpl<T>
         
         this.checkBuildAttempted();
         
-        final DtbApp app = this.getApp();
-        final String query = this.getQuery();
+        logger.log(Level.FINE, "Parameters: {0}", this.getParameters());
+        
+        final JpaContext jpaContext = this.getJpaContext();
+        final Class<T> resultType = this.getResultType();
+        final String textToFind = this.getQuery();
         final Date deadlineFrom = this.getDeadlineFrom();
         final Date deadlineTo = this.getDeadlineTo();
         final Appointment appointment = this.getAppointment();
@@ -90,16 +88,17 @@ public class SelectDaoBuilderImpl<T>
         final Date from = this.getFrom();
         final Date to = this.getTo();
         
-        final boolean hasQuery = query != null && !query.isEmpty();
+        Objects.requireNonNull(resultType);
+        
+        final boolean hasQuery = textToFind != null && !textToFind.isEmpty();
         final boolean joinDoc = hasQuery;
         final boolean joinTr = hasQuery || deadlineFrom != null || deadlineTo != null;
         
-        final String q = !hasQuery ? null : '%'+query+'%';
+        final String query = !hasQuery ? null : '%'+textToFind+'%';
         
-        final EntityManager em = app.getEntityManager();
+        final EntityManager em = jpaContext.getEntityManager(resultType);
 
-        final BuilderForSelect<T> dao = resultType == null ? 
-                new BuilderForSelectImpl(em) : new BuilderForSelectImpl(em, resultType);
+        final BuilderForSelect<T> dao = new BuilderForSelectImpl(em, resultType);
         
         final CriteriaBuilder cb = dao.getCriteriaBuilder();
         
@@ -110,14 +109,14 @@ public class SelectDaoBuilderImpl<T>
         final List<Predicate> likes = !hasQuery ? null : new ArrayList();
         
         final Root task = cq.from(Task.class); 
-        this.searchTask(cb, task, likes, q);
+        this.searchTask(cb, task, likes, query);
         
         final Join<Task, Doc> taskDoc = !joinDoc ? null : task.join(Task_.doc); 
-        this.searchDoc(cb, taskDoc, likes, q);
+        this.searchDoc(cb, taskDoc, likes, query);
         
         // If you don't specify left join here then some searches will return incorrect results
         final Join<Task, Taskresponse> taskTr = !joinTr ? null : task.join(Task_.taskresponseList, JoinType.LEFT);
-        this.searchTaskresponse(cb, taskTr, likes, q);
+        this.searchTaskresponse(cb, taskTr, likes, query);
 
         final List<Predicate> where = new ArrayList<>();
         

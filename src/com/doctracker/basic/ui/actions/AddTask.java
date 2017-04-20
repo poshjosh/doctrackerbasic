@@ -42,7 +42,8 @@ import com.bc.appbase.App;
 public class AddTask implements Action<App,Task> {
 
     @Override
-    public Task execute(App appBase, Map<String, Object> params) throws TaskExecutionException {
+    public Task execute(App appBase, Map<String, Object> params) 
+            throws ParameterException, TaskExecutionException {
 
         final DtbApp app = (DtbApp)appBase;
         
@@ -52,7 +53,7 @@ public class AddTask implements Action<App,Task> {
         
         final Task task;
         
-        try(Dao dao = app.getDao()){
+        try(Dao dao = app.getDao(Task.class)){
             
             dao.begin();
             
@@ -66,7 +67,7 @@ public class AddTask implements Action<App,Task> {
             final Date datesigned = (Date)params.get(Doc_.datesigned.getName());
             
             if(docid != null) {
-                doc = app.getDao().findAndClose(Doc.class, docid);
+                doc = app.getDao(Doc.class).findAndClose(Doc.class, docid);
                 logger.log(Level.FINER, "Doc: {0}", doc);
                 if(doc == null) {
                     throw new InvalidParameterException(Doc_.docid.getName() + " = " + docid);
@@ -108,22 +109,13 @@ public class AddTask implements Action<App,Task> {
             app.getSlaveUpdates().addPersist(doc);
             app.getSlaveUpdates().addPersist(task);
             
-//            app.updateOutput(Collections.singletonList(responsibility));
-            app.updateOutput();
+//            app.updateReports(Collections.singletonList(responsibility), true);
+            app.updateReports(true);
             
             logger.log(Level.FINER, "After commit docid: {0}", doc.getDocid());
             logger.log(Level.FINER, "After commit taskid: {0}", task.getTaskid());
             
             app.getUIContext().getTaskFrame().getMessageLabel().setText("Success");
-        
-            try{
-                app.getAction(DtbActionCommands.REFRESH_RESULTS).execute(app, params);
-            }catch(TaskExecutionException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
-            }
-        }catch(ParameterException e) {
-           
-            throw new TaskExecutionException(e);
         }
         
         return task;
