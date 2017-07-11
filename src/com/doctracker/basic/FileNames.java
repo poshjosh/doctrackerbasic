@@ -21,19 +21,21 @@ package com.doctracker.basic;
  */
 public interface FileNames {
     
+    // @related root folder
+    //
     String ROOT = "doctrackerbasic";
     
-    String LOGS = "logs";
-    
     String CONFIGS = "configs";
+    
+    // @related logs folder
+    //
+    String LOGS = "logs";
     
     String SLAVE_UPDATES_DIR = "slave_updates";
     
     String REPORT_FILE_EXT = "xls";
     
     String REPORT_BACKUP_DIR = "backup";
-    
-    String REPORT_OUTPUT_DIR = "output";
     
     String REPORT_BACKUP_FILE_ID = "tasks";
     

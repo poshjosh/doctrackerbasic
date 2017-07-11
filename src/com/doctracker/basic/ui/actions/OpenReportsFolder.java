@@ -18,7 +18,6 @@ package com.doctracker.basic.ui.actions;
 
 import com.bc.appbase.App;
 import com.bc.appbase.ui.actions.ActionCommands;
-import com.bc.appbase.ui.actions.OpenFile;
 import com.bc.appbase.ui.actions.ParamNames;
 import com.bc.appcore.actions.Action;
 import com.bc.appcore.actions.TaskExecutionException;
@@ -59,7 +58,7 @@ public class OpenReportsFolder implements Action<App,File> {
             if(output != null && output.isFile()) {
 
                 app.getAction(ActionCommands.OPEN_FILE).execute(
-                        app, Collections.singletonMap(OpenFile.FILE, output));
+                        app, Collections.singletonMap(java.io.File.class.getName(), output));
             }
         }
         

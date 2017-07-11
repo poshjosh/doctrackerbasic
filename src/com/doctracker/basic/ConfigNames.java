@@ -41,9 +41,7 @@ public interface ConfigNames {
     
     String DATE_PATTERN = "datePattern";
     
-    String OUTPUT_FONT_SIZE = "outputFontSize";
-    
-    String REPORT_FOLDER_PATH = "outputDir";
+    String REPORT_FOLDER_PATH = "reportsOutputDir";
     
     String SERIAL_COLUMNNAME = "serialColumnName";
 }

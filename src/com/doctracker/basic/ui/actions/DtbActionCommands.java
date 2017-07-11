@@ -50,7 +50,7 @@ public interface DtbActionCommands extends com.bc.appbase.ui.actions.ActionComma
     
     String REFRESH_REPORTS = RefreshReports.class.getName();
     
-    String IMPORT = ImportExcelData.class.getName();
+    String IMPORT_DOCS_FROM_EXCEL = ImportDocsFromExcelData.class.getName();
     
     String CLOSE_TASK = CloseTask.class.getName();
     String OPEN_TASK = OpenTask.class.getName();
@@ -69,8 +69,6 @@ public interface DtbActionCommands extends com.bc.appbase.ui.actions.ActionComma
     String SCHEDULE_DEADLINE_TASKS_REMINDER = ScheduleDeadlineTasksReminder.class.getName();
     
     String REFRESH_REPORTS_FROM_BACKUP = RefreshReportsFromBackup.class.getName();
-    
-    String CHANGE_FONT_SIZE_OF_REPORTS = ChangeReportsFontSize.class.getName();
     
     String CHANGE_FOLDER_FOR_REPORTS = ChangeFolderForReports.class.getName();
     

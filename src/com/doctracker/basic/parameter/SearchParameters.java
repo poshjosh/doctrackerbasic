@@ -23,7 +23,7 @@ import com.bc.appbase.ui.actions.ParamNames;
  */
 public interface SearchParameters {
     String PARAM_JPACONTEXT = "jpaContext";
-    String PARAM_RESULT_TYPE = ParamNames.RESULT_TYPE;
+    String PARAM_RESULT_TYPE = ParamNames.ENTITY_TYPE;
     String PARAM_QUERY = "query";
     String PARAM_FROM = "from";
     String PARAM_TO = "to";

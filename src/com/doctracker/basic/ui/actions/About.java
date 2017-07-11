@@ -20,14 +20,15 @@ import com.bc.appcore.actions.TaskExecutionException;
 import java.util.Map;
 import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
-import com.bc.appbase.ui.actions.DisplayResource;
+import com.bc.appbase.ui.actions.DisplayURL;
+import static com.bc.appbase.ui.actions.ParamNames.CONTENT_TYPE;
 import com.bc.appcore.parameter.ParameterException;
 import java.util.HashMap;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 4:54:19 AM
  */
-public class About extends DisplayResource {
+public class About extends DisplayURL {
 
     @Override
     public Boolean execute(App app, Map<String, Object> params) 
@@ -35,7 +36,7 @@ public class About extends DisplayResource {
         
         params = new HashMap();
         params.put(CONTENT_TYPE, "text/html");
-        params.put(RESOURCE, DtbApp.class.getResource("about.html"));
+        params.put(java.net.URL.class.getName(), DtbApp.class.getResource("about.html"));
         
         return super.execute(app, params);
     }

@@ -72,7 +72,7 @@ public class TaskResponsePanel extends javax.swing.JPanel {
         
         this.getAuthorCombobox().setSelectedIndex(0);
         
-        final DateUIUpdater updater = app.get(DateUIUpdater.class);
+        final DateUIUpdater updater = app.getOrException(DateUIUpdater.class);
         
         final Calendar cal = app.getCalendar();
         

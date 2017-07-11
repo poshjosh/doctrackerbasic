@@ -21,7 +21,7 @@ import com.doctracker.basic.DtbApp;
 import com.doctracker.basic.pu.entities.Appointment;
 import com.doctracker.basic.pu.entities.Appointment_;
 import com.doctracker.basic.pu.entities.Unit;
-import com.doctracker.basic.pu.remote.entities.Unit_;
+//import com.doctracker.basic.pu.remote.entities.Unit_;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 31, 2017 5:23:08 PM
@@ -38,7 +38,7 @@ public class DtbSelectionContext extends AbstractSelectionContext {
         if(entityType == Appointment.class) {
             columnName = Appointment_.abbreviation.getName();
         }else if(entityType == Unit.class) {
-            columnName = Unit_.abbreviation.getName();
+            columnName = "abbreviation";//Unit_.abbreviation.getName();
         }else {
             columnName = outputIfNone;
         }   

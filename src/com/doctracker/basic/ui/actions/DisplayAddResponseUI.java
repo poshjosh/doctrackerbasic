@@ -24,7 +24,6 @@ import com.doctracker.basic.ui.TaskResponseFrame;
 import com.doctracker.basic.ui.TaskResponsePanel;
 import java.util.List;
 import java.util.Map;
-import javax.swing.SwingUtilities;
 import com.bc.appcore.actions.Action;
 import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
@@ -38,20 +37,11 @@ public class DisplayAddResponseUI implements Action<App,Object> {
     public Object execute(final App app, final Map<String, Object> params) throws TaskExecutionException {
         
         final List taskidList = (List)params.get(Task_.taskid.getName() + "List");
-        final boolean eventThread = SwingUtilities.isEventDispatchThread();
         try(Dao dao = app.getDao(Task.class)) {
-            dao.begin();
             for(Object taskid : taskidList) {
                 final Task task = dao.find(Task.class, taskid);
-                if(eventThread) {
-                    this.execute(((DtbApp)app), task);
-                }else{
-                    java.awt.EventQueue.invokeLater(() -> {
-                        execute(((DtbApp)app), task);
-                    });
-                }
+                this.execute(((DtbApp)app), task);
             }
-            dao.commit();
         }
         return Boolean.TRUE;
     }

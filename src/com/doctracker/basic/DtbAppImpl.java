@@ -19,22 +19,26 @@ package com.doctracker.basic;
 import com.bc.appbase.AbstractApp;
 import com.bc.appbase.parameter.SelectedRecordsParametersBuilder;
 import com.bc.appbase.ui.SearchResultsPanel;
+import com.bc.appbase.ui.UIContext;
 import com.bc.appbase.ui.actions.ActionCommands;
 import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.appcore.html.HtmlBuilder;
 import com.bc.appcore.jpa.model.ResultModel;
 import com.bc.appcore.parameter.ParameterException;
 import com.bc.appcore.parameter.ParametersBuilder;
+import com.bc.appcore.util.ExpirableCache;
 import com.bc.config.Config;
 import com.bc.config.ConfigService;
 import com.bc.jpa.JpaContext;
 import com.bc.jpa.dao.Criteria;
 import com.bc.jpa.sync.JpaSync;
 import com.bc.jpa.sync.SlaveUpdates;
+import com.bc.util.Util;
 import com.doctracker.basic.html.TaskHtmlBuilder;
 import com.doctracker.basic.html.TaskresponseHtmlBuilder;
 import com.doctracker.basic.jpa.DtbSearchContext;
 import com.doctracker.basic.jpa.DtbSearchContextImpl;
+import com.doctracker.basic.jpa.model.DtbResultModel;
 import com.doctracker.basic.parameter.AddAppointmentParametersBuilder;
 import com.doctracker.basic.parameter.AddResponseParametersBuilder;
 import com.doctracker.basic.parameter.AddTaskParametersBuilder;
@@ -56,12 +60,9 @@ import com.doctracker.basic.ui.TaskFrame;
 import com.doctracker.basic.ui.TaskPanel;
 import com.doctracker.basic.ui.TaskResponsePanel;
 import com.doctracker.basic.ui.UnitPanel;
-import com.doctracker.basic.ui.actions.DtbActionCommands;
-import com.doctracker.basic.jpa.model.TaskResultModel;
 import com.doctracker.basic.util.DateTimeFormat;
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Path;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -74,6 +75,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.swing.ImageIcon;
+import com.doctracker.basic.ui.actions.DtbActionCommands;
+import java.util.concurrent.TimeUnit;
+import com.bc.appcore.Filenames;
+import com.bc.appcore.ObjectFactory;
+import com.bc.appcore.jpa.predicates.MasterPersistenceUnitTest;
+import java.util.function.Predicate;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 7, 2017 11:26:00 PM
@@ -89,10 +96,10 @@ public class DtbAppImpl extends AbstractApp implements DtbApp {
     private ResultModel<Task> taskResultModel;
     
     public DtbAppImpl(
-            Path workingDir, ConfigService configService, Config config, Properties settingsConfig, JpaContext jpaContext,
-            ExecutorService dataOutputService, SlaveUpdates slaveUpdates, JpaSync jpaSync) {
+            Filenames filenames, ConfigService configService, Config config, Properties settingsConfig, JpaContext jpaContext,
+            ExecutorService dataOutputService, SlaveUpdates slaveUpdates, JpaSync jpaSync, ExpirableCache expirableCache) {
         
-        super(workingDir, configService, config, settingsConfig, jpaContext, dataOutputService, slaveUpdates, jpaSync);
+        super(filenames, configService, config, settingsConfig, jpaContext, slaveUpdates, jpaSync, expirableCache);
         
         this.updateOutputService = Objects.requireNonNull(dataOutputService);
         
@@ -102,19 +109,25 @@ public class DtbAppImpl extends AbstractApp implements DtbApp {
     @Override
     public void init() {
         
-        this.init(new DtbObjectFactory(this));
+        super.init();
         
+        this.getUIContext().getTaskFrame().getTaskPanel().init(this);
+        
+        this.initDefaultResultModel();
+    }
+    
+    @Override
+    protected ObjectFactory createObjectFactory() {
+        return new DtbObjectFactory(this);
+    }
+    
+    @Override
+    protected UIContext createUIContext() {
         final DtbMainFrame mainFrame = new DtbMainFrame();
         final TaskFrame taskFrame = new TaskFrame();
         final URL iconURL = DtbApp.class.getResource("naflogo.jpg");
         final ImageIcon imageIcon = new ImageIcon(iconURL, "NAF Logo");
-        
-        this.init(new DtbUIContextImpl(this, imageIcon, mainFrame, taskFrame));
-        
-        mainFrame.init(this);
-        taskFrame.getTaskPanel().init(this);
-        
-        this.initDefaultResultModel();
+        return new DtbUIContextImpl(this, imageIcon, mainFrame, taskFrame);
     }
     
     private void initDefaultResultModel() {
@@ -127,9 +140,23 @@ public class DtbAppImpl extends AbstractApp implements DtbApp {
                     Task_.description.getName(), Task_.timeopened.getName(),
                     "Response 1", "Response 2", "Remarks"
             );
-        this.taskResultModel = new TaskResultModel(
-                this, columnNames, serialColumnIndex    
+        this.taskResultModel = new DtbResultModel(
+                this, Task.class, columnNames, serialColumnIndex    
         );
+    }
+
+    @Override
+    public void shutdown() {
+        try{
+            super.shutdown();
+        }finally{
+            Util.shutdownAndAwaitTermination(this.updateOutputService, 1, TimeUnit.SECONDS);
+        }
+    }
+
+    @Override
+    public Predicate<String> getPersistenceUnitNameTest() {
+        return new MasterPersistenceUnitTest();
     }
 
     @Override
@@ -201,7 +228,7 @@ public class DtbAppImpl extends AbstractApp implements DtbApp {
     
     @Override
     public void updateReports(List<Appointment> appointmentList, boolean refreshDisplay) {
-
+        
         final Callable<List<File>> updateOutputTask = new Callable() {
             @Override
             public List<File> call() {
@@ -256,6 +283,7 @@ public class DtbAppImpl extends AbstractApp implements DtbApp {
     public <T> ParametersBuilder<T> getParametersBuilder(T source, String actionCommand) {
         
         final ParametersBuilder builder;
+        
         if(source instanceof TaskPanel && 
                 (DtbActionCommands.ADD_TASK_AND_DOC.equals(actionCommand) ||
                 DtbActionCommands.ADD_TASK_TO_DOC.equals(actionCommand))) {

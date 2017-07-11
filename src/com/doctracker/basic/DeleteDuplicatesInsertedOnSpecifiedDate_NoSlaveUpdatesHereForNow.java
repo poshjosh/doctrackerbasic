@@ -39,7 +39,7 @@ import java.util.logging.Logger;
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 17, 2017 9:41:25 PM
  */
-public class DeleteDuplicatesInsertedOnSpecifiedDate {
+public class DeleteDuplicatesInsertedOnSpecifiedDate_NoSlaveUpdatesHereForNow {
     
     private final Calendar calendar;
     
@@ -51,14 +51,14 @@ public class DeleteDuplicatesInsertedOnSpecifiedDate {
     
     private final JpaContext jpaContext;
     
-    private DeleteDuplicatesInsertedOnSpecifiedDate(Calendar calendar) throws URISyntaxException {
+    private DeleteDuplicatesInsertedOnSpecifiedDate_NoSlaveUpdatesHereForNow(Calendar calendar) throws URISyntaxException {
         this(
                 new JpaContextImpl(Thread.currentThread().getContextClassLoader().getResource("META-INF/persistence.xml").toURI(), null),
                 20, false,
                 calendar, 17);
     }
     
-    private DeleteDuplicatesInsertedOnSpecifiedDate(
+    private DeleteDuplicatesInsertedOnSpecifiedDate_NoSlaveUpdatesHereForNow(
             JpaContext jpaContext, int pageSize, boolean useCache,
             Calendar calendar, int dayOfMonth) {
         this.jpaContext = Objects.requireNonNull(jpaContext);

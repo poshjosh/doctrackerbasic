@@ -9,10 +9,10 @@
     <class>com.doctracker.basic.pu.entities.Appointment</class>
     <class>com.doctracker.basic.pu.entities.Doc</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/doctrackerbasic_db1?zeroDateTimeBehavior=convertToNull"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://europa.ignitionserver.net:3306/loosebox_dtb?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="loosebox_dtbuser"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="Jesus4eva-"/>
+      <property name="javax.persistence.jdbc.password" value="uuid3910"/>
       <property name="eclipselink.connection-pool.default.initial" value="1"/>
       <property name="eclipselink.connection-pool.default.min" value="64"/>
       <property name="eclipselink.connection-pool.default.max" value="64"/>

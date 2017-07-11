@@ -16,10 +16,8 @@
 
 package com.doctracker.basic;
 
-import com.bc.appbase.ObjectFactory;
-import com.bc.appbase.ObjectFactoryImpl;
-import com.bc.appcore.exceptions.ObjectFactoryException;
-import com.bc.appcore.jpa.EntityMapBuilder;
+import com.bc.appbase.ObjectFactoryBase;
+import com.bc.appcore.ObjectFactory;
 import com.doctracker.basic.jpa.DtbSelectionContext;
 import com.bc.appcore.jpa.SelectionContext;
 import com.bc.util.MapBuilder;
@@ -27,28 +25,24 @@ import com.bc.util.MapBuilder;
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 31, 2017 5:24:29 PM
  */
-public class DtbObjectFactory extends ObjectFactoryImpl {
+public class DtbObjectFactory extends ObjectFactoryBase {
 
     public DtbObjectFactory(DtbApp app) {
         super(app);
     }
 
     @Override
-    public <T> T get(Class<T> type) {
+    public <T> T doGetOrException(Class<T> type) throws Exception {
         Object output;
         if(type.equals(SelectionContext.class)){
             output = new DtbSelectionContext(this.getApp());
         }else if(type.equals(MapBuilder.class)){
-            output = new EntityMapBuilder(this.getApp())
-                    .nullsAllowed(true).maxCollectionSize(0).maxDepth(3);
+            final MapBuilder mapBuilder = (MapBuilder)super.doGetOrException(type);
+            output = mapBuilder.nullsAllowed(true).maxCollectionSize(0).maxDepth(3);
         }else if(type.equals(ObjectFactory.class)){
             output = new DtbObjectFactory(this.getApp());
         }else{
-            try{
-                output = super.get(type);
-            }catch(ObjectFactoryException e) {
-                throw new RuntimeException(e);
-            }
+            output = super.doGetOrException(type);
         }  
         return (T)output;
     }

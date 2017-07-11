@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package com.doctracker.basic;
+package com.doctracker.basic.excel;
+
+import java.util.Set;
+import jxl.Cell;
+import jxl.Sheet;
 
 /**
- * @author Chinomso Bassey Ikwuagwu on Feb 25, 2017 2:26:58 PM
+ * @author Chinomso Bassey Ikwuagwu on May 4, 2017 3:52:10 PM
  */
-public interface ConfigPrefixNames extends ConfigNames {
-    String COLUMNLABEL = "columnLabel";
-    String REPORT = "report";
+public interface ExcelRowProcessor<T> {
+
+    T process(T previous, Sheet sheet, Cell [] cells, int row, Set<Integer> failedRows);
 }

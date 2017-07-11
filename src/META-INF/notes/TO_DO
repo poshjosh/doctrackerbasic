@@ -1,3 +1,7 @@
+Displayed selectionType is not editable
+ResultModel getEntityRelation should be updated
+Adding an appointment/unit should have option of parent appointment
+
 Immediate refresh
 
 all executequery actions should have ParamNames.resulttype

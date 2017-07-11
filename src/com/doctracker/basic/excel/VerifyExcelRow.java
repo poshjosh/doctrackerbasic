@@ -16,7 +16,6 @@
 
 package com.doctracker.basic.excel;
 
-import com.bc.appbase.excel.ExcelRowHandler;
 import com.doctracker.basic.pu.entities.Task;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +28,7 @@ import com.doctracker.basic.DtbApp;
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 1, 2017 6:33:29 PM
  */
-public class VerifyExcelRow implements ExcelRowHandler<Boolean> {
+public class VerifyExcelRow implements ExcelRowProcessor<Boolean> {
 
     private final int refnumCol = 1;
     private final int taskDescriptionCol = 2;
@@ -46,7 +45,7 @@ public class VerifyExcelRow implements ExcelRowHandler<Boolean> {
     }
 
     @Override
-    public Boolean handleRow(Boolean previousResult, Sheet sheet, Cell [] cells, int row, Set<Integer> failedRows) {
+    public Boolean process(Boolean previousResult, Sheet sheet, Cell [] cells, int row, Set<Integer> failedRows) {
     
         final int [] cols = {taskDescriptionCol, action0col, action1col, remarksCol};
         

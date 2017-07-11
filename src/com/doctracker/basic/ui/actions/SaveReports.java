@@ -24,7 +24,7 @@ import com.doctracker.basic.ConfigNames;
 import com.doctracker.basic.FileNames;
 import com.doctracker.basic.pu.entities.Appointment;
 import com.doctracker.basic.pu.entities.Task;
-import com.bc.appbase.ui.model.EntityTableModel;
+import com.bc.appbase.ui.table.model.EntityTableModel;
 import com.bc.appcore.jpa.model.ResultModel;
 import java.io.File;
 import java.nio.file.Path;
@@ -42,7 +42,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.TableModel;
-import com.doctracker.basic.ConfigPrefixNames;
 import com.doctracker.basic.ConfigSuffixNames;
 import com.bc.appbase.ui.actions.ParamNames;
 import com.doctracker.basic.jpa.SelectTaskresponseBuilder;
@@ -61,7 +60,6 @@ import com.bc.appcore.parameter.ParameterException;
 import com.bc.appcore.util.Util;
 import com.doctracker.basic.jpa.DtbSearchContext;
 import com.doctracker.basic.jpa.predicates.TaskDocTaskresponseContainsText;
-import java.awt.Font;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -69,6 +67,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Chinomso Bassey Ikwuagwu on Mar 2, 2017 6:20:01 PM
  */
 public class SaveReports implements Action<App,List<File>> {
+    
+    public static final String REPORT_PREFIX_NAME = "report";
     
     private long startTime;
     
@@ -107,9 +107,7 @@ public class SaveReports implements Action<App,List<File>> {
                 for(Path path : tableModels.keySet()) {
 
                     final Map saveTableParams = this.getParams(path, tableModels.get(path));
-                    final Font tableFont = app.getUIContext().getFont(JTable.class);
-                    final Font reportFont = tableFont.deriveFont(tableFont.getStyle(), app.getConfig().getInt(ConfigNames.OUTPUT_FONT_SIZE, tableFont.getSize()));
-                    saveTableParams.put(java.awt.Font.class.getName(), reportFont);
+                    saveTableParams.put(java.awt.Font.class.getName(), app.getUIContext().getFont(JTable.class));
 
                     final File file = (File)app.getAction(DtbActionCommands.SAVE_TABLE_MODEL).execute(
                             app, saveTableParams);
@@ -120,6 +118,8 @@ public class SaveReports implements Action<App,List<File>> {
                         output.add(file);
                     }
                 }
+                
+                logger.log(Level.FINE, "Saved reports: {0}", output);
 
                 if(!output.isEmpty()) {
                     app.getAction(DtbActionCommands.REFRESH_REPORTS_FROM_BACKUP).execute(
@@ -176,7 +176,7 @@ public class SaveReports implements Action<App,List<File>> {
        
         final ResultModel<Task> resultModel = app.getResultModel(Task.class, null);
         
-        final String workingDir = app.getWorkingDir().toString();
+        final String workingDir = app.getFilenames().getWorkingDir();
 
         final DtbSearchContext<Task> searchContext = ((DtbApp)app).getSearchContext(Task.class);
         final SearchResults searchResults = searchContext.getSearchResults();
@@ -227,7 +227,7 @@ public class SaveReports implements Action<App,List<File>> {
         final Map<String, String[]> input = new HashMap();
         final Config config = app.getConfig();
         for(int i=0; i<20; i++) {
-            final String prefix = ConfigPrefixNames.REPORT + '.' + i + '.';
+            final String prefix = REPORT_PREFIX_NAME + '.' + i + '.';
             final String name = config.getString(prefix + ConfigSuffixNames.NAME, null);
             if(name == null) {
                 continue;
@@ -244,7 +244,8 @@ public class SaveReports implements Action<App,List<File>> {
         final Date date_48hrs_start =  date_today_start;
         final Date date_48hrs_end = this.getEndDate(today, 2).getTime();
         if(logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Start: {0}. End: {1}", new Object[]{date_48hrs_start, date_48hrs_end});
+            logger.log(Level.FINE, "Range days: {0}, start: {1}. end: {2}", 
+                    new Object[]{range_days, date_48hrs_start, date_48hrs_end});
         }
         
         for(String fname : input.keySet()) {
@@ -384,7 +385,7 @@ public class SaveReports implements Action<App,List<File>> {
             }
         }
         
-        final TableModel tableModel = new EntityTableModel(app, new ArrayList(toSave), resultModel);
+        final TableModel tableModel = new EntityTableModel(new ArrayList(toSave), resultModel);
 
         if(logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "{0} results filtered to {1} for appointment: {2} using predicate: {3}",
@@ -399,7 +400,7 @@ public class SaveReports implements Action<App,List<File>> {
             Appointment appt, Date deadlineFrom, Date deadlineTo, String[] queries) {
         final List<Task> results = this.getDeadlineResults(
                 app, sm, appt, deadlineFrom, deadlineTo, queries);
-        return new EntityTableModel(app, results, resultModel);
+        return new EntityTableModel(results, resultModel);
     }
     private List<Task> getDeadlineResults(App app, DtbSearchContext<Task> sm, Appointment appt, 
             Date deadlineFrom, Date deadlineTo, String[] queries) {

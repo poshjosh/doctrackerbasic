@@ -52,7 +52,7 @@ public class RefreshReportsFromBackup implements Action<App,List<File>> {
         
         if(!this.isNullOrEmpty(targetDir)) {
             
-            final Path backupDirPath = Paths.get(app.getWorkingDir().toString(), FileNames.REPORT_BACKUP_DIR);
+            final Path backupDirPath = Paths.get(app.getFilenames().getWorkingDir(), FileNames.REPORT_BACKUP_DIR);
             final File backupDir = backupDirPath.toFile();
             final String suffix = "." + FileNames.REPORT_BACKUP_FILE_EXT;
             final String [] backupFnames = backupDir.list((File dir, String name) -> name.endsWith(suffix));

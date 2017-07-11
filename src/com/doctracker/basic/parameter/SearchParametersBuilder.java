@@ -67,7 +67,7 @@ public class SearchParametersBuilder implements SearchParameters, ParametersBuil
             params.put(SearchParameters.PARAM_QUERY, text);
         }
         
-        final DateFromUIBuilder builder = app.get(DateFromUIBuilder.class);
+        final DateFromUIBuilder builder = app.getOrException(DateFromUIBuilder.class);
         
         final Calendar cal = app.getCalendar();
         

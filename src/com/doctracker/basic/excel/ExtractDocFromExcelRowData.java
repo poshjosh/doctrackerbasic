@@ -16,8 +16,10 @@
 
 package com.doctracker.basic.excel;
 
-import com.bc.appbase.ui.UILog;
-import com.bc.appbase.excel.ExcelRowHandler;
+import com.bc.appbase.ui.ScreenLog;
+import com.bc.appbase.ui.UIContext;
+import com.bc.appbase.ui.actions.ActionCommands;
+import com.bc.appbase.ui.actions.ParamNames;
 import com.bc.jpa.JpaContext;
 import com.bc.jpa.dao.Dao;
 import com.doctracker.basic.pu.entities.Appointment;
@@ -29,13 +31,9 @@ import com.doctracker.basic.jpa.DocDao;
 import com.doctracker.basic.jpa.TaskDao;
 import com.doctracker.basic.ui.SelectAppointmentOrCreateNewPanel;
 import com.doctracker.basic.ui.actions.AddAppointment;
-import com.bc.appbase.ui.model.WorksheetTableModel;
 import com.bc.appcore.actions.TaskExecutionException;
+import com.bc.appcore.parameter.ParameterException;
 import com.bc.appcore.util.TextHandler;
-import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -48,11 +46,15 @@ import jxl.Cell;
 import jxl.Sheet;
 import java.util.Objects;
 import com.doctracker.basic.DtbApp;
+import java.awt.Window;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JButton;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 13, 2017 2:27:04 PM
  */
-public class ExtractDocFromExcelRow implements ExcelRowHandler<Doc> {
+public class ExtractDocFromExcelRowData implements ExcelRowProcessor<Doc> {
     
 //            final String [] cols = {"Serial", "Reference", "Task", "Branch to take action",
 //                    "Date Tracking Commenced", "Action Taken", "Additional Followup",
@@ -89,18 +91,18 @@ public class ExtractDocFromExcelRow implements ExcelRowHandler<Doc> {
     
     private final DtbApp app;
     
-    private final UILog uiLogger;
+    private final ScreenLog uiLogger;
     
-    public ExtractDocFromExcelRow(DtbApp app, UILog uiLogger) {
+    public ExtractDocFromExcelRowData(DtbApp app, ScreenLog uiLogger) {
         this.app = Objects.requireNonNull(app);
         this.appointments = app.getJpaContext().getBuilderForSelect(Appointment.class).getResultsAndClose(0, Integer.MAX_VALUE);
         this.CAS = this.appointments.get(0);
-        this.textHandler = app.get(TextHandler.class);
+        this.textHandler = app.getOrException(TextHandler.class);
         this.uiLogger = uiLogger;
     }
     
     @Override
-    public Doc handleRow(Doc previousDoc, Sheet sheet, Cell [] cells, int row, Set<Integer> failedRows) {
+    public Doc process(Doc previousDoc, Sheet sheet, Cell [] cells, int row, Set<Integer> failedRows) {
         
         final String apptStr = cells[apptCol].getContents();
 
@@ -476,61 +478,51 @@ public class ExtractDocFromExcelRow implements ExcelRowHandler<Doc> {
     }
     
     private SelectAppointmentOrCreateNewPanel createAndShowSelectAppointmentUI(Sheet sheet, int row, int col) {
+
+        final UIContext uiContext = app.getUIContext();
         
         final SelectAppointmentOrCreateNewPanel container = new SelectAppointmentOrCreateNewPanel(app);
         final JTable table = container.getTable();
-        final Font font = app.getUIContext().getFont(table);
-        table.setFont(font);
-        table.getTableHeader().setFont(font.deriveFont(Font.BOLD));
         
         final int midway = 3;
-        final WorksheetTableModel tableModel = new WorksheetTableModel(sheet, row-midway, (midway * 2 + 1));
-        table.setModel(tableModel);
-
-        final JFrame frame = new JFrame("Select Appointment or Create New");
-        frame.getContentPane().add(container);
-        app.getUIContext().positionFullScreen(frame);
+        
+        final Map<String, Object> params = new HashMap(8, 0.75f);
+        params.put(ParamNames.SHEET, sheet);
+        params.put(JTable.class.getName(), table);
+        params.put(ParamNames.OFFSET, row-midway);
+        params.put(ParamNames.LIMIT, (midway * 2 + 1));
+        params.put(ParamNames.TITLE, "Select Appointment or Create New");
+        
+        final JFrame frame;
+        try{
+            frame = (JFrame)app.getAction(ActionCommands.CREATE_WORKSHEET_FRAME).execute(app, params);
+        }catch(ParameterException | TaskExecutionException e) {
+            log("ERRO ["+row+':'+col+"]\t " + e);
+            return container;
+        }
+        
+        uiContext.positionFullScreen(frame);
         
         frame.pack();
         
-        app.getUIContext().updateTableUI(table, tableModel, app.getResultModel(Task.class, null));
+        uiContext.updateTableUI(table, Task.class, -1);
         
         frame.setVisible(true);
         
-        table.setRowSelectionInterval(midway, midway);
-        final Rectangle rect = table.getCellRect(midway, 0, true);
-        container.getTableScrollPane().scrollRectToVisible(rect);
-        table.scrollRectToVisible(rect);
+        uiContext.scrollTo(table, midway, midway);
         
-        container.getDoneButton().addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                synchronized(frame) {
-                    notifyAllAndDispose(frame);
-                }
-            }
-        });
-
-        synchronized(frame) {
-            try{
-                frame.wait();
-            }catch(InterruptedException e) {
-                log("ERRO ["+row+':'+col+"]\t " + e);
-                this.notifyAllAndDispose(frame);
-            }
+        params.clear();
+        params.put(Window.class.getName(), frame);
+        params.put(JButton.class.getName(), container.getDoneButton());
+        try{
+            app.getAction(ActionCommands.BLOCK_WINDOW_TILL_BUTTON_CLICK).execute(app, params);
+        }catch(ParameterException | TaskExecutionException e) {
+            log("ERRO ["+row+':'+col+"]\t " + e);
         }
         
         return container;
     }
     
-    private void notifyAllAndDispose(JFrame frame) {
-        synchronized(frame) {
-            frame.notifyAll();
-            frame.setVisible(false);
-            frame.dispose();
-        }
-    }
-
     private Appointment getAppointment(String abbrev) {
         final int index = this.getAppointmentIndex(abbrev);
         return index == -1 ? null : appointments.get(index);

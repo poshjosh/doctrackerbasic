@@ -74,7 +74,7 @@ public class AddResponseParametersBuilder implements ParametersBuilder<TaskRespo
         
         final Calendar cal = app.getCalendar();
         
-        final DateFromUIBuilder builder = app.get(DateFromUIBuilder.class);
+        final DateFromUIBuilder builder = app.getOrException(DateFromUIBuilder.class);
         final Date deadline = builder.calendar(cal)
                 .ui(taskResponsePanel.getDeadlinePanel())
                 .build(null);

@@ -50,7 +50,7 @@ public class CloseTask implements Action<App,Boolean> {
             
             try{
                 Map<String, Object> map = new HashMap(params);
-                map.put(ParamNames.RESULT_TYPE, Task.class);
+                map.put(ParamNames.ENTITY_TYPE, Task.class);
                 app.getAction(ActionCommands.REFRESH_ALL_RESULTS).execute(app, map);
             }catch(ParameterException | TaskExecutionException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);

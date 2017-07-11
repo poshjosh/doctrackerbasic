@@ -21,16 +21,16 @@ import com.bc.jpa.dao.SelectDao;
 import com.bc.jpa.search.SearchResults;
 import com.doctracker.basic.pu.entities.Task;
 import com.doctracker.basic.pu.entities.Taskresponse_;
-import com.bc.appbase.ui.SearchResultsFrame;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.SwingUtilities;
 import com.bc.appcore.actions.Action;
 import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
+import com.bc.appbase.ui.ResultsFrame;
+import com.bc.appbase.ui.UIContext;
 import com.doctracker.basic.jpa.DtbSearchContext;
 import com.bc.appcore.jpa.SearchContext;
 
@@ -60,17 +60,7 @@ public class SearchDeadlineTasks implements Action<App,Boolean> {
         
         msg.append("</html>");
         
-        if(SwingUtilities.isEventDispatchThread()) {
-            this.createAndShowSearchResultsFrame(app, searchResults, KEY, msg);
-        }else{
-            java.awt.EventQueue.invokeLater(() -> {
-                try{
-                    createAndShowSearchResultsFrame(app, searchResults, KEY, msg);
-                }catch(RuntimeException e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Unexpected exception", e);
-                }
-            });
-        }
+        this.createAndShowSearchResultsFrame(app, searchResults, KEY, msg);
         
         return Boolean.TRUE;
     }
@@ -96,11 +86,15 @@ public class SearchDeadlineTasks implements Action<App,Boolean> {
     }
 
     private void createAndShowSearchResultsFrame(App app, SearchResults<Task> searchResults, String KEY, Object msg) {
+        
+        final ResultsFrame frame = new ResultsFrame();
+        
+        final UIContext uiContext = app.getUIContext();
+        
         final SearchContext<Task> searchContext = app.getSearchContext(Task.class);
-        final SearchResultsFrame frame = app.getUIContext().createSearchResultsFrame(
-                searchContext, searchResults, KEY, 0, 1, msg.toString(), true);
-        app.getUIContext().positionHalfScreenRight(frame);
-        frame.pack();
+        
+        frame.loadSearchResults(uiContext, searchContext, searchResults, KEY, msg, true, false);
+        
         frame.setVisible(true);
     }
 }

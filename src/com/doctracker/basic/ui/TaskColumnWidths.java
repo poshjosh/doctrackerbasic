@@ -16,43 +16,32 @@
 
 package com.doctracker.basic.ui;
 
-import com.bc.table.cellui.ColumnWidths;
 import com.doctracker.basic.pu.entities.Task_;
-import com.bc.appcore.jpa.model.ResultModel;
-import java.util.Date;
+import com.bc.ui.table.cell.ColumnWidthsImpl;
+import javax.swing.table.TableModel;
 
 /**
  * @author Chinomso Bassey Ikwuagwu on Mar 3, 2017 10:33:14 AM
  */
-public class TaskColumnWidths implements ColumnWidths {
+public class TaskColumnWidths extends ColumnWidthsImpl {
     
-    private final ResultModel resultModel;
-
-    public TaskColumnWidths(ResultModel resultModel) {
-        this.resultModel = resultModel;
+    public TaskColumnWidths() { }
+    
+    @Override
+    public int getMinChars(TableModel tableModel, int columnIndex) {
+        if(Task_.reponsibility.getName().equals(tableModel.getColumnName(columnIndex))) {
+            return 8;
+        }else{
+            return super.getMinChars(tableModel, columnIndex);
+        }
     }
     
     @Override
-    public int getColumnPreferredWidthInChars(int columnIndex) {
-        
-        final Class aClass = resultModel.getColumnClass(columnIndex);
-
-        final int widthInChars;
-        if(aClass == Long.class || aClass == Integer.class || aClass == Short.class) {
-            widthInChars = 4;
-        }else if(aClass == Date.class) {
-            widthInChars = 14;
+    public int getMaxChars(TableModel tableModel, int columnIndex) {
+        if(Task_.reponsibility.getName().equals(tableModel.getColumnName(columnIndex))) {
+            return Short.MAX_VALUE;
         }else{
-            final String colName = resultModel.getColumnName(columnIndex);
-            if(Task_.reponsibility.getName().equals(colName)) {
-                widthInChars = 14;
-            }else if("Remarks".equals(colName)) {
-                widthInChars = 11;
-            }else{
-                widthInChars = 30;
-            }
+            return super.getMaxChars(tableModel, columnIndex);
         }
-
-        return widthInChars;
     }
 }

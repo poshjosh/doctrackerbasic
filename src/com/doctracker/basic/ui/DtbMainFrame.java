@@ -36,7 +36,6 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
     private javax.swing.JMenuItem executeDeleteMenuItem;
     private javax.swing.JMenuItem executeSelectMenuItem;
     private javax.swing.JMenuItem executeUpdateMenuItem;
-    private javax.swing.JMenuItem changeFontSizeForReportsMenuItem;
     private javax.swing.JMenuItem importMenuItem;
     private javax.swing.JMenuItem newtaskMenuItem;
     private javax.swing.JMenu reportsMenu;
@@ -68,14 +67,13 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
         super.init(app);
         
         this.getNewtaskMenuItem().setActionCommand(DtbActionCommands.DISPLAY_ADD_TASK_UI);
-        this.getImportMenuItem().setActionCommand(DtbActionCommands.IMPORT);
+        this.getImportMenuItem().setActionCommand(DtbActionCommands.IMPORT_DOCS_FROM_EXCEL);
         this.getExecuteSelectMenuItem().setActionCommand(DtbActionCommands.EXECUTE_SELECT_QUERY);
         this.getExecuteUpdateMenuItem().setActionCommand(DtbActionCommands.EXECUTE_UPDATE_QUERY);
         this.getExecuteDeleteMenuItem().setActionCommand(DtbActionCommands.EXECUTE_DELETE_QUERY);
         this.getRefreshReportsMenuItem().setActionCommand(DtbActionCommands.REFRESH_REPORTS);
         this.getQueryTodayMenuItem().setActionCommand(DtbActionCommands.DISPLAY_QUERY_TODAY_REPORT);
         this.getTrackStartTodayMenuItem().setActionCommand(DtbActionCommands.DISPLAY_TRACK_START_TODAY_REPORT);
-        this.getChangeFontSizeForReportsMenuItem().setActionCommand(DtbActionCommands.CHANGE_FONT_SIZE_OF_REPORTS);
         this.getChangeFolderForReportsMenuItem().setActionCommand(DtbActionCommands.CHANGE_FOLDER_FOR_REPORTS);
         this.getOpenReportsFolderMenuItem().setActionCommand(DtbActionCommands.OPEN_FOLDER_FOR_REPORTS);
         this.getSyncMenuItem().setActionCommand(DtbActionCommands.SYNC_DATABASE);
@@ -89,7 +87,6 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
                 this.getRefreshReportsMenuItem(),
                 this.getQueryTodayMenuItem(),
                 this.getTrackStartTodayMenuItem(),
-                this.getChangeFontSizeForReportsMenuItem(), 
                 this.getChangeFolderForReportsMenuItem(),
                 this.getOpenReportsFolderMenuItem(),
                 this.getSyncMenuItem()
@@ -122,26 +119,23 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
         changeFolderForReportsMenuItem = new javax.swing.JMenuItem();
         openReportsFolderMenuItem = new javax.swing.JMenuItem();
         viewReportMenu = new javax.swing.JMenu();
-        changeFontSizeForReportsMenuItem = new javax.swing.JMenuItem();
         remoteMenu = new javax.swing.JMenu();
         syncMenuItem = new javax.swing.JMenuItem();
         queryTodayMenuItem = new javax.swing.JMenuItem();
         trackStartTodayMenuItem = new javax.swing.JMenuItem();
 
-        JMenuBar menuBar = this.getJMenuBar();
-        JMenu fileMenu = this.getFileMenu();
+        final JMenuBar menuBar = this.getJMenuBar();
+        final JMenu fileMenu = this.getFileMenu();
 
         final Font menuFont = this.getMenuFont();
         newtaskMenuItem.setFont(menuFont);
-        newtaskMenuItem.setMnemonic('o');
+        newtaskMenuItem.setMnemonic('n');
         newtaskMenuItem.setText("New Task");
         fileMenu.add(newtaskMenuItem);
 
         importMenuItem.setFont(menuFont);
         importMenuItem.setText("Import");
         fileMenu.add(importMenuItem);
-
-        menuBar.add(fileMenu);
 
         sqlMenu.setText("SQL");
         sqlMenu.setFont(menuFont);
@@ -190,10 +184,6 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
         openReportsFolderMenuItem.setText("Open Folder");
         reportsMenu.add(openReportsFolderMenuItem);
         
-        changeFontSizeForReportsMenuItem.setFont(menuFont);
-        changeFontSizeForReportsMenuItem.setText("Font Size");
-        reportsMenu.add(changeFontSizeForReportsMenuItem);
-
         menuBar.add(reportsMenu);
 
         remoteMenu.setText("Remote");
@@ -218,10 +208,6 @@ public class DtbMainFrame extends com.bc.appbase.ui.MainFrame {
 
     public JMenuItem getExecuteUpdateMenuItem() {
         return executeUpdateMenuItem;
-    }
-
-    public JMenuItem getChangeFontSizeForReportsMenuItem() {
-        return changeFontSizeForReportsMenuItem;
     }
 
     public JMenuItem getImportMenuItem() {

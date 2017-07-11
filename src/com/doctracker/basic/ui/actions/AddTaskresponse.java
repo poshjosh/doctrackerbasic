@@ -79,7 +79,7 @@ public class AddTaskresponse implements Action<App,Object> {
             Date deadline = (Date)params.get(Taskresponse_.deadline.getName());
             final String respStr = (String)params.get(Taskresponse_.response.getName());
             if(deadline == null) {
-                final TextHandler textHandler = app.get(TextHandler.class);
+                final TextHandler textHandler = app.getOrException(TextHandler.class);
                 if(!textHandler.isNullOrEmpty(respStr)) {
                     final String dateStr = textHandler.getLastDateStr(respStr);
                     if(!textHandler.isNullOrEmpty(dateStr)) {

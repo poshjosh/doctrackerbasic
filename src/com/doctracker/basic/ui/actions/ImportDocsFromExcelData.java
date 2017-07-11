@@ -18,33 +18,37 @@ package com.doctracker.basic.ui.actions;
 
 import com.bc.appcore.actions.TaskExecutionException;
 import java.util.Map;
+import com.doctracker.basic.excel.VerifyExcelRow;
+import com.doctracker.basic.excel.ExtractDocFromExcelRowData;
+import com.bc.appbase.ui.ScreenLog;
 import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
-import com.bc.appbase.ui.actions.DeleteSelectedRecords;
-import com.bc.appbase.ui.actions.ParamNames;
 import com.bc.appcore.parameter.ParameterException;
-import com.doctracker.basic.pu.entities.Task;
-import java.util.HashMap;
+import com.doctracker.basic.excel.ExcelRowProcessor;
 
 /**
- * @author Chinomso Bassey Ikwuagwu on Feb 11, 2017 3:29:19 PM
+ * @author Chinomso Bassey Ikwuagwu on Feb 17, 2017 10:41:15 AM
  */
-public class DeleteTask extends DeleteSelectedRecords {
+public class ImportDocsFromExcelData extends ImportExcelData {
+
+    @Override
+    public ExcelRowProcessor getRowImporter(App app, ScreenLog uiLog) {
+        return new ExtractDocFromExcelRowData((DtbApp)app, uiLog);
+    }
+
+    @Override
+    public ExcelRowProcessor getRowVerifier(App app, ScreenLog uiLog) {
+        return new VerifyExcelRow((DtbApp)app);
+    }
 
     @Override
     public Boolean execute(App app, Map<String, Object> params) 
             throws ParameterException, TaskExecutionException {
         
-        params = new HashMap(params);
-        params.put(ParamNames.ENTITY_TYPE, Task.class);
+        final Boolean output = super.execute(app, params);
         
-        final Boolean success = super.execute(app, params);
-        
-        if(success) {
-            
-            ((DtbApp)app).updateReports(true);
-        }
-        
-        return success;
+        ((DtbApp)app).updateReports(true);
+                
+        return output;
     }
 }

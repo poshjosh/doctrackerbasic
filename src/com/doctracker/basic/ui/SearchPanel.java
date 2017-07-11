@@ -79,7 +79,7 @@ public class SearchPanel extends javax.swing.JPanel {
     
     public void setToDefaults(DtbApp app) {
         
-        final DateUIUpdater updater = app.get(DateUIUpdater.class);
+        final DateUIUpdater updater = app.getOrException(DateUIUpdater.class);
         
         final Calendar cal = app.getCalendar();
         

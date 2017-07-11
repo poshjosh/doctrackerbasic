@@ -18,9 +18,8 @@ package com.doctracker.basic.ui;
 
 import com.bc.appbase.ui.SearchResultsPanel;
 import com.bc.appbase.ui.SearchResultsPanelMouseRightClickListener;
-import com.bc.appbase.ui.UIContexImpl;
-import com.bc.table.cellui.ColumnWidths;
-import com.bc.appcore.jpa.model.ResultModel;
+import com.bc.appbase.ui.UIContexBase;
+import com.bc.ui.table.cell.ColumnWidths;
 import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
@@ -33,7 +32,7 @@ import com.doctracker.basic.ui.actions.DtbActionCommands;
 /**
  * @author Chinomso Bassey Ikwuagwu on Feb 10, 2017 4:51:32 PM
  */
-public class DtbUIContextImpl extends UIContexImpl implements DtbUIContext {
+public class DtbUIContextImpl extends UIContexBase implements DtbUIContext {
     
     private transient final Logger logger = Logger.getLogger(DtbUIContextImpl.class.getName());
 
@@ -62,8 +61,8 @@ public class DtbUIContextImpl extends UIContexImpl implements DtbUIContext {
     }
 
     @Override
-    public ColumnWidths getColumnWidths(ResultModel resultModel) {
-        return new TaskColumnWidths(resultModel);
+    public ColumnWidths getColumnWidths() {
+        return new TaskColumnWidths();
     }
 
     @Override

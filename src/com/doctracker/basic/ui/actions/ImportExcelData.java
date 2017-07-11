@@ -16,37 +16,49 @@
 
 package com.doctracker.basic.ui.actions;
 
-import com.bc.appcore.actions.TaskExecutionException;
-import java.io.IOException;
-import java.util.Map;
-import jxl.read.biff.BiffException;
-import com.doctracker.basic.pu.entities.Doc;
-import com.bc.appbase.excel.ExcelDataImporterImpl;
-import com.doctracker.basic.excel.VerifyExcelRow;
-import com.bc.appbase.excel.ExcelRowHandler;
-import com.doctracker.basic.excel.ExtractDocFromExcelRow;
-import com.bc.appbase.ui.UILog;
-import com.bc.appcore.actions.Action;
-import java.io.File;
-import java.util.Collections;
-import javax.swing.JOptionPane;
-import jxl.Workbook;
-import com.doctracker.basic.DtbApp;
 import com.bc.appbase.App;
+import com.bc.appbase.ui.ScreenLog;
+import com.bc.appbase.ui.actions.ActionCommands;
+import com.bc.appbase.ui.actions.ParamNames;
+import com.bc.appbase.ui.table.model.WorksheetTableModel;
+import com.bc.appcore.actions.Action;
+import com.bc.appcore.actions.TaskExecutionException;
 import com.bc.appcore.parameter.ParameterException;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+import com.doctracker.basic.excel.ExcelSheetProcessor;
+import java.util.LinkedHashSet;
+import java.util.function.Function;
+import com.doctracker.basic.excel.ExcelRowProcessor;
 
 /**
- * @author Chinomso Bassey Ikwuagwu on Feb 17, 2017 10:41:15 AM
+ * @author Chinomso Bassey Ikwuagwu on May 1, 2017 8:28:32 PM
  */
-public class ImportExcelData implements Action<App,Boolean> {
+public abstract class ImportExcelData implements Action<App,Boolean> {
+    
+    public abstract ExcelRowProcessor getRowImporter(App app, ScreenLog uiLog);
 
+    public abstract ExcelRowProcessor getRowVerifier(App app, ScreenLog uiLog);
+    
     @Override
     public Boolean execute(App app, Map<String, Object> params) 
             throws ParameterException, TaskExecutionException {
         
         try{
             
-            final File file = (File)app.getAction(DtbActionCommands.PROMPT_SELECT_EXCEL_FILE).execute(app, params);
+            final File file = (File)app.getAction(ActionCommands.PROMPT_SELECT_EXCEL_FILE).execute(app, params);
 
             if(file == null) {
                 return Boolean.FALSE;
@@ -54,46 +66,62 @@ public class ImportExcelData implements Action<App,Boolean> {
 
             final Workbook workbook = Workbook.getWorkbook(file);
 
-            final String sheetName = (String)app.getAction(DtbActionCommands.PROMPT_SELECT_SHEETNAME).execute(
+            final String sheetName = (String)app.getAction(ActionCommands.PROMPT_SELECT_SHEETNAME).execute(
                     app, Collections.singletonMap(Workbook.class.getName(), workbook));
 
             if(sheetName == null) {
                 return Boolean.FALSE;
             }
 
-            final String selection = JOptionPane.showInputDialog(app.getUIContext().getMainFrame(), 
-                    "Enter row number to start extracting from. Default is 0", "Enter First Row-number", JOptionPane.PLAIN_MESSAGE);
-
-            final int rowOffset = selection == null || selection.isEmpty() ? 0 :
-                    Integer.parseInt(selection);
-
-            final UILog uiLog = new UILog("Excel Data Importer");
+            final Sheet sheet = workbook.getSheet(sheetName);
             
-            final ExcelRowHandler<Doc> rowImporter = new ExtractDocFromExcelRow((DtbApp)app, uiLog);
+            final int rowOffset = this.promptSelectRowOffset(app, sheet, 0);
+            
+            final Map<String, Object> d2eParams = new HashMap(8, 0.75f);
+            d2eParams.put(ParamNames.SHEET, sheet);
+            d2eParams.put(ParamNames.OFFSET, rowOffset);
+            
+//            final Map<Integer, String> output = (Map<Integer, String>)app.getAction(
+//                    ActionCommands.MATCH_EXCEL_TO_DATABASE_COLUMNS).execute(app, d2eParams);
 
-            final ExcelDataImporterImpl importer = new ExcelDataImporterImpl(
-                    app, rowImporter, uiLog);
+            final ScreenLog uiLog = new ScreenLog("Excel Data Importer");
+            
+            final ExcelRowProcessor rowImporter = this.getRowImporter(app, uiLog);
+
+            final Set<Integer> failedImports = new LinkedHashSet();
+            
+            final Function<Sheet, Integer> importer = new ExcelSheetProcessor(
+                    rowImporter, null, null, rowOffset + 1, Integer.MAX_VALUE, failedImports);
 
             try{
             
-                uiLog.show();
+                uiLog.show(); 
 
-                importer.execute(file, sheetName, rowOffset, Integer.MAX_VALUE);
-
-                final ExcelRowHandler<Boolean> rowVerifier = new VerifyExcelRow((DtbApp)app);
-
-                final ExcelDataImporterImpl verifier = new ExcelDataImporterImpl(
-                        app, rowVerifier, uiLog);
-
-                verifier.execute(file, sheetName, rowOffset, Integer.MAX_VALUE);
-
-                ((DtbApp)app).updateReports(true);
+                final Integer importCount = importer.apply(sheet);
                 
-                uiLog.querySaveLogThenSave();
+                final int[] arrFailed = failedImports.stream().mapToInt((n) -> n +1).toArray();
+                uiLog.log("Failed to import the following rows: " + Arrays.toString(arrFailed));
+                
+                
+                uiLog.log("");
+                uiLog.log("Verifying rows");
+                
+                final ExcelRowProcessor<Boolean> rowVerifier = this.getRowVerifier(app, uiLog);
+
+                final Set<Integer> failedVerifications = new LinkedHashSet();
+
+                final Function<Sheet, Integer> verifier = new ExcelSheetProcessor(
+                        rowVerifier, null, null, rowOffset + 1, Integer.MAX_VALUE, failedVerifications);
+
+                final Integer verificationCount = verifier.apply(sheet);
+                final int [] arr = failedVerifications.stream().mapToInt((n) -> n +1).toArray();
+                uiLog.log("Failed to verify the following rows: " + Arrays.toString(arr));
+                
+                uiLog.querySaveLogThenSave("import");
                 
             }finally{
                 
-                uiLog.dispose();
+                uiLog.hideAndDispose();
             }
         }catch(IOException | BiffException e) {
             
@@ -101,5 +129,27 @@ public class ImportExcelData implements Action<App,Boolean> {
         }
         
         return Boolean.TRUE;
+    }
+    
+    public int promptSelectRowOffset(App app, Sheet sheet, int outputIfNone) 
+            throws ParameterException, TaskExecutionException {
+        
+        final int offset = 0;
+        final int limit = Math.min(sheet.getRows(), 10);
+        final WorksheetTableModel tableModel = 
+                new WorksheetTableModel(sheet, offset, limit);
+        
+        final JTable table = new JTable(tableModel);
+        table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        final JScrollPane scrolls = new JScrollPane(table);
+        
+        JOptionPane.showMessageDialog(app.getUIContext().getMainFrame(), scrolls, 
+                "Select row number to start extracting from. Default is " + outputIfNone, 
+                JOptionPane.PLAIN_MESSAGE);
+
+        final int output = table.getSelectedRow() == -1 ? outputIfNone : table.getSelectedRow();
+
+        return output;
     }
 }

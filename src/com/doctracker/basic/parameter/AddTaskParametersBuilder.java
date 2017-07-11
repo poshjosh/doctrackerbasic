@@ -93,7 +93,7 @@ public class AddTaskParametersBuilder implements ParametersBuilder<TaskPanel> {
             params.put(Task_.reponsibility.getName(), responsibility);
         }
         
-        final DateFromUIBuilder builder = app.get(DateFromUIBuilder.class);
+        final DateFromUIBuilder builder = app.getOrException(DateFromUIBuilder.class);
         
         final Calendar cal = app.getCalendar();
         

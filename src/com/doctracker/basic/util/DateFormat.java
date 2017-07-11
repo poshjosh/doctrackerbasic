@@ -25,10 +25,7 @@ import com.doctracker.basic.DtbApp;
  */
 public class DateFormat extends SimpleDateFormat {
 
-    private final DtbApp app;
-
     public DateFormat(DtbApp app) {
-        this.app = app;
         DateFormat.this.setTimeZone(app.getTimeZone());
         DateFormat.this.applyLocalizedPattern(
                 app.getConfig().getString(ConfigNames.DATE_PATTERN, "dd-MMM-yy"));
